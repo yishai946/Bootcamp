@@ -4,7 +4,7 @@ import { AppBar, Button, Divider, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import Pages from '../AppRouter/Pages';
 
-const Sidebar = () => (
+const Navbar = () => (
   <AppBar position="sticky">
     <Row justifyContent="flex-start" alignItems="center" padding={2} gap={3}>
       <Logo />
@@ -14,14 +14,14 @@ const Sidebar = () => (
           isVisibleInMenu && (
             <NavLink to={path} key={path}>
               {({ isActive }) => (
-              <Button
-                sx={{ gap: 1 }}
-                color="secondary"
-                variant={isActive ? "contained" : "text"}
-              >
-                {icon}
-                <Typography>{title}</Typography>
-              </Button>
+                <Button
+                  sx={{ gap: 1 }}
+                  color="secondary"
+                  variant={isActive ? 'contained' : 'outlined'}
+                >
+                  {icon}
+                  <Typography fontWeight={600}>{title}</Typography>
+                </Button>
               )}
             </NavLink>
           )
@@ -30,4 +30,4 @@ const Sidebar = () => (
   </AppBar>
 );
 
-export default Sidebar;
+export default Navbar;

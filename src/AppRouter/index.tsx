@@ -1,15 +1,19 @@
+import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Sidebar from '../layout/Sidebar';
+import Navbar from '../layout/Navbar';
+import LoadingScreen from './LoadingScreen';
 import Pages from './Pages';
 
 const AppRouter = () => (
   <BrowserRouter>
-    <Sidebar />
-    <Routes>
-      {Pages.map((page) => (
-        <Route key={page.path} path={page.path} element={page.element} />
-      ))}
-    </Routes>
+    <Navbar />
+    <Suspense fallback={<LoadingScreen />}>
+      <Routes>
+        {Pages.map((page) => (
+          <Route key={page.path} path={page.path} element={page.element} />
+        ))}
+      </Routes>
+    </Suspense>
   </BrowserRouter>
 );
 

@@ -1,9 +1,11 @@
-import Calendar from '@pages/Calendar';
-import Home from '@pages/Home';
-import Tasks from '@pages/Tasks';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import { lazy } from 'react';
+
+const Calendar = lazy(() => import('@pages/Calendar'));
+const Home = lazy(() => import('@pages/Home'));
+const Tasks = lazy(() => import('@pages/Tasks'));
 
 interface Page {
   path: string;

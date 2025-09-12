@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 import LightTheme from '../theme/LightTheme';
+import Column from '@components/Containers/Column';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ interface AppProvidersProps {
 const AppProviders = ({ children }: AppProvidersProps) => (
   <ThemeProvider theme={LightTheme}>
     <CssBaseline />
-    {children}
+    <Column height="100vh">{children}</Column>
   </ThemeProvider>
 );
 

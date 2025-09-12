@@ -1,7 +1,11 @@
+import { Typography } from '@mui/material';
+
 const Home = () => {
   return (
     <div>
-      <h1>Home</h1>
+      <Typography variant="h2" fontWeight={700}>
+        Home
+      </Typography>
     </div>
   );
 };

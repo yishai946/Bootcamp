@@ -21,7 +21,11 @@ const LightTheme = createTheme({
     divider: '#e0e0e0',
   },
   typography: {
-    fontFamily: `'Roboto', 'Helvetica', 'Arial', sans-serif`,
+    fontFamily: 'Assistant, Arial, sans-serif',
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
   },
   components: {
     MuiCssBaseline: {
