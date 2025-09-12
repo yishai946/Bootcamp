@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "recruitId": 3,
+    "type": "guard",
+    "description": "Guard duty on Sunday",
+    "startDate": "2025-09-14",
+    "workDays": 1
+  },
+  {
+    "id": 2,
+    "recruitId": 3,
+    "type": "after",
+    "description": "Medical appointment",
+    "startDate": "2025-09-15",
+    "workDays": 1
+  },
+  {
+    "id": 3,
+    "recruitId": 5,
+    "type": "shift",
+    "description": "Evening shift",
+    "startDate": "2025-09-15",
+    "workDays": 1
+  }
+]

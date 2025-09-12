@@ -1,0 +1,6 @@
+[
+  { "id": 1, "recruitId": 3, "taskId": 1, "status": "not_started" },
+  { "id": 2, "recruitId": 3, "taskId": 2, "status": "in_progress" },
+  { "id": 3, "recruitId": 5, "taskId": 2, "status": "not_started" },
+  { "id": 4, "recruitId": 5, "taskId": 3, "status": "done" }
+]
