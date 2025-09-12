@@ -26,7 +26,9 @@ const LightTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
-        padding: 0,
+        body: {
+          padding: 0,
+        },
       },
     },
     MuiButton: {

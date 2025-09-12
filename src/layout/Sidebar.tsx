@@ -1,7 +1,7 @@
 import Row from '@components/Containers/Row';
 import Logo from '@components/Logo';
-import { AppBar, Button, Divider, Icon, ListItemIcon, Typography } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { AppBar, Button, Divider, Typography } from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import Pages from '../AppRouter/Pages';
 
 const Sidebar = () => (

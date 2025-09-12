@@ -2,7 +2,6 @@ import Column from '@components/Containers/Column';
 import { Typography } from '@mui/material';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import Row from '@components/Containers/Row';
-import { use } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Logo = () => {
