@@ -1,8 +1,12 @@
+import { Box, Typography } from "@mui/material";
+
 const Calendar = () => {
   return (
-    <div>
-      <h1>Calendar</h1>
-    </div>
+    <Box width="100%">
+      <Typography variant="h2" fontWeight={700}>
+        לוח שנה
+      </Typography>
+    </Box>
   );
 };
 

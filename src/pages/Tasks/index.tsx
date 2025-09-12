@@ -1,8 +1,12 @@
+import { Box, Typography } from '@mui/material';
+
 const Tasks = () => {
   return (
-    <div>
-      <h1>Tasks</h1>
-    </div>
+    <Box width="100%">
+      <Typography variant="h2" fontWeight={700}>
+        משימות
+      </Typography>
+    </Box>
   );
 };
 

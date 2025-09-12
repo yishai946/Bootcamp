@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
 const LightTheme = createTheme({
+  direction: 'rtl',
   palette: {
     primary: {
       main: '#057c59',

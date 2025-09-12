@@ -1,12 +1,12 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const Home = () => {
   return (
-    <div>
+    <Box width="100%">
       <Typography variant="h2" fontWeight={700}>
-        Home
+        בית
       </Typography>
-    </div>
+    </Box>
   );
 };
 
