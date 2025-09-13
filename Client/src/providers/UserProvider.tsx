@@ -1,30 +1,22 @@
 import User from '@entities/User';
-import users from '../mock/users.json';
+import useGetUser from '@hooks/User/useGetUser';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface UserContextType {
   user: User | null;
+  loading: boolean;
+  error: Error | unknown;
+  retry: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading, error, retry } = useGetUser('3');
 
-  // Simulate fetching user data
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await new Promise<User | null>((resolve) =>
-        setTimeout(() => resolve(users[0]), 1000)
-      );
-
-      setUser(userData);
-    };
-
-    fetchUser();
-  }, []);
-
-  return <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, loading, error, retry }}>{children}</UserContext.Provider>
+  );
 };
 
 const useUser = (): UserContextType => {

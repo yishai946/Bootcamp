@@ -20,7 +20,9 @@
       "@hooks/*": ["hooks/*"],
       "@enums/*": ["enums/*"],
       "@entities/*": ["entities/*"],
-      "@providers/*": ["providers/*"]
+      "@providers/*": ["providers/*"],
+      "@api/*": ["api/*"],
+      "@skeletons/*": ["skeletons/*"]
     },
     "noEmit": true,
     "jsx": "react-jsx"

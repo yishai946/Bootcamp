@@ -15,6 +15,8 @@ export default defineConfig({
       '@providers': '/src/providers',
       '@enums': '/src/enums',
       '@entities': '/src/entities',
+      '@api': '/src/api',
+      '@skeletons': '/src/skeletons',
     },
   },
 });

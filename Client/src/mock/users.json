@@ -1,36 +1,36 @@
 [
   {
     "id": "1",
-    "name": "דוד",
-    "username": "דוד לוי",
+    "name": "דוד לוי",
+    "username": "david.levi",
     "role": 0,
     "teamId": "1"
   },
   {
     "id": "2",
-    "name": "מאיה",
-    "username": "מאיה כהן",
+    "name": "מאיה כהן",
+    "username": "maya.cohen",
     "role": 1,
     "teamId": "1"
   },
   {
     "id": "3",
-    "name": "עומר",
-    "username": "עומר בראון",
+    "name": "עומר בראון",
+    "username": "omer.brown",
     "role": 2,
     "teamId": "1"
   },
   {
     "id": "4",
-    "name": "נועה",
-    "username": "נועה שוורץ",
+    "name": "נועה שוורץ",
+    "username": "noa.schwartz",
     "role": 1,
     "teamId": "2"
   },
   {
     "id": "5",
-    "name": "יונתן",
-    "username": "יונתן שוורץ",
+    "name": "יונתן שוורץ",
+    "username": "yonatan.schwartz",
     "role": 2,
     "teamId": "2"
   }
