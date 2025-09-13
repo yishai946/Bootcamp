@@ -17,7 +17,10 @@
     "paths": {
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@enums/*": ["enums/*"],
+      "@entities/*": ["entities/*"],
+      "@providers/*": ["providers/*"]
     },
     "noEmit": true,
     "jsx": "react-jsx"

@@ -2,7 +2,7 @@ import Row from '@components/Containers/Row';
 import Logo from '@components/Logo';
 import { AppBar, Button, Divider, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import Pages from '../AppRouter/Pages';
+import Pages from '../Router/Pages';
 
 const Navbar = () => (
   <AppBar position="sticky">

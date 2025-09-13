@@ -1,18 +1,18 @@
--- Create schema
+-- Drop and create schema
 DROP SCHEMA IF EXISTS BootCamp CASCADE;
 CREATE SCHEMA BootCamp;
 
 SET search_path TO BootCamp;
 
 -- ENUMs
-DROP TYPE IF EXISTS Users_role_enum CASCADE;
-CREATE TYPE Users_role_enum AS ENUM ('team_leader', 'instructor', 'recruit');
+DROP TYPE IF EXISTS Role CASCADE;
+CREATE TYPE Role AS ENUM ('team_leader', 'instructor', 'recruit');
 
-DROP TYPE IF EXISTS TraineeTasks_status_enum CASCADE;
-CREATE TYPE TraineeTasks_status_enum AS ENUM ('not_started', 'in_progress', 'CR', 'fixed', 'done');
+DROP TYPE IF EXISTS ExcerciseStatus CASCADE;
+CREATE TYPE ExcerciseStatus AS ENUM ('not_started', 'in_progress', 'CR', 'fixed', 'done');
 
-DROP TYPE IF EXISTS OccasionType_enum CASCADE;
-CREATE TYPE OccasionType_enum AS ENUM ('guard', 'shift', 'after', 'other');
+DROP TYPE IF EXISTS UnavailabilityType CASCADE;
+CREATE TYPE UnavailabilityType AS ENUM ('guard', 'shift', 'after', 'other');
 
 -- Teams table
 DROP TABLE IF EXISTS Teams CASCADE;
@@ -29,11 +29,11 @@ CREATE TABLE Users (
     lastName VARCHAR(100) NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role Users_role_enum NOT NULL,
+    role Role NOT NULL,
     teamId INT REFERENCES Teams(id) ON DELETE SET NULL
 );
 
--- Excercises table
+-- Exercises table
 DROP TABLE IF EXISTS Excercises CASCADE;
 CREATE TABLE Excercises (
     id SERIAL PRIMARY KEY,
@@ -42,7 +42,7 @@ CREATE TABLE Excercises (
     workDays DECIMAL(3,1) NOT NULL
 );
 
--- TeamExcercises table
+-- TeamExercises table
 DROP TABLE IF EXISTS TeamExcercises CASCADE;
 CREATE TABLE TeamExcercises (
     id SERIAL PRIMARY KEY,
@@ -51,13 +51,13 @@ CREATE TABLE TeamExcercises (
     UNIQUE(teamId, taskId)
 );
 
--- RecruitExcercises table
+-- RecruitExercises table
 DROP TABLE IF EXISTS RecruitExcercises CASCADE;
 CREATE TABLE RecruitExcercises (
     id SERIAL PRIMARY KEY,
     recruitId INT NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
     taskId INT NOT NULL REFERENCES Excercises(id) ON DELETE CASCADE,
-    status TraineeTasks_status_enum DEFAULT 'not_started'
+    status ExcerciseStatus DEFAULT 'not_started'
 );
 
 -- RecruitInstructor table
@@ -72,7 +72,7 @@ DROP TABLE IF EXISTS RecruitUnavailability CASCADE;
 CREATE TABLE RecruitUnavailability (
     id SERIAL PRIMARY KEY,
     recruitId INT NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
-    type OccasionType_enum NOT NULL,
+    type UnavailabilityType NOT NULL,
     description VARCHAR(255),
     startDate DATE NOT NULL,
     workDays DECIMAL(3,1) NOT NULL

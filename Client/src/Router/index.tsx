@@ -4,7 +4,7 @@ import Navbar from '../layout/Navbar';
 import LoadingScreen from './LoadingScreen';
 import Pages from './Pages';
 
-const AppRouter = () => (
+const Router = () => (
   <BrowserRouter>
     <Navbar />
     <Suspense fallback={<LoadingScreen />}>
@@ -17,4 +17,4 @@ const AppRouter = () => (
   </BrowserRouter>
 );
 
-export default AppRouter;
+export default Router;
