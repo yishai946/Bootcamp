@@ -4,10 +4,13 @@ import { useUser } from '@providers/UserProvider';
 import teams from '../../mock/teams.json';
 import HomePageSkeleton from '@skeletons/HomePageSkeleton';
 import ErrorAlert from '@components/ErrorAlert';
+import UserInfo from './UserInfo';
+import ExercisesSummary from './ExercisesSummary';
+import Column from '@components/Containers/Column';
 
 const Home = () => {
   const { user, loading, error, retry } = useUser();
-  const team = teams.find((t) => t.id === user?.teamId);
+  const teamName = teams.find((t) => t.id === user?.teamId)?.name || 'ללא צוות';
 
   return loading ? (
     <Typography variant="h5" color="textSecondary">
@@ -16,14 +19,10 @@ const Home = () => {
   ) : !user ? (
     <ErrorAlert error={error} height="100%" retry={retry} />
   ) : (
-    <Box>
-      <Typography variant="h3" fontWeight={700}>
-        {`שלום ${user?.name}`}
-      </Typography>
-      <Typography variant="h5" color="textSecondary">
-        {RoleNames[user.role]} • {team?.name}
-      </Typography>
-    </Box>
+    <Column gap={4}>
+      <UserInfo name={user.name} role={user.role} teamName={teamName} />
+      <ExercisesSummary />
+    </Column>
   );
 };
 
