@@ -4,6 +4,7 @@ import LightTheme from '../theme/LightTheme';
 import Column from '@components/Containers/Column';
 import rtlCache from '../rtlCache';
 import { UserProvider } from './UserProvider';
+import ErrorBoundary from '@components/ErrorBoundary';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -12,10 +13,14 @@ interface AppProvidersProps {
 const AppProviders = ({ children }: AppProvidersProps) => (
   <CacheProvider value={rtlCache}>
     <ThemeProvider theme={LightTheme}>
-      <UserProvider>
-        <CssBaseline />
-        <Column height="100vh">{children}</Column>
-      </UserProvider>
+      <Column height="100vh">
+        <ErrorBoundary>
+          <UserProvider>
+            <CssBaseline />
+            {children}
+          </UserProvider>
+        </ErrorBoundary>
+      </Column>
     </ThemeProvider>
   </CacheProvider>
 );
