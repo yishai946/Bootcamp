@@ -1,9 +1,9 @@
 import { ExerciseStatus } from '@enums/ExerciseStatus';
 
 interface RecruitExercise {
-  id: number;
-  recruitId: number;
-  taskId: number;
+  id: string;
+  recruitId: string;
+  taskId: string;
   status: ExerciseStatus;
 }
 

@@ -1,14 +1,13 @@
-import { RoleNames } from '@enums/Role';
-import { Box, Typography } from '@mui/material';
-import { useUser } from '@providers/UserProvider';
-import teams from '../../mock/teams.json';
-import HomePageSkeleton from '@skeletons/HomePageSkeleton';
-import ErrorAlert from '@components/ErrorAlert';
-import UserInfo from './UserInfo';
-import ExercisesSummary from './ExercisesSummary';
 import Column from '@components/Containers/Column';
+import ErrorAlert from '@components/ErrorAlert';
+import { Typography } from '@mui/material';
+import { useUser } from '@providers/UserProvider';
+import HomePageSkeleton from '@skeletons/HomePageSkeleton';
+import teams from '../../mock/teams.json';
+import ExercisesSummaryDisplay from './ExercisesSummary/ExerciseSummeryDisplay';
+import UserInfo from './UserInfo';
 
-const Home = () => {
+const HomePage = () => {
   const { user, loading, error, retry } = useUser();
   const teamName = teams.find((t) => t.id === user?.teamId)?.name || 'ללא צוות';
 
@@ -21,9 +20,9 @@ const Home = () => {
   ) : (
     <Column gap={4}>
       <UserInfo name={user.name} role={user.role} teamName={teamName} />
-      <ExercisesSummary />
+      <ExercisesSummaryDisplay />
     </Column>
   );
 };
 
-export default Home;
+export default HomePage;

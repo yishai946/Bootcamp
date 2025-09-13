@@ -3,7 +3,7 @@ import Row from '@components/Containers/Row';
 import { Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface ExerciseSummaryFieldProps {
+interface ExercisesSummaryFieldProps {
   title: string;
   subTitle: string;
   value: number;
@@ -11,13 +11,13 @@ interface ExerciseSummaryFieldProps {
   icon: ReactNode;
 }
 
-const ExerciseSummaryField = ({
+const ExercisesSummaryField = ({
   title,
   subTitle,
   value,
   bgColor,
   icon,
-}: ExerciseSummaryFieldProps) => {
+}: ExercisesSummaryFieldProps) => {
   return (
     <Column
       sx={{ background: bgColor }}
@@ -35,10 +35,12 @@ const ExerciseSummaryField = ({
       </Row>
       <Column>
         <Typography variant="h4">{value}</Typography>
-        <Typography variant="subtitle1" noWrap>{subTitle}</Typography>
+        <Typography variant="subtitle1" noWrap>
+          {subTitle}
+        </Typography>
       </Column>
     </Column>
   );
 };
 
-export default ExerciseSummaryField;
+export default ExercisesSummaryField;

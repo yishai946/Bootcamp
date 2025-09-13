@@ -1,18 +1,20 @@
 import Row from '@components/Containers/Row';
 import ErrorAlert from '@components/ErrorAlert';
+import { EXERCISE_STATUS_INFO } from '@constants/EXERCISE_STATUS_INFO';
+import RecruitExercise from '@entities/RecruitExcercise';
 import { ExerciseStatus, ExerciseStatusNames } from '@enums/ExerciseStatus';
 import { Box } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
-import recruitExercises from '../../../mock/RecruitExercises.json';
-import ExerciseSummaryField from './ExerciseSummeryField';
-import { EXERCISE_STATUS_INFO } from '@constants/EXERCISE_STATUS_INFO';
+import ExerciseSummaryField from './ExercisesSummeryField';
 
-const ExercisesSummary = () => {
+interface ExercisesSummaryProps {
+  exercises: RecruitExercise[];
+}
+
+const ExercisesSummary = ({ exercises }: ExercisesSummaryProps) => {
   const { user } = useUser();
 
   if (!user) return <ErrorAlert error="משתמש לא מחובר" />;
-
-  const exercises = recruitExercises.filter((e) => e.recruitId === user.id);
 
   const ExerciseStatuses: ExerciseStatus[] = [
     ExerciseStatus.NotStarted,
