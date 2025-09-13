@@ -1,47 +1,37 @@
 [
   {
-    "id": 1,
-    "firstName": "David",
-    "lastName": "Levi",
+    "id": "1",
+    "name": "David",
     "username": "davidl",
-    "password": "pass123",
-    "role": "team_leader",
-    "teamId": 1
+    "role": 0,
+    "teamId": "1"
   },
   {
-    "id": 2,
-    "firstName": "Maya",
-    "lastName": "Cohen",
+    "id": "2",
+    "name": "Maya",
     "username": "mayac",
-    "password": "pass123",
-    "role": "instructor",
-    "teamId": 1
+    "role": 1,
+    "teamId": "1"
   },
   {
-    "id": 3,
-    "firstName": "Omer",
-    "lastName": "Biton",
+    "id": "3",
+    "name": "Omer",
     "username": "omerb",
-    "password": "pass123",
-    "role": "recruit",
-    "teamId": 1
+    "role": 2,
+    "teamId": "1"
   },
   {
-    "id": 4,
-    "firstName": "Noa",
-    "lastName": "Levi",
+    "id": "4",
+    "name": "Noa",
     "username": "noal",
-    "password": "pass123",
-    "role": "instructor",
-    "teamId": 2
+    "role": 1,
+    "teamId": "2"
   },
   {
-    "id": 5,
-    "firstName": "Yonatan",
-    "lastName": "Shalev",
+    "id": "5",
+    "name": "Yonatan",
     "username": "yonatans",
-    "password": "pass123",
-    "role": "recruit",
-    "teamId": 2
+    "role": 2,
+    "teamId": "2"
   }
 ]
