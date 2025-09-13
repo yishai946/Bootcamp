@@ -1,4 +1,4 @@
-import { ExerciseStatus } from "@enums/ExerciseStatus ";
+import { ExerciseStatus } from '@enums/ExerciseStatus';
 
 interface RecruitExercise {
   id: number;

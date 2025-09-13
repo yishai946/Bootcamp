@@ -22,7 +22,8 @@
       "@entities/*": ["entities/*"],
       "@providers/*": ["providers/*"],
       "@api/*": ["api/*"],
-      "@skeletons/*": ["skeletons/*"]
+      "@skeletons/*": ["skeletons/*"],
+      "@constants/*": ["constants/*"]
     },
     "noEmit": true,
     "jsx": "react-jsx"

@@ -17,6 +17,7 @@ export default defineConfig({
       '@entities': '/src/entities',
       '@api': '/src/api',
       '@skeletons': '/src/skeletons',
+      '@constants': '/src/constants',
     },
   },
 });
