@@ -1,26 +1,24 @@
 [
   {
-    "id": 1,
-    "recruitId": 3,
-    "type": "guard",
-    "description": "Guard duty on Sunday",
+    "id": "1",
+    "recruitId": "3",
+    "type": 0,
     "startDate": "2025-09-14",
     "workDays": 1
   },
   {
-    "id": 2,
-    "recruitId": 3,
-    "type": "after",
-    "description": "Medical appointment",
+    "id": "2",
+    "recruitId": "3",
+    "type": 2,
     "startDate": "2025-09-15",
     "workDays": 1
   },
   {
-    "id": 3,
-    "recruitId": 5,
-    "type": "shift",
-    "description": "Evening shift",
-    "startDate": "2025-09-15",
-    "workDays": 1
+    "id": "3",
+    "recruitId": "5",
+    "type": 3,
+    "description": "טיסה לחו״ל",
+    "startDate": "2025-09-22",
+    "workDays": 4
   }
 ]

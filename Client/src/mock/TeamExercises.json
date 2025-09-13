@@ -1,6 +1,6 @@
 [
-  { "id": 1, "teamId": 1, "taskId": 1 },
-  { "id": 2, "teamId": 1, "taskId": 2 },
-  { "id": 3, "teamId": 2, "taskId": 2 },
-  { "id": 4, "teamId": 2, "taskId": 3 }
+  { "id": "1", "teamId": "1", "taskId": "1" },
+  { "id": "2", "teamId": "1", "taskId": "2" },
+  { "id": "3", "teamId": "2", "taskId": "2" },
+  { "id": "4", "teamId": "2", "taskId": "3" }
 ]

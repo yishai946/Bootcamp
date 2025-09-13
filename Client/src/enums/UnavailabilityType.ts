@@ -1,6 +1,6 @@
 export enum UnavailabilityType {
-  Guard = 'guard',
-  Shift = 'shift',
-  After = 'after',
-  Other = 'other',
+  Guard,
+  Shift,
+  After,
+  Other,
 }
