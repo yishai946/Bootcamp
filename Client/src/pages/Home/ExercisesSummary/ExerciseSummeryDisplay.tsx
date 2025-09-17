@@ -1,5 +1,5 @@
 import ErrorAlert from '@components/ErrorAlert';
-import useGetUserExercises from '@hooks/User/useGetUserExercises';
+import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
 import { useUser } from '@providers/UserProvider';
 import ExercisesSummary from '.';
 import ExerciseSummarySkeleton from '@skeletons/ExerciseSummarySkeleton';
