@@ -11,7 +11,7 @@ const UpcomingEventsDisplay = () => {
   return loading ? (
     <UpcomingEventsSkeleton />
   ) : error ? (
-    <ErrorAlert error={error} height="100%" retry={retry} />
+    <ErrorAlert error={error} width="48%" retry={retry} />
   ) : (
     <UpcomingEvents events={events} />
   );
