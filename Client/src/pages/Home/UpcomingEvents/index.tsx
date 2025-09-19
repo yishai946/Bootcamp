@@ -23,11 +23,11 @@ const UpcomingEvents = ({ events }: UpcomingEventsProps) => (
     ) : (
       events.map((event) => <UpcomingEvent event={event} />)
     )}
-    <Button variant="contained" color="primary" fullWidth>
-      <Link to="/calendar" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to="/calendar" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Button variant="contained" color="primary" fullWidth sx={{ height: 45}}>
         צפייה בלוח השנה המלא
-      </Link>
-    </Button>
+      </Button>
+    </Link>
   </InfoContainer>
 );
 
