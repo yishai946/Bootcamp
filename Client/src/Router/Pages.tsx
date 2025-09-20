@@ -24,9 +24,9 @@ const Pages: Page[] = [
     icon: <HomeRoundedIcon />,
   },
   {
-    path: '/tasks',
+    path: '/exercises',
     element: <Tasks />,
-    title: 'משימות',
+    title: 'תרגילים',
     isVisibleInMenu: true,
     icon: <CheckBoxRoundedIcon />,
   },
