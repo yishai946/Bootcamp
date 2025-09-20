@@ -5,7 +5,7 @@ import { lazy } from 'react';
 
 const Calendar = lazy(() => import('@pages/Calendar'));
 const Home = lazy(() => import('@pages/Home'));
-const Tasks = lazy(() => import('@pages/Tasks'));
+const Tasks = lazy(() => import('@pages/Exercises'));
 
 interface Page {
   path: string;
