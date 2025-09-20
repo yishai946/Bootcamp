@@ -4,11 +4,11 @@ import ErrorAlert from '@components/ErrorAlert';
 import { useUser } from '@providers/UserProvider';
 import HomePageSkeleton from '@skeletons/HomePageSkeleton';
 import teams from '../../mock/teams.json';
+import EstimatedDateDisplay from './EstimatedDate/EstimatedDateDisplay';
 import ExercisesSummaryDisplay from './ExercisesSummary/ExerciseSummeryDisplay';
 import Progress from './Progress/ProgressDisplay';
 import UpcomingEventsDisplay from './UpcomingEvents/UpcomingEventsDisplay';
 import UserInfo from './UserInfo';
-import EstimatedDate from './EstimatedDate';
 
 const HomePage = () => {
   const { user, loading, error, retry } = useUser();
@@ -26,7 +26,7 @@ const HomePage = () => {
         <UpcomingEventsDisplay />
         <Column width="49%" justifyContent="space-between">
           <Progress />
-          <EstimatedDate />
+          <EstimatedDateDisplay />
         </Column>
       </Row>
     </Column>

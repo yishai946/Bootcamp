@@ -2,13 +2,12 @@ import Row from '@components/Containers/Row';
 import Event from '@entities/Event';
 import { EventTypeIcons } from '@enums/EventType';
 import { Button, Typography } from '@mui/material';
+import { formatDate } from '@utils/helperFuncs';
 
 interface UpcomingEventProps {
   event: Event;
   onSelect?: (event: Event) => void;
 }
-
-const formatDate = (dateString: string) => dateString.split('T')[0].split('-').reverse().join('/');
 
 const UpcomingEvent = ({ event, onSelect }: UpcomingEventProps) => (
   <Button

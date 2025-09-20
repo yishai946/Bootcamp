@@ -2,7 +2,7 @@ import { Stack, StackProps, Typography } from '@mui/material';
 import Row from './Row';
 
 interface InfoContainerProps extends StackProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   icon?: React.ReactNode;
 }

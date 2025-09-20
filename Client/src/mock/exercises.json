@@ -1,20 +1,32 @@
 [
   {
-    "id": "1",
-    "title": "Joining the Frontline",
-    "contentFile": "/exercises/joining_the_frontline.md",
-    "workDays": 2
-  },
-  {
     "id": "2",
     "title": "Cadet Status Panel",
     "contentFile": "/exercises/cadet_status_panel.md",
     "workDays": 3
   },
   {
-    "id": "3",
+    "id": "1",
+    "title": "Joining the Frontline",
+    "contentFile": "/exercises/joining_the_frontline.md",
+    "workDays": 2
+  },
+  {
+    "id": "4",
     "title": "Routing and Mission Details",
     "contentFile": "/exercises/routing_and_mission_details.md",
+    "workDays": 2
+  },
+  {
+    "id": "3",
+    "title": "Bringing the Data to Life - First Intel from HQ",
+    "contentFile": "/exercises/Bringing the Data to Life.md",
     "workDays": 3
+  },
+  {
+    "id": "5",
+    "title": "Global Error Boundary & 404 Page - Holding the Line",
+    "contentFile": "/exercises/Global Error Boundary & 404 Page - Holding the Line.md",
+    "workDays": 0.5
   }
 ]

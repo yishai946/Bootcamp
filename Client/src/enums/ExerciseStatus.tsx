@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 import NotStartedIcon from '@mui/icons-material/HourglassEmpty';
 import InProgressIcon from '@mui/icons-material/Autorenew';
 import CodeReviewIcon from '@mui/icons-material/RateReview';
@@ -29,13 +29,21 @@ export const ExerciseStatusColors: Record<ExerciseStatus, string> = {
   [ExerciseStatus.Done]: 'linear-gradient(135deg, #057c5879, #1bf44a)',
 };
 
+export const ExerciseStatusSimplifiedColors: Record<ExerciseStatus, string> = {
+  [ExerciseStatus.NotStarted]: '#a8a8a8',
+  [ExerciseStatus.InProgress]: '#4facfe',
+  [ExerciseStatus.CodeReview]: '#a18cd1',
+  [ExerciseStatus.Fixed]: '#fddb92',
+  [ExerciseStatus.Done]: '#057c5879',
+};
+
 export const ExerciseStatusIcons: Record<ExerciseStatus, ReactNode> = {
   [ExerciseStatus.NotStarted]: <NotStartedIcon />,
   [ExerciseStatus.InProgress]: <InProgressIcon />,
   [ExerciseStatus.CodeReview]: <CodeReviewIcon />,
   [ExerciseStatus.Fixed]: <FixedIcon />,
   [ExerciseStatus.Done]: <DoneIcon />,
-}
+};
 
 export const ExerciseStatusSubtitle: Record<ExerciseStatus, string> = {
   [ExerciseStatus.NotStarted]: 'תרגילים שטרם החלו',

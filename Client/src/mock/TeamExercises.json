@@ -1,6 +1,7 @@
 [
-  { "id": "1", "teamId": "1", "taskId": "1" },
-  { "id": "2", "teamId": "1", "taskId": "2" },
-  { "id": "3", "teamId": "2", "taskId": "2" },
-  { "id": "4", "teamId": "2", "taskId": "3" }
+  { "id": "3", "teamId": "1", "taskId": "3", "index": 2 },
+  { "id": "1", "teamId": "1", "taskId": "1", "index": 0 },
+  { "id": "2", "teamId": "1", "taskId": "2", "index": 1 },
+  { "id": "5", "teamId": "1", "taskId": "5", "index": 4 },
+  { "id": "4", "teamId": "1", "taskId": "4", "index": 3 }
 ]

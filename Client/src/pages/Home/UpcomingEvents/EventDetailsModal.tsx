@@ -9,17 +9,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { formatDate } from '@utils/helperFuncs';
 
 interface EventDetailsModalProps {
   event: Event | null;
   onClose: () => void;
 }
-
-const formatDateTime = (dateString: string) =>
-  new Date(dateString).toLocaleString('he-IL', {
-    dateStyle: 'full',
-    timeStyle: 'short',
-  });
 
 const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
   <Dialog
@@ -44,13 +39,13 @@ const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
               <Typography variant="subtitle2" color="text.secondary">
                 תחילת האירוע
               </Typography>
-              <Typography variant="body1">{formatDateTime(event.startTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.startTime)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
                 סיום האירוע
               </Typography>
-              <Typography variant="body1">{formatDateTime(event.endTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.endTime)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">

@@ -23,7 +23,8 @@
       "@providers/*": ["providers/*"],
       "@api/*": ["api/*"],
       "@skeletons/*": ["skeletons/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@utils/*": ["utils/*"]
     },
     "noEmit": true,
     "jsx": "react-jsx"
