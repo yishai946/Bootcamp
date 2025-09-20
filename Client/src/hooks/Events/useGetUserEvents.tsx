@@ -4,6 +4,7 @@ import eventsMock from '../../mock/events.json';
 
 const useGetUserEvents = (userId: string) => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | unknown>(null);
 
@@ -16,6 +17,14 @@ const useGetUserEvents = (userId: string) => {
       );
 
       setEvents(eventsData || []);
+
+      const now = new Date();
+      const upcoming = (eventsData || [])
+        .filter((event) => new Date(event.startTime) >= now)
+        .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+        .slice(0, 3);
+
+      setUpcomingEvents(upcoming);
     } catch (error) {
       setError(error);
     } finally {
@@ -29,7 +38,7 @@ const useGetUserEvents = (userId: string) => {
     }
   }, [userId]);
 
-  return { events, loading, error, retry: fetchEvents };
+  return { events, upcomingEvents, loading, error, retry: fetchEvents };
 };
 
 export default useGetUserEvents;

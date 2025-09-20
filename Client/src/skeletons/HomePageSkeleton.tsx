@@ -2,13 +2,22 @@ import { Skeleton } from '@mui/material';
 import Column from '@components/Containers/Column';
 import ExercisesSummarySkeleton from './ExerciseSummarySkeleton';
 import UpcomingEventsSkeleton from './UpcomingEventsSkeleton';
+import EstimatedDateSkeleton from './EstimatedDateSkeleton';
+import ProgressSkeleton from './ProgressSkeleton';
+import Row from '@components/Containers/Row';
 
 const HomePageSkeleton = () => (
-  <Column gap={3}>
-    <Skeleton variant="rectangular" width="20%" height={52} />
-    <Skeleton variant="rectangular" width="10%" height={24} />
+  <Column gap={4}>
+    <Skeleton variant="rounded" width="20%" height={52} />
+    <Skeleton variant="rounded" width="10%" height={24} />
     <ExercisesSummarySkeleton />
-    <UpcomingEventsSkeleton />
+    <Row justifyContent="space-between" height={388}>
+      <UpcomingEventsSkeleton />
+      <Column width="48%" justifyContent="space-between">
+        <ProgressSkeleton />
+        <EstimatedDateSkeleton />
+      </Column>
+    </Row>
   </Column>
 );
 

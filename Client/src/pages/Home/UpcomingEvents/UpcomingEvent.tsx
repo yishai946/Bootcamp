@@ -1,5 +1,6 @@
 import Row from '@components/Containers/Row';
 import Event from '@entities/Event';
+import { EventTypeIcons } from '@enums/EventType';
 import { Button, Typography } from '@mui/material';
 
 interface UpcomingEventProps {
@@ -16,7 +17,10 @@ const UpcomingEvent = ({ event, onSelect }: UpcomingEventProps) => (
     onClick={() => onSelect?.(event)}
   >
     <Row justifyContent="space-between" width="100%" alignItems="center">
-      <Typography variant="h6">{event.title}</Typography>
+      <Row gap={2} alignItems="center">
+        {EventTypeIcons[event.type]}
+        <Typography variant="h6">{event.title}</Typography>
+      </Row>
       <Typography variant="body1">{formatDate(event.startTime)}</Typography>
     </Row>
   </Button>

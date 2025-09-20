@@ -27,7 +27,6 @@ const UpcomingEvents = ({ events }: UpcomingEventsProps) => {
     <InfoContainer
       title="אירועים קרובים"
       icon={<EventIcon color="primary" />}
-      padding={2}
       width="48%"
       gap={2}
     >

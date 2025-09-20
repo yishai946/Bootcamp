@@ -3,7 +3,7 @@ import Row from './Row';
 
 interface InfoContainerProps extends StackProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   icon?: React.ReactNode;
 }
 
