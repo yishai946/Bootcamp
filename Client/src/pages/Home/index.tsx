@@ -24,7 +24,7 @@ const HomePage = () => {
       <ExercisesSummaryDisplay />
       <Row justifyContent="space-between">
         <UpcomingEventsDisplay />
-        <Column width="48%" justifyContent="space-between">
+        <Column width="49%" justifyContent="space-between">
           <Progress />
           <EstimatedDate />
         </Column>

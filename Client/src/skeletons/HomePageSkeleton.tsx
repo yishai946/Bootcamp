@@ -13,7 +13,7 @@ const HomePageSkeleton = () => (
     <ExercisesSummarySkeleton />
     <Row justifyContent="space-between" height={388}>
       <UpcomingEventsSkeleton />
-      <Column width="48%" justifyContent="space-between">
+      <Column width="49%" justifyContent="space-between">
         <ProgressSkeleton />
         <EstimatedDateSkeleton />
       </Column>
