@@ -17,7 +17,6 @@ const ExerciseCard = ({ exercise, exerciseStatus }: ExerciseProps) => (
     variant="outlined"
     color='inherit'
     sx={{
-      width: '90%',
       justifyContent: 'space-between',
       borderWidth: 2,
       borderColor: ExerciseStatusSimplifiedColors[exerciseStatus],
@@ -26,7 +25,7 @@ const ExerciseCard = ({ exercise, exerciseStatus }: ExerciseProps) => (
     }}
   >
     <Typography variant="h6">{exercise.title}</Typography>
-    {ExerciseStatusIcons[exerciseStatus]}
+    <Typography variant="body1" fontWeight={600}>{exercise.workDays} ימי עבודה</Typography>
   </Button>
 );
 

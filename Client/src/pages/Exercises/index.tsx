@@ -1,16 +1,15 @@
-import Column from '@components/Containers/Column';
+﻿import Center from '@components/Containers/Center';
+import ErrorAlert from '@components/ErrorAlert';
+import { ExerciseStatus } from '@enums/ExerciseStatus';
 import useGetTeamExercises from '@hooks/Exercises/useGetTeamExercises';
 import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
 import { useUser } from '@providers/UserProvider';
-import ExerciseCard from './ExerciseCard';
-import { ExerciseStatus } from '@enums/ExerciseStatus';
 import ExercisesPageSkeleton from '@skeletons/PageSkeleton';
-import ErrorAlert from '@components/ErrorAlert';
 import { useMemo } from 'react';
-import { Stack } from '@mui/material';
+import ExerciseWithStatus from '../../types/ExerciseWithStatus';
 import ExerciseStepper from './ExerciseStepper';
 
-const Tasks = () => {
+const Exercises = () => {
   const { user } = useUser();
   const {
     exercises: recruitExercises,
@@ -26,7 +25,7 @@ const Tasks = () => {
     retry: teamRetry,
   } = useGetTeamExercises(user?.teamId || '');
 
-  const exercisesWithStatus = useMemo(
+  const exercisesWithStatus: ExerciseWithStatus[] = useMemo(
     () =>
       teamExercises.map((exercise) => ({
         exercise,
@@ -34,7 +33,7 @@ const Tasks = () => {
           recruitExercises.find((recruitExercise) => recruitExercise.id === exercise.id)?.status ||
           ExerciseStatus.NotStarted,
       })),
-    [teamExercises, recruitExercises],
+    [teamExercises, recruitExercises]
   );
 
   return teamLoading || recruitLoading ? (
@@ -42,22 +41,10 @@ const Tasks = () => {
   ) : teamError || recruitError ? (
     <ErrorAlert error={teamError || recruitError} retry={teamError ? teamRetry : recruitRetry} />
   ) : (
-    <Stack direction="row" alignItems="flex-start" justifyContent="center" width="100%" mt={4} spacing={3}>
-      <ExerciseStepper
-        steps={exercisesWithStatus.map(({ exercise, status }) => ({
-          id: exercise.id,
-          title: exercise.title,
-          status,
-        }))}
-        sx={{ mt: 0.5 }}
-      />
-      <Column gap={4} alignItems="center" width="100%">
-        {exercisesWithStatus.map(({ exercise, status }) => (
-          <ExerciseCard key={exercise.id} exercise={exercise} exerciseStatus={status} />
-        ))}
-      </Column>
-    </Stack>
+    <Center flexDirection="column" width="100%" mt={4}>
+      <ExerciseStepper steps={exercisesWithStatus} />
+    </Center>
   );
 };
 
-export default Tasks;
+export default Exercises;
