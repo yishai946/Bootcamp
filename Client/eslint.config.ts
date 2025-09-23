@@ -1,15 +1,14 @@
 // eslint.config.js
 import js from '@eslint/js';
+import pluginPrettier from 'eslint-plugin-prettier';
+import pluginReact from 'eslint-plugin-react';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import pluginReact from 'eslint-plugin-react';
-import pluginPrettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
-import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -30,21 +29,18 @@ export default defineConfig([
       // ESLint core rules
       ...js.configs.recommended.rules,
 
-      // TypeScript ESLint rules
-      ...tseslint.configs.recommended.rules,
-
       // React rules
       ...pluginReact.configs.flat.recommended.rules,
 
       // Prettier integration
       'prettier/prettier': 'error',
 
-      // Correct way to check unused vars in TS
-      'no-unused-vars': 'off', // Turn off core rule
+      'no-unused-vars': 'warn',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
 
       // Optional: warn on undefined vars
       'no-undef': 'warn',
+      'react/react-in-jsx-scope': 'off',
     },
   },
 ]);
