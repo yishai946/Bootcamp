@@ -19,7 +19,7 @@ const Connector = styled(StepConnector)(({ theme }) => ({
   },
 }));
 
-const getStepIcon = (status: ExerciseStatus) => (
+export const getStepIcon = (status: ExerciseStatus) => (
   <Box
     component="span"
     sx={{
@@ -50,7 +50,6 @@ const ExerciseStepper = ({ steps, sx }: ExerciseStepperProps) => {
       orientation="vertical"
       connector={<Connector />}
       sx={{
-        width: '90%',
         '& .MuiStepLabel-iconContainer': { pr: 2, flexShrink: 0 },
         ...sx,
       }}
