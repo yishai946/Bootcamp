@@ -1,9 +1,5 @@
 import Exercise from '@entities/Excercise';
-import {
-  ExerciseStatus,
-  ExerciseStatusIcons,
-  ExerciseStatusSimplifiedColors,
-} from '@enums/ExerciseStatus';
+import { ExerciseStatus, ExerciseStatusSimplifiedColors } from '@enums/ExerciseStatus';
 import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,7 +22,7 @@ const ExerciseCard = ({ exercise, exerciseStatus }: ExerciseProps) => {
         borderWidth: 2,
         borderColor: ExerciseStatusSimplifiedColors[exerciseStatus],
         borderRadius: 2,
-        p: 2, 
+        p: 2,
       }}
     >
       <Typography variant="h6">{exercise.title}</Typography>

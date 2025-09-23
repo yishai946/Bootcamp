@@ -23,10 +23,10 @@ const useGetEstimatedDate = (userId: string) => {
               estimatedDate: recruitExercises
                 .filter((exercise) => exercise.recruitId === userId)
                 .reduce((latest, current) =>
-                  new Date(current.endDate).getTime() > new Date(latest.endDate).getTime()
+                  new Date(current.doneDate).getTime() > new Date(latest.doneDate).getTime()
                     ? current
                     : latest
-                ).endDate,
+                ).doneDate,
               actualWorkDays: 54,
             }),
           1000

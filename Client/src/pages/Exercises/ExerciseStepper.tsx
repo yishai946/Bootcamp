@@ -1,10 +1,9 @@
-﻿import Exercise from '@entities/Excercise';
-import { ExerciseStatus, ExerciseStatusColors, ExerciseStatusIcons } from '@enums/ExerciseStatus';
+﻿import { ExerciseStatus, ExerciseStatusColors, ExerciseStatusIcons } from '@enums/ExerciseStatus';
 import { Box, Step, StepLabel, Stepper, StepperProps } from '@mui/material';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
-import ExerciseCard from './ExerciseCard';
 import ExerciseWithStatus from '../../types/ExerciseWithStatus';
+import ExerciseCard from './ExerciseCard';
 
 interface ExerciseStepperProps extends Pick<StepperProps, 'sx'> {
   steps: ExerciseWithStatus[];
@@ -54,7 +53,7 @@ const ExerciseStepper = ({ steps, sx }: ExerciseStepperProps) => {
         ...sx,
       }}
     >
-      {steps.map(({ exercise, status }, idx) => (
+      {steps.map(({ exercise, status }) => (
         <Step key={exercise.id}>
           <StepLabel icon={getStepIcon(status)}>
             <ExerciseCard exercise={exercise} exerciseStatus={status} />
@@ -66,4 +65,3 @@ const ExerciseStepper = ({ steps, sx }: ExerciseStepperProps) => {
 };
 
 export default ExerciseStepper;
-

@@ -3,40 +3,50 @@
     "id": "1",
     "recruitId": "3",
     "taskId": "1",
-    "status": 4,
-    "endDate": "2025-12-01T10:00:00Z",
-    "startDate": "2025-11-02T10:00:00Z"
+    "status": 2,
+    "startDate": "2025-11-02T10:00:00Z",
+    "crDate": "2025-11-15T10:00:00Z",
+    "fixDate": "2025-11-30T10:00:00Z",
+    "doneDate": "2025-12-01T10:00:00Z"
   },
   {
     "id": "2",
     "recruitId": "3",
     "taskId": "2",
     "status": 4,
-    "endDate": "2025-12-03T10:00:00Z",
-    "startDate": "2025-11-04T10:00:00Z"
+    "startDate": "2025-11-04T10:00:00Z",
+    "crDate": "2025-11-15T10:00:00Z",
+    "fixDate": "2025-11-30T10:00:00Z",
+    "doneDate": "2025-12-03T10:00:00Z"
   },
   {
     "id": "3",
     "recruitId": "3",
     "taskId": "2",
     "status": 2,
-    "endDate": "2025-12-11T10:00:00Z",
-    "startDate": "2025-11-12T10:00:00Z"
+    "startDate": "2025-11-12T10:00:00Z",
+    "crDate": "2025-11-15T10:00:00Z",
+    "fixDate": "2025-11-30T10:00:00Z",
+    "doneDate": "2025-12-11T10:00:00Z"
   },
   {
     "id": "4",
     "recruitId": "3",
     "taskId": "3",
     "status": 1,
-    "endDate": "2025-12-07T10:00:00Z",
-    "startDate": "2025-11-08T10:00:00Z"
+    "startDate": "2025-11-08T10:00:00Z",
+    "crDate": "2025-11-15T10:00:00Z",
+    "fixDate": "2025-11-30T10:00:00Z",
+    "doneDate": "2025-12-07T10:00:00Z"
   },
   {
     "id": "5",
     "recruitId": "3",
     "taskId": "4",
     "status": 0,
-    "endDate": "2025-12-09T10:00:00Z",
-    "startDate": "2025-11-10T10:00:00Z"
+    "startDate": "2025-11-10T10:00:00Z",
+    "crDate": "2025-11-15T10:00:00Z",
+    "fixDate": "2025-11-30T10:00:00Z",
+    "doneDate": "2025-12-09T10:00:00Z"
   }
 ]

@@ -2,11 +2,11 @@ import Row from '@components/Containers/Row';
 import ErrorAlert from '@components/ErrorAlert';
 import RecruitExercise from '@entities/RecruitExcercise';
 import {
-  ExerciseStatus,
   ExerciseStatusColors,
   ExerciseStatusIcons,
   ExerciseStatusNames,
   ExerciseStatusSubtitle,
+  STATUSES,
 } from '@enums/ExerciseStatus';
 import { Box } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
@@ -21,17 +21,9 @@ const ExercisesSummary = ({ exercises }: ExercisesSummaryProps) => {
 
   if (!user) return <ErrorAlert error="משתמש לא מחובר" />;
 
-  const ExerciseStatuses: ExerciseStatus[] = [
-    ExerciseStatus.NotStarted,
-    ExerciseStatus.InProgress,
-    ExerciseStatus.CodeReview,
-    ExerciseStatus.Fixed,
-    ExerciseStatus.Done,
-  ];
-
   return (
     <Row justifyContent="space-between" width="100%" gap={4}>
-      {ExerciseStatuses.map((status) => {
+      {STATUSES.map((status) => {
         const value = exercises.filter((e) => e.status === status).length;
 
         return (

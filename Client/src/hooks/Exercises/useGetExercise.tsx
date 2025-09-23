@@ -2,7 +2,7 @@ import Exercise from '@entities/Excercise';
 import { useEffect, useState } from 'react';
 import exercises from '../../mock/exercises.json';
 
-const useGetExercise = (exerciseId: string) => {
+const useGetExercise = (exerciseId: string | undefined) => {
   const [exercise, setExercise] = useState<Exercise | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | unknown>(null);

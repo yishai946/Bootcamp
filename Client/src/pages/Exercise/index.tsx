@@ -1,28 +1,43 @@
+import Column from '@components/Containers/Column';
 import ErrorAlert from '@components/ErrorAlert';
 import useGetExercise from '@hooks/Exercises/useGetExercise';
-import { Box } from '@mui/material';
+import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
+import { Box, Divider } from '@mui/material';
+import { useUser } from '@providers/UserProvider';
 import ReactMarkdown from 'react-markdown';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import LoadingScreen from '../../Router/LoadingScreen';
+import ExerciseButton from './ExerciseButton';
+import ExerciseDates from './ExerciseDates';
 
 const Exercise = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-
-  if (!id) {
-    navigate('/NotFound');
-    return null;
-  }
+  const { user } = useUser();
 
   const { exercise, loading, error, retry } = useGetExercise(id);
+  const {
+    exercises,
+    loading: exercisesLoading,
+    error: exercisesError,
+    retry: exercisesRetry,
+  } = useGetUserExercises(user?.id);
 
-  return loading ? (
-    <p>Loading...</p>
-  ) : error ? (
-    <ErrorAlert error={error} retry={retry} />
+  const recruitExercise = exercises?.find((exercise) => exercise.id === id);
+
+  return loading || exercisesLoading ? (
+    <LoadingScreen />
+  ) : !exercise || !recruitExercise ? (
+    <ErrorAlert error={error || exercisesError} retry={error ? retry : exercisesRetry} />
   ) : (
-    <Box dir="ltr">
-      <ReactMarkdown>{exercise?.contentFile}</ReactMarkdown>
-    </Box>
+    <Column gap={4} mb={2} pt={0}>
+      <Box dir={exercise.rtl ? 'rtl' : 'ltr'} mt={2}>
+        <ReactMarkdown>{exercise?.contentFile}</ReactMarkdown>
+      </Box>
+      <Divider />
+      <ExerciseDates exercise={exercise} recruitExercise={recruitExercise} />
+      <Divider />
+      <ExerciseButton status={recruitExercise.status} />
+    </Column>
   );
 };
 

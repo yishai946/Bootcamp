@@ -28,14 +28,16 @@ const ExercisesSummaryField = ({
       gap={2}
     >
       <Row justifyContent="space-between" alignItems="center">
-        <Typography variant="h6" fontWeight={700}>
+        <Typography variant="h6" fontWeight={700} color="secondary">
           {title}
         </Typography>
         {icon}
       </Row>
       <Column>
-        <Typography variant="h4">{value}</Typography>
-        <Typography variant="subtitle1" noWrap>
+        <Typography variant="h4" color="secondary">
+          {value}
+        </Typography>
+        <Typography variant="subtitle1" noWrap color="secondary">
           {subTitle}
         </Typography>
       </Column>
