@@ -19,6 +19,7 @@ export default defineConfig({
       '@skeletons': '/src/skeletons',
       '@constants': '/src/constants',
       '@utils': '/src/utils',
+      '@types': '/src/types',
     },
   },
 });

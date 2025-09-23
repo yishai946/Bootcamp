@@ -17,7 +17,7 @@ const LightTheme = createTheme({
     },
     text: {
       primary: '#1e1e1e',
-      secondary: '#616161',
+      secondary: '#1e1e1e',
     },
     divider: '#e0e0e0',
   },

@@ -2,7 +2,7 @@ import RecruitExercise from '@entities/RecruitExcercise';
 import { useEffect, useState } from 'react';
 import recruitExercises from '../../mock/RecruitExercises.json';
 
-const useGetUserExercises = (userId: string) => {
+const useGetUserExercises = (userId: string | undefined) => {
   const [exercises, setExercises] = useState<RecruitExercise[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | unknown>(null);

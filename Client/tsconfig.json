@@ -24,6 +24,7 @@
       "@api/*": ["api/*"],
       "@skeletons/*": ["skeletons/*"],
       "@constants/*": ["constants/*"],
+      "@types/*": ["types/*"],
       "@utils/*": ["utils/*"]
     },
     "noEmit": true,

@@ -2,7 +2,7 @@ import Center from '@components/Containers/Center';
 import { CircularProgress } from '@mui/material';
 
 const LoadingScreen = () => (
-  <Center flexGrow={1}>
+  <Center height="100%">
     <CircularProgress />
   </Center>
 );
