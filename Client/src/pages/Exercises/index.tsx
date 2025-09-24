@@ -6,7 +6,7 @@ import useGetTeamExercises from '@hooks/Exercises/useGetTeamExercises';
 import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
 import { Divider, Typography } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
-import ExercisesPageSkeleton from '@skeletons/PageSkeleton';
+import ExercisesPageSkeleton from '@skeletons/ExercisesPageSkeleton';
 import { useMemo } from 'react';
 import ExerciseWithStatus from '../../types/ExerciseWithStatus';
 import ExerciseCard from './ExerciseCard';
