@@ -1,7 +1,7 @@
 import Column from '@components/Containers/Column';
 import ErrorAlert from '@components/ErrorAlert';
 import useGetExercise from '@hooks/Exercises/useGetExercise';
-import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
+import useGetUserExercises from '@hooks/RecruitExercises/useGetUserExercises';
 import { Box, Divider } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
 import ReactMarkdown from 'react-markdown';
@@ -36,7 +36,7 @@ const Exercise = () => {
       <Divider />
       <ExerciseDates exercise={exercise} recruitExercise={recruitExercise} />
       <Divider />
-      <ExerciseButton status={recruitExercise.status} />
+      <ExerciseButton status={recruitExercise.status} recruitExerciseId={recruitExercise.id} />
     </Column>
   );
 };

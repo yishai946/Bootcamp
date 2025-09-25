@@ -1,8 +1,10 @@
 import { ExerciseStatus, ExerciseStatusColors } from '@enums/ExerciseStatus';
+import useAdvanceExerciseStatus from '@hooks/RecruitExercises/useAdvanceExerciseStatus';
 import { Button } from '@mui/material';
 
 interface ExerciseButtonProps {
   status: ExerciseStatus;
+  recruitExerciseId: string;
 }
 
 const buttonLabels: Partial<Record<ExerciseStatus, string>> = {
@@ -12,14 +14,20 @@ const buttonLabels: Partial<Record<ExerciseStatus, string>> = {
   [ExerciseStatus.Fixed]: 'סיים תרגיל',
 };
 
-const ExerciseButton = ({ status }: ExerciseButtonProps) =>
-  status !== ExerciseStatus.Done && (
-    <Button
-      variant="contained"
-      sx={{ background: ExerciseStatusColors[(status + 1) as ExerciseStatus], fontSize: 16 }}
-    >
-      {buttonLabels[status]}
-    </Button>
+const ExerciseButton = ({ status, recruitExerciseId }: ExerciseButtonProps) => {
+  const { advanceExerciseStatus } = useAdvanceExerciseStatus();
+
+  return (
+    status !== ExerciseStatus.Done && (
+      <Button
+        variant="contained"
+        onClick={() => advanceExerciseStatus(recruitExerciseId)}
+        sx={{ background: ExerciseStatusColors[(status + 1) as ExerciseStatus], fontSize: 16 }}
+      >
+        {buttonLabels[status]}
+      </Button>
+    )
   );
+};
 
 export default ExerciseButton;

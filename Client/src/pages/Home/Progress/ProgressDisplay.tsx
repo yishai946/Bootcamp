@@ -1,5 +1,5 @@
 import ErrorAlert from '@components/ErrorAlert';
-import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
+import useGetUserExercises from '@hooks/RecruitExercises/useGetUserExercises';
 import { useUser } from '@providers/UserProvider';
 import ProgressSkeleton from '@skeletons/ProgressSkeleton';
 import Progress from '.';

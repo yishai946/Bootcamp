@@ -3,7 +3,7 @@ import Row from '@components/Containers/Row';
 import ErrorAlert from '@components/ErrorAlert';
 import { ExerciseStatus } from '@enums/ExerciseStatus';
 import useGetTeamExercises from '@hooks/Exercises/useGetTeamExercises';
-import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
+import useGetUserExercises from '@hooks/RecruitExercises/useGetUserExercises';
 import { Divider, Typography } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
 import ExercisesPageSkeleton from '@skeletons/ExercisesPageSkeleton';
