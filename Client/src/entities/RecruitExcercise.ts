@@ -5,10 +5,10 @@ interface RecruitExercise {
   recruitId: string;
   taskId: string;
   status: ExerciseStatus;
-  startDate: string | null;
-  crDate: string | null;
-  fixDate: string | null;
-  doneDate: string | null;
+  startDate: string;
+  crDate: string;
+  fixDate: string;
+  doneDate: string;
 }
 
 export default RecruitExercise;

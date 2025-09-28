@@ -6,8 +6,9 @@ interface Event {
   type: EventType;
   title: string;
   description?: string;
-  startTime: string;
-  endTime: string;
+  start: string;
+  end: string;
+  allDay: boolean;
   createdAt: string;
   updatedAt: string;
 }

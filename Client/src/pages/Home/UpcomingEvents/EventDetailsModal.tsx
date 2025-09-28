@@ -39,13 +39,13 @@ const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
               <Typography variant="subtitle2" color="text.secondary">
                 תחילת האירוע
               </Typography>
-              <Typography variant="body1">{formatDate(event.startTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.start)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
                 סיום האירוע
               </Typography>
-              <Typography variant="body1">{formatDate(event.endTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.end)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
