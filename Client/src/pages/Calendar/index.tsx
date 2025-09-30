@@ -8,7 +8,7 @@ import heLocale from '@fullcalendar/core/locales/he';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import useGetUserEvents from '@hooks/Events/useGetUserEvents';
-import useGetUserExercises from '@hooks/Exercises/useGetUserExercises';
+import useGetUserExercises from '@hooks/RecruitExercises/useGetUserExercises';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
