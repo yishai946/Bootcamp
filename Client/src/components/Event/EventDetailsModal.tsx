@@ -12,13 +12,15 @@ import {
 import { formatDate } from '@utils/helperFuncs';
 
 interface EventDetailsModalProps {
+  isOpen: boolean;
   event: Event | null;
   onClose: () => void;
+  onEdit?: (event: Event) => void;
 }
 
-const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
+const EventDetailsModal = ({ isOpen, event, onClose, onEdit }: EventDetailsModalProps) => (
   <Dialog
-    open={Boolean(event)}
+    open={isOpen}
     onClose={onClose}
     fullWidth
     maxWidth="sm"
@@ -39,13 +41,13 @@ const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
               <Typography variant="subtitle2" color="text.secondary">
                 תחילת האירוע
               </Typography>
-              <Typography variant="body1">{formatDate(event.startTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.start, !event.allDay)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
                 סיום האירוע
               </Typography>
-              <Typography variant="body1">{formatDate(event.endTime)}</Typography>
+              <Typography variant="body1">{formatDate(event.end, !event.allDay)}</Typography>
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
@@ -58,6 +60,11 @@ const EventDetailsModal = ({ event, onClose }: EventDetailsModalProps) => (
           </Stack>
         </DialogContent>
         <DialogActions>
+          {onEdit && (
+            <Button onClick={() => onEdit(event)} variant="contained" color="warning">
+              עריכה
+            </Button>
+          )}
           <Button onClick={onClose} variant="contained" color="primary">
             סגירה
           </Button>

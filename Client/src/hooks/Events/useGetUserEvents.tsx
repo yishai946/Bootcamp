@@ -20,8 +20,8 @@ const useGetUserEvents = (userId: string) => {
 
       const now = new Date();
       const upcoming = (eventsData || [])
-        .filter((event) => new Date(event.startTime) >= now)
-        .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+        .filter((event) => new Date(event.start) >= now)
+        .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
         .slice(0, 3);
 
       setUpcomingEvents(upcoming);

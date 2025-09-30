@@ -8,7 +8,7 @@ import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
-export enum EventType {
+enum EventType {
   Guard,
   Shift,
   After,
@@ -19,7 +19,7 @@ export enum EventType {
   Other,
 }
 
-export const EventTypeNames: Record<EventType, string> = {
+const EventTypeNames: Record<EventType, string> = {
   [EventType.Guard]: 'שמירה',
   [EventType.Shift]: 'תורנות',
   [EventType.After]: 'אפטר',
@@ -40,3 +40,20 @@ export const EventTypeIcons: Record<EventType, ReactNode> = {
   [EventType.DayOff]: <BeachAccessIcon />,
   [EventType.Other]: <MoreHorizIcon />,
 };
+
+const EventTypeColors: Record<EventType, string> = {
+  [EventType.Guard]: '#f44336',
+  [EventType.Shift]: '#2196f3',
+  [EventType.After]: '#4caf50',
+  [EventType.CR]: '#a18cd1',
+  [EventType.FixesCheck]: '#d3b062',
+  [EventType.Sickness]: '#607d8b',
+  [EventType.DayOff]: '#3f51b5',
+  [EventType.Other]: '#795548',
+};
+
+const eventTypeOptions = Object.values(EventType).filter(
+  (value): value is EventType => typeof value === 'number'
+);
+
+export { EventType, EventTypeNames, EventTypeColors, eventTypeOptions };

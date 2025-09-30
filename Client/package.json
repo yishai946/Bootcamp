@@ -12,6 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
     "react": "^19.1.1",
@@ -19,7 +22,10 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.8.2",
     "stylis": "^4.3.6",
-    "stylis-plugin-rtl": "^2.1.1"
+    "stylis-plugin-rtl": "^2.1.1",
+    "react-hook-form": "^7.53.0",
+    "@hookform/resolvers": "^3.9.0",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",

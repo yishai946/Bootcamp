@@ -36,8 +36,15 @@ export default defineConfig([
       'prettier/prettier': 'error',
 
       'no-unused-vars': 'warn',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          ignoreClassFields: true,
+          ignoreEnums: true,
+        },
+      ],
       // Optional: warn on undefined vars
       'no-undef': 'warn',
       'react/react-in-jsx-scope': 'off',

@@ -20,7 +20,7 @@ const UpcomingEvent = ({ event, onSelect }: UpcomingEventProps) => (
         {EventTypeIcons[event.type]}
         <Typography variant="h6">{event.title}</Typography>
       </Row>
-      <Typography variant="body1">{formatDate(event.startTime)}</Typography>
+      <Typography variant="body1">{formatDate(event.start)}</Typography>
     </Row>
   </Button>
 );
