@@ -52,4 +52,8 @@ const EventTypeColors: Record<EventType, string> = {
   [EventType.Other]: '#795548',
 };
 
-export { EventType, EventTypeNames, EventTypeColors };
+const eventTypeOptions = Object.values(EventType).filter(
+  (value): value is EventType => typeof value === 'number'
+);
+
+export { EventType, EventTypeNames, EventTypeColors, eventTypeOptions };

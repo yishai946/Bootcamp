@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import NoUpcomingEvents from './NoUpcomingEvents';
 import UpcomingEvent from './UpcomingEvent';
-import EventDetailsModal from './EventDetailsModal';
+import EventDetailsModal from '../../../components/Event/EventDetailsModal';
 
 interface UpcomingEventsProps {
   events: Event[];
@@ -42,7 +42,7 @@ const UpcomingEvents = ({ events }: UpcomingEventsProps) => {
           צפייה בלוח השנה המלא
         </Button>
       </Link>
-      <EventDetailsModal event={selectedEvent} onClose={handleCloseModal} />
+      <EventDetailsModal isOpen={!!selectedEvent} event={selectedEvent} onClose={handleCloseModal} />
     </InfoContainer>
   );
 };
