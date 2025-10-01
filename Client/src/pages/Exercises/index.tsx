@@ -48,7 +48,7 @@ const Exercises = () => {
   ) : teamError || recruitError ? (
     <ErrorAlert error={teamError || recruitError} retry={teamError ? teamRetry : recruitRetry} />
   ) : (
-    <Column flexDirection="column" width="100%" gap={2} px={4}>
+    <Column width="100%" gap={2} px={4}>
       {currentExercise && (
         <>
           <Typography variant="h4" fontWeight={700} ml={6} mt={2}>

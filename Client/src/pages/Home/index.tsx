@@ -11,13 +11,13 @@ import UpcomingEventsDisplay from './UpcomingEvents/UpcomingEventsDisplay';
 import UserInfo from './UserInfo';
 
 const HomePage = () => {
-  const { user, loading, error, retry } = useUser();
+  const { user, isPending: loading, error } = useUser();
   const teamName = teams.find((t) => t.id === user?.teamId)?.name || 'ללא צוות';
 
   return loading ? (
     <HomePageSkeleton />
   ) : !user ? (
-    <ErrorAlert error={error} height="100%" retry={retry} />
+    <ErrorAlert error={error} height="100%" />
   ) : (
     <Column gap={4}>
       <UserInfo name={user.name} role={user.role} teamName={teamName} />

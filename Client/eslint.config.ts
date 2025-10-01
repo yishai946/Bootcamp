@@ -5,8 +5,10 @@ import pluginReact from 'eslint-plugin-react';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default defineConfig([
+  ...pluginQuery.configs['flat/recommended'],
   {
     files: ['src/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     languageOptions: {

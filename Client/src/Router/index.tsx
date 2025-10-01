@@ -1,21 +1,37 @@
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Navbar from '../layout/Navbar';
 import LoadingScreen from './LoadingScreen';
 import Pages from './Pages';
-import { Box } from '@mui/material';
+import Layout from '../layout';
+import ProtectedRoute from './ProtectedRoute';
+import PublicOnlyRoute from './PublicOnlyRoute';
 
 const Router = () => (
   <BrowserRouter>
-    <Navbar />
     <Suspense fallback={<LoadingScreen />}>
-      <Box padding={3} flexGrow={1}>
-        <Routes>
-          {Pages.map((page) => (
-            <Route key={page.path} path={page.path} element={page.element} />
+      <Routes>
+        {Pages.filter((page) => page.isPublicOnly).map((page) => (
+          <Route
+            key={page.path}
+            path={page.path}
+            element={<PublicOnlyRoute>{page.element}</PublicOnlyRoute>}
+          />
+        ))}
+        {Pages.filter((page) => !page.isProtected && !page.isPublicOnly).map((page) => (
+          <Route key={page.path} path={page.path} element={page.element} />
+        ))}
+        <Route element={<Layout />}>
+          {Pages.filter((page) => page.isProtected).map((page) => (
+            <Route
+              key={page.path}
+              path={page.path}
+              element={
+                <ProtectedRoute allowedRoles={page.allowedRoles}>{page.element}</ProtectedRoute>
+              }
+            />
           ))}
-        </Routes>
-      </Box>
+        </Route>
+      </Routes>
     </Suspense>
   </BrowserRouter>
 );
