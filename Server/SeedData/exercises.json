@@ -1,0 +1,37 @@
+[
+  {
+    "id": "2",
+    "title": "Cadet Status Panel",
+    "contentFile": "/exercises/cadet_status_panel.md",
+    "workDays": 3,
+    "rtl": false
+  },
+  {
+    "id": "1",
+    "title": "Joining the Frontline",
+    "workDays": 2,
+    "contentFile": "# Exercise 1: React Bootcamp – Joining the Frontline\n\n⏱️ *Duration: 2 day*\n\n---\n\nYou've already helped architect the backend foundation of the **Scout Regiment Management System (SRMS)** — the lifeline of humanity's last organized defense. But data locked behind endpoints is useless unless the Corps can see it, command it, and act on it.\n\nBefore you can build the real interface of SRMS, you must first **master the raw tools of the web** — the very language of the walls.\n\nIn this mission, you’ll construct your first interface using only **HTML, CSS, and JavaScript**. No frameworks. No lifelines. Just you, the DOM, and your training.\n\nYou’re not building features yet — you’re learning to control the battlefield itself.\n\nThis is the moment the SRMS system begins to take shape. And it begins with a countdown.\n\n---\n\n## **🎯 Goal**\n\nBuild your very first **Scout Regiment interface** using nothing but **HTML, CSS, and JavaScript** — no frameworks, no shortcuts.\n\nYou will design a static page titled **“Hello, Cadet!”**, styled with CSS and enhanced with JavaScript logic. The page should display a backwards **countdown timer** starting from 24:00:00 and going to 0.\n\nThis will teach you how the **web works from the ground up** — structure (HTML), style (CSS), and behavior (JS).\n\n---\n\n## **📚 Required Reading**\n\n### 🧱 Web Fundamentals\n\n- What is **HTML**? What is the structure of a basic HTML document?\n- What is **CSS**? What are **selectors**, **properties**, **classes**, and **IDs**?\n- What is **JavaScript**? How does it make web pages interactive?\n- What is the **DOM**? How does JS manipulate it?\n- What is the difference between **inline**, **internal**, and **external** CSS?\n- What are **box model**, **margin**, **padding**, **border**, **display: flex**?\n- What are **media queries** and why do we use them?\n- What is the difference between **class** and **id** in HTML?\n- How **Flexbox** works in CSS, and how to use it for building responsive layouts and aligning elements efficiently\n\n---\n\n### 📜 JavaScript Concepts\n\n- What is **ECMAScript (ES6+)**?\n    - `const`, `let`, arrow functions\n    - template literals (`Hello, ${name}`)\n    - destructuring\n    - basic array methods like `map`, `filter` (you won’t use them here, but know them)\n- What is the **event loop** and how does **setInterval** work?\n- What is the **DOM** and how does JavaScript update it?\n- What is the difference between:\n    - `innerText`, `textContent`, and `innerHTML`\n    - `setInterval` and `setTimeout`\n    - synchronous vs asynchronous code\n\n---\n\n## **🛠️ Technical Requirements**\n\n- Create a new folder for your project with the following files:\n\n```\nbash\n/project-folder\n  index.html\n  styles.css\n  script.js\n```\n\n- Your project must:\n    - Use **external CSS and JS** files (no inline styles or scripts)\n    - Be fully functional by simply opening `index.html` in a browser (no server required)\n    - Use Flexbox\n\n---\n\n## **🧭 Functionality**\n\nBuild a simple **Attack on Titan–themed landing page** that displays a **24-hour countdown timer**.\n\nWhen the timer reaches 00:00:00, display an appropriate **message** on the screen.\n\n---\n\n## **⚠️ Boundaries & Constraints**\n\n- No React, Vite, JSX, or TypeScript\n- No NPM or external libraries\n- Vanilla HTML, CSS, and JS only (use Flexbox, important!)\n- Use basic DOM manipulation, not jQuery\n\n---\n\n## **💡 Remarks**\n\nThis is the moment you first **touch the web**. No abstractions. Just raw code.\n\nBefore you build frameworks, you must **understand the foundation**.\n\nDon’t worry about fancy design — just make sure it’s clean, readable, and works reliably. Your future self will thank you.\n\n> “**Discipline. Foundation. Clarity. These are the weapons of a true frontend scout.**” — *Commander Erwin Smith*",
+    "rtl": false
+  },
+  {
+    "id": "4",
+    "title": "Routing and Mission Details",
+    "contentFile": "/exercises/routing_and_mission_details.md",
+    "workDays": 2,
+    "rtl": false
+    },
+  {
+    "id": "3",
+    "title": "Bringing the Data to Life - First Intel from HQ",
+    "contentFile": "/exercises/Bringing the Data to Life.md",
+    "workDays": 3,
+    "rtl": false
+  },
+  {
+    "id": "5",
+    "title": "Global Error Boundary & 404 Page - Holding the Line",
+    "contentFile": "/exercises/Global Error Boundary & 404 Page - Holding the Line.md",
+    "workDays": 0.5,
+    "rtl": false
+  }
+]
