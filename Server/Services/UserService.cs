@@ -1,4 +1,5 @@
-﻿using Server.Application.DTOs;
+﻿using NHibernate.Linq;
+using Server.Application.DTOs;
 using Server.DB;
 using Server.DTOs;
 using Server.Entities;
@@ -23,7 +24,8 @@ namespace Server.Services
         public LoginResDTO Login(LoginReqDTO loginData)
         {
             var user = Database.Read(session => session.Query<User>()
-                .Where(u => u.Username == loginData.Username)
+                .Where(user => user.Username == loginData.Username)
+                .Fetch(user => user.Team)
                 .SingleOrDefault());
 
             EnsureUserFound(user);

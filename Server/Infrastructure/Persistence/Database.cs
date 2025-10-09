@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg;
 using NHibernate;
 using NHibernate.Driver;
 using ISession = NHibernate.ISession;
+using Server.Infrastructure.Persistence;
 
 namespace Server.DB
 {
@@ -22,6 +23,10 @@ namespace Server.DB
                 .Mappings(map =>
                 {
                     map.FluentMappings.AddFromAssemblyOf<Program>();
+                })
+                .ExposeConfiguration(cfg =>
+                {
+                    cfg.SetInterceptor(new MiniProfilerInterceptor());
                 })
                 .BuildSessionFactory();
         }
