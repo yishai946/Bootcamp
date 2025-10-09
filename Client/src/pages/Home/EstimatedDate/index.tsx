@@ -13,7 +13,6 @@ const EstimatedDate = ({ estimatedDate, actualWorkDays }: EstimatedDateProps) =>
     width="100%"
     icon={<FlagIcon color="primary" />}
     gap={2}
-    height="46%"
   >
     <Typography variant="h5" fontWeight={600} component="div" alignSelf="center">
       {estimatedDate}

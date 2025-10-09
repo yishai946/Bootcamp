@@ -21,7 +21,6 @@ const Progress = ({ exercises }: ProgressProps) => {
       icon={<TrendingUpIcon color="primary" />}
       gap={2}
       width="100%"
-      height="50%"
     >
       <Typography variant="h5" fontWeight={600} alignSelf="center">
         {progress.toFixed(0)}%
