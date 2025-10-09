@@ -13,7 +13,7 @@ const Progress = ({ exercises }: ProgressProps) => {
     (exercise) => exercise.status === ExerciseStatus.Done
   ).length;
 
-  const progress = (completedExercises / exercises.length) * 100;
+  const progress = (completedExercises / exercises.length) * 100 || 100;
 
   return (
     <InfoContainer

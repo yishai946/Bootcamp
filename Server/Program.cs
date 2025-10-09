@@ -6,6 +6,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddFrontendCors();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddDI();
@@ -20,6 +21,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseCors("FrontendCors");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -12,7 +12,6 @@ import UserInfo from './UserInfo';
 
 const HomePage = () => {
   const { user, isPending: loading, error } = useUser();
-  const teamName = teams.find((t) => t.id === user?.teamId)?.name || 'ללא צוות';
 
   return loading ? (
     <HomePageSkeleton />
@@ -20,7 +19,7 @@ const HomePage = () => {
     <ErrorAlert error={error} height="100%" />
   ) : (
     <Column gap={4}>
-      <UserInfo name={user.name} role={user.role} teamName={teamName} />
+      <UserInfo name={user.name} role={user.role} teamName={user.team.name} />
       <ExercisesSummaryDisplay />
       <Row justifyContent="space-between">
         <UpcomingEventsDisplay />

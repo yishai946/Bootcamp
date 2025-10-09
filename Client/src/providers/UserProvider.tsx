@@ -24,9 +24,12 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsPending(true);
     setError(null);
     try {
-      const loggedInUser = await apiLogin(username, password);
-      setUser(loggedInUser);
-      localStorage.setItem('user', JSON.stringify(loggedInUser));
+      const loginResponse = await apiLogin(username, password);
+
+      setUser(loginResponse.user);
+
+      localStorage.setItem('user', JSON.stringify(loginResponse.user));
+      localStorage.setItem('token', JSON.stringify(loginResponse.token));
     } catch (err) {
       setError(err as Error);
       setUser(null);
@@ -40,6 +43,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setUser(null);
     setError(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   useEffect(() => {
