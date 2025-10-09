@@ -3,7 +3,7 @@ import { ExerciseStatus } from '@enums/ExerciseStatus';
 interface RecruitExercise {
   id: string;
   recruitId: string;
-  taskId: string;
+  exerciseId: string;
   status: ExerciseStatus;
   startDate: string;
   crDate: string;

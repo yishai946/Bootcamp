@@ -7,7 +7,7 @@ interface ErrorAlertProps extends StackProps {
 }
 
 const ErrorAlert = ({ error, retry, ...stackProps }: ErrorAlertProps) => (
-  <Center {...stackProps} flexDirection="column" gap={2}>
+  <Center {...stackProps} gap={2}>
     <Alert severity="error" variant="outlined">
       {error instanceof Error
         ? error.message

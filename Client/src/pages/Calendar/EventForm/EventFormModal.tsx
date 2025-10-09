@@ -17,9 +17,9 @@ import {
   EventFormValues,
   mapEventToFormValues,
 } from './EventForm.schema';
-import EventTypeSelect from './Fields/EventTypeSelect';
-import RHFSwitch from './Fields/RHFSwitch';
-import RHFTextField from './Fields/RHFTextField';
+import EventTypeSelect from '../../../components/Fields/EventTypeSelect';
+import RHFSwitch from '../../../components/Fields/RHFSwitch';
+import RHFTextField from '../../../components/Fields/RHFTextField';
 
 interface EventFormModalProps {
   isOpen: boolean;

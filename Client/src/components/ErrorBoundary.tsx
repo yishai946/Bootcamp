@@ -29,7 +29,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError) {
       return (
-        <Center height="100%" flexDirection="column" gap={4}>
+        <Center height="100%" gap={4}>
           <Typography variant="h1" color="error" fontWeight="bold">
             Something went wrong.
           </Typography>

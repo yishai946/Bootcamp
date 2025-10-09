@@ -15,13 +15,12 @@ import { useUser } from '@providers/UserProvider';
 import { useState } from 'react';
 import LoadingScreen from '../../Router/LoadingScreen';
 import EventFormModal from './EventForm/EventFormModal';
-import { co } from '@fullcalendar/core/internal-common';
 
 const Calendar = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const { user, loading: userLoading, error: userError, retry: userRetry } = useUser();
+  const { user, isPending: userLoading, error: userError } = useUser();
   const {
     events,
     loading: eventsLoading,
@@ -83,13 +82,13 @@ const Calendar = () => {
     return (
       <ErrorAlert
         error={eventsError || userError || exercisesError}
-        retry={eventsRetry || userRetry || exercisesRetry}
+        retry={eventsRetry || exercisesRetry}
       />
     );
   }
 
   return (
-    <Box sx={{ height: '100%', width: '100%' }}>
+    <Box height="100%">
       <Box
         sx={{
           width: '80%',
