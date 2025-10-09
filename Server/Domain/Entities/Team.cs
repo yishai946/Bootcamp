@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-
-namespace Server.Domain.Entities;
-
-public class Team
+﻿namespace Server.Entities
 {
-    public virtual string Id { get; set; } = null!;
-    public virtual string Name { get; set; } = string.Empty;
-    public virtual IList<User> Members { get; protected set; } = new List<User>();
-    public virtual IList<TeamExercise> Exercises { get; protected set; } = new List<TeamExercise>();
+    public class Team
+    {
+        public virtual Guid Id { get; protected set; }
+        public virtual string Name { get; set; } = String.Empty;
+        public virtual IList<User> Users { get; set; } = [];
+        public virtual IList<TeamExercise> TeamExercises { get; set; } = [];
+
+    }
 }

@@ -1,24 +1,9 @@
-using System;
-
-namespace Server.Domain.Entities;
-
-public class RecruitInstructor
+﻿namespace Server.Entities
 {
-    public virtual User Recruit { get; set; } = null!;
-    public virtual User Instructor { get; set; } = null!;
-
-    public override bool Equals(object? obj)
+    public class RecruitInstructor
     {
-        if (obj is not RecruitInstructor other)
-        {
-            return false;
-        }
-
-        return Equals(Recruit?.Id, other.Recruit?.Id) && Equals(Instructor?.Id, other.Instructor?.Id);
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Recruit?.Id, Instructor?.Id);
+        public virtual Guid RecruitId { get; protected set; } = default!;
+        public virtual User Recruit { get; set; } = default!;
+        public virtual User Instructor { get; set; } = default!;
     }
 }

@@ -1,9 +1,9 @@
-namespace Server.Domain.Entities;
-
-public class TeamExercise
+﻿namespace Server.Entities
 {
-    public virtual string Id { get; set; } = null!;
-    public virtual Team Team { get; set; } = null!;
-    public virtual Exercise Exercise { get; set; } = null!;
-    public virtual int SortOrder { get; set; }
+    public class TeamExercise
+    {
+        public virtual Guid Id { get; protected set; } = default!;
+        public virtual Exercise Exercise { get; set; } = default!;
+        public virtual Team Team { get; set; } = default!;
+    }
 }

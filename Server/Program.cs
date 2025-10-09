@@ -1,20 +1,14 @@
-using System.Text.Json.Serialization;
-using Server.Application;
-using Server.Infrastructure.Persistence;
+using Server.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
-
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddJwtAuth(builder.Configuration);
+builder.Services.AddDI();
 
 var app = builder.Build();
 
@@ -25,7 +19,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

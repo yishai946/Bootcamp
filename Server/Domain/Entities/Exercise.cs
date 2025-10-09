@@ -1,10 +1,14 @@
-namespace Server.Domain.Entities;
-
-public class Exercise
+﻿namespace Server.Entities
 {
-    public virtual string Id { get; set; } = null!;
-    public virtual string Title { get; set; } = string.Empty;
-    public virtual string ContentFile { get; set; } = string.Empty;
-    public virtual double WorkDays { get; set; }
-    public virtual bool IsRtl { get; set; }
+    public class Exercise
+    {
+        public virtual Guid Id { get; protected set; } = default!;
+        public virtual string Title { get; set; } = default!;
+        public virtual string ContentFile { get; set; } = default!;
+        public virtual decimal WorkDays { get; set; }
+        public virtual bool Rtl { get; set; }
+
+        public virtual IList<TeamExercise> TeamExercises { get; set; } = [];
+        public virtual IList<RecruitExercise> RecruitExercises { get; set; } = [];
+    }
 }
