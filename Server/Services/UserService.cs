@@ -14,7 +14,6 @@ namespace Server.Services
         private readonly Database Database;
         private readonly TokenService TokenService;
 
-
         public UserService(Database database, TokenService tokenService)
         {
             Database = database;
@@ -40,7 +39,7 @@ namespace Server.Services
             return ConvertToLoginDto(accessToken, user);
         }
 
-        public void EnsureUserFound([NotNull] User? user)
+        private void EnsureUserFound([NotNull] User? user)
         {
             if (user == null)
             {
@@ -54,6 +53,7 @@ namespace Server.Services
                 Token = token,
                 User = new()
                 {
+                    Id = user.Id,
                     Name = user.Name,
                     Role = user.Role,
                     Team = new() { Id = user.Team.Id, Name = user.Team.Name },

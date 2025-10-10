@@ -2,7 +2,7 @@
 {
     public class LoginException : Exception
     {
-         public LoginException() : base("Username or password are incorrect") { }
+        public LoginException() : base("Username or password are incorrect") { }
 
         public LoginException(string message) : base(message) { }
 

@@ -1,12 +1,14 @@
-﻿import { ExerciseStatus, ExerciseStatusColors, ExerciseStatusIcons } from '@enums/ExerciseStatus';
-import { Box, Step, StepLabel, Stepper, StepperProps } from '@mui/material';
+﻿import Column from '@components/Containers/Column';
+import Row from '@components/Containers/Row';
+import RecruitExercise from '@entities/RecruitExcercise';
+import { ExerciseStatus, ExerciseStatusColors, ExerciseStatusIcons } from '@enums/ExerciseStatus';
+import { Box, Divider, Step, StepLabel, Stepper, StepperProps, Typography } from '@mui/material';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled } from '@mui/material/styles';
-import ExerciseWithStatus from '../../types/ExerciseWithStatus';
 import ExerciseCard from './ExerciseCard';
 
 interface ExerciseStepperProps extends Pick<StepperProps, 'sx'> {
-  steps: ExerciseWithStatus[];
+  exercises: RecruitExercise[];
 }
 
 const Connector = styled(StepConnector)(({ theme }) => ({
@@ -40,27 +42,53 @@ export const getStepIcon = (status: ExerciseStatus) => (
   </Box>
 );
 
-const ExerciseStepper = ({ steps, sx }: ExerciseStepperProps) => {
-  if (!steps.length) return null;
+const ExerciseStepper = ({ exercises, sx }: ExerciseStepperProps) => {
+  if (!exercises.length) return null;
+
+  const currentExercise =
+    exercises.find((exercise) => exercise.status === ExerciseStatus.InProgress) || exercises[0];
 
   return (
-    <Stepper
-      activeStep={-1}
-      orientation="vertical"
-      connector={<Connector />}
-      sx={{
-        '& .MuiStepLabel-iconContainer': { pr: 2, flexShrink: 0 },
-        ...sx,
-      }}
-    >
-      {steps.map(({ exercise, status }) => (
-        <Step key={exercise.id}>
-          <StepLabel icon={getStepIcon(status)}>
-            <ExerciseCard exercise={exercise} exerciseStatus={status} />
-          </StepLabel>
-        </Step>
-      ))}
-    </Stepper>
+    <Column width="100%" gap={2} px={4}>
+      {currentExercise && (
+        <>
+          <Typography variant="h4" fontWeight={700} ml={6} mt={2}>
+            תרגיל נוכחי
+          </Typography>
+          <Row gap={2} alignItems="center" mb={2}>
+            {getStepIcon(currentExercise.status)}
+            <ExerciseCard
+              exerciseStatus={currentExercise.status}
+              exercise={currentExercise.exercise}
+            />
+          </Row>
+          <Divider />
+        </>
+      )}
+      <Typography variant="h4" fontWeight={700} ml={6}>
+        תרגילים
+      </Typography>
+      <Stepper
+        activeStep={-1}
+        orientation="vertical"
+        connector={<Connector />}
+        sx={{
+          '& .MuiStepLabel-iconContainer': { pr: 2, flexShrink: 0 },
+          ...sx,
+        }}
+      >
+        {exercises.map((recruitExercise) => (
+          <Step key={recruitExercise.id}>
+            <StepLabel icon={getStepIcon(recruitExercise.status)}>
+              <ExerciseCard
+                exercise={recruitExercise.exercise}
+                exerciseStatus={recruitExercise.status}
+              />
+            </StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+    </Column>
   );
 };
 

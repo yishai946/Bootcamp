@@ -25,7 +25,7 @@ const AppProviders = ({ children }: AppProvidersProps) => {
                 <CssBaseline />
                 {children}
               </UserProvider>
-              {/* {import.meta.env.DEV && <ReactQueryDevtools />} */}
+              {import.meta.env.DEV && <ReactQueryDevtools />}
             </QueryClientProvider>
           </ErrorBoundary>
         </Column>

@@ -13,15 +13,10 @@ const Progress = ({ exercises }: ProgressProps) => {
     (exercise) => exercise.status === ExerciseStatus.Done
   ).length;
 
-  const progress = (completedExercises / exercises.length) * 100 || 100;
+  const progress = exercises.length == 0 ? 0 : (completedExercises / exercises.length) * 100;
 
   return (
-    <InfoContainer
-      title="התקדמות"
-      icon={<TrendingUpIcon color="primary" />}
-      gap={2}
-      width="100%"
-    >
+    <InfoContainer title="התקדמות" icon={<TrendingUpIcon color="primary" />} gap={2} width="100%">
       <Typography variant="h5" fontWeight={600} alignSelf="center">
         {progress.toFixed(0)}%
       </Typography>

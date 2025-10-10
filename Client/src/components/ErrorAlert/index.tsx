@@ -1,5 +1,5 @@
 import Center from '@components/Containers/Center';
-import { Alert, Box, Button, StackProps } from '@mui/material';
+import { Alert, Button, StackProps } from '@mui/material';
 
 interface ErrorAlertProps extends StackProps {
   error?: Error | string | unknown;

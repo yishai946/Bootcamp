@@ -48,12 +48,14 @@ CREATE INDEX IF NOT EXISTS ix_users_team_id ON bootcamp.users(team_id);
 
 -- exercises (catalog of exercises)
 CREATE TABLE IF NOT EXISTS bootcamp.exercises (
-  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  code         text NOT NULL UNIQUE,      -- e.g., "EX-001"
-  title        text NOT NULL,
-  description  text,
-  created_at   timestamptz NOT NULL DEFAULT now(),
-  updated_at   timestamptz NOT NULL DEFAULT now()
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title         text NOT NULL,
+  content_file  text NOT NULL,
+  work_days     numeric(3,1) NOT NULL,
+  rtl           boolean NOT NULL DEFAULT false,
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  updated_at    timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT ck_exercises_work_days_range CHECK (work_days >= 0.0 AND work_days <= 365.0)
 );
 
 -- recruit_exercises (assignment + status tracking)
@@ -91,6 +93,33 @@ CREATE TABLE IF NOT EXISTS bootcamp.events (
 
 CREATE INDEX IF NOT EXISTS ix_events_user_id ON bootcamp.events(user_id);
 CREATE INDEX IF NOT EXISTS ix_events_user_time ON bootcamp.events(user_id, start_time);
+
+-- ---------- team_exercises (per-team exercise lineup + ordering) ----------
+CREATE TABLE IF NOT EXISTS bootcamp.team_exercises (
+  id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  team_id      uuid NOT NULL REFERENCES bootcamp.teams(id) ON DELETE CASCADE,
+  exercise_id  uuid NOT NULL REFERENCES bootcamp.exercises(id) ON DELETE CASCADE,
+  position     integer NOT NULL,  -- order of the exercise within the team lineup (0-based or 1-based: you choose)
+  created_at   timestamptz NOT NULL DEFAULT now(),
+  updated_at   timestamptz NOT NULL DEFAULT now(),
+  CONSTRAINT uq_team_exercise UNIQUE (team_id, exercise_id),
+  CONSTRAINT ck_position_nonnegative CHECK (position >= 0)
+);
+
+CREATE INDEX IF NOT EXISTS ix_team_exercises_team_id ON bootcamp.team_exercises(team_id);
+CREATE INDEX IF NOT EXISTS ix_team_exercises_exercise_id ON bootcamp.team_exercises(exercise_id);
+-- optional: speed up "give me the ordered lineup for a team"
+CREATE INDEX IF NOT EXISTS ix_team_exercises_team_pos ON bootcamp.team_exercises(team_id, position);
+
+-- keep updated_at fresh
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trg_touch_team_exercises') THEN
+    CREATE TRIGGER trg_touch_team_exercises
+      BEFORE UPDATE ON bootcamp.team_exercises
+      FOR EACH ROW EXECUTE FUNCTION bootcamp.touch_updated_at();
+  END IF;
+END$$;
 
 -- ---------- triggers to keep updated_at fresh (optional but handy) ----------
 CREATE OR REPLACE FUNCTION bootcamp.touch_updated_at()

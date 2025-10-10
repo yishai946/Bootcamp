@@ -8,31 +8,30 @@ import heLocale from '@fullcalendar/core/locales/he';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import useGetUserEvents from '@hooks/Events/useGetUserEvents';
-import useGetUserExercises from '@hooks/RecruitExercises/useGetUserExercises';
 import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab } from '@mui/material';
 import { useUser } from '@providers/UserProvider';
 import { useState } from 'react';
 import LoadingScreen from '../../Router/LoadingScreen';
 import EventFormModal from './EventForm/EventFormModal';
+import { useQuery } from '@tanstack/react-query';
+import { getRecruitExercises } from '@api/endpoints/recruitExercises';
 
-const Calendar = () => {
+interface CalendarProps {
+  exercises: RecruitExercise[];
+}
+
+const Calendar = ({ exercises }: CalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const { user, isPending: userLoading, error: userError } = useUser();
+  const { user, loading: userLoading, error: userError } = useUser();
   const {
     events,
     loading: eventsLoading,
     error: eventsError,
     retry: eventsRetry,
   } = useGetUserEvents(user?.id || '');
-  const {
-    exercises,
-    loading: exercisesLoading,
-    error: exercisesError,
-    retry: exercisesRetry,
-  } = useGetUserExercises(user?.id || '');
 
   const getExerciseMilestones = (exercise: RecruitExercise, index: number) =>
     [
@@ -77,12 +76,12 @@ const Calendar = () => {
     setSelectedEvent(null);
   };
 
-  if (eventsLoading || userLoading || exercisesLoading) return <LoadingScreen />;
-  if (eventsError || userError || exercisesError) {
+  if (eventsLoading) return <LoadingScreen />;
+  if (eventsError) {
     return (
       <ErrorAlert
-        error={eventsError || userError || exercisesError}
-        retry={eventsRetry || exercisesRetry}
+        error={eventsError}
+        retry={eventsRetry}
       />
     );
   }

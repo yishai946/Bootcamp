@@ -11,7 +11,7 @@ import UpcomingEventsDisplay from './UpcomingEvents/UpcomingEventsDisplay';
 import UserInfo from './UserInfo';
 
 const HomePage = () => {
-  const { user, isPending: loading, error } = useUser();
+  const { user, loading, error } = useUser();
 
   return loading ? (
     <HomePageSkeleton />
