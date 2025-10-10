@@ -17,6 +17,7 @@ namespace Server.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginReqDTO loginData)
         {
             try

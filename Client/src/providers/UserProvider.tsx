@@ -29,7 +29,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setUser(loginResponse.user);
 
       localStorage.setItem('user', JSON.stringify(loginResponse.user));
-      localStorage.setItem('token', JSON.stringify(loginResponse.token));
+      localStorage.setItem('token', loginResponse.token);
     } catch (err) {
       setError(err as Error);
       setUser(null);

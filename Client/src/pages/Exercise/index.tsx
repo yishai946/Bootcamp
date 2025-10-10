@@ -7,12 +7,13 @@ import { useParams } from 'react-router-dom';
 import LoadingScreen from '../../Router/LoadingScreen';
 import ExerciseButton from './ExerciseButton';
 import ExerciseDates from './ExerciseDates';
-import { useQuery } from '@tanstack/react-query';
-import { getByExerciseId } from '@api/endpoints/recruitExercises';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { advanceRecruitExerciseStatus, getByExerciseId } from '@api/endpoints/recruitExercises';
 
 const Exercise = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useUser();
+  const queryClient = useQueryClient();
 
   const {
     data: recruitExercise,
@@ -24,6 +25,21 @@ const Exercise = () => {
     queryFn: ({ queryKey }) => getByExerciseId(queryKey[1]!, queryKey[2]!),
     enabled: !!id && !!user?.id,
   });
+
+  const advanceExerciseMutation = useMutation({
+    mutationFn: (exerciseId: string) => advanceRecruitExerciseStatus(exerciseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['recruitExercise', id, user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['recruitExercises', user?.id] });
+    },
+    onError: (error) => {
+      console.error('Failed to advance exercise status:', error);
+    },
+  });
+
+  const handleAdvanceExercise = (exerciseId: string) => {
+    advanceExerciseMutation.mutate(exerciseId);
+  };
 
   return isPending ? (
     <LoadingScreen />
@@ -37,7 +53,7 @@ const Exercise = () => {
       <Divider />
       <ExerciseDates recruitExercise={recruitExercise} />
       <Divider />
-      <ExerciseButton status={recruitExercise.status} recruitExerciseId={recruitExercise.id} />
+      <ExerciseButton status={recruitExercise.status} recruitExerciseId={recruitExercise.id} onAdvance={handleAdvanceExercise} />
     </Column>
   );
 };

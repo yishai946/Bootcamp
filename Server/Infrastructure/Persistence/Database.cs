@@ -40,10 +40,27 @@ namespace Server.DB
 
         public T Read<T>(Func<ISession, T> func)
         {
-            using (var session = OpenSession())
+            using var session = OpenSession();
+            return func(session);
+        }
+
+        public void Modify(Action<ISession> action)
+        {
+            using var session = OpenSession();
+            using var transaction = session.BeginTransaction();
+            try
             {
-                return func(session);
+                action(session);
+                session.Flush();
+                transaction.Commit();
+            }
+            catch
+            {
+                if (transaction.IsActive)
+                    transaction.Rollback();
+                throw;
             }
         }
+
     }
 }

@@ -13,7 +13,7 @@ const Exercises = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['userExercises', user?.id],
+    queryKey: ['recruitExercises', user?.id],
     queryFn: ({ queryKey }) => getRecruitExercises(queryKey[1]!),
     enabled: !!user?.id,
   });

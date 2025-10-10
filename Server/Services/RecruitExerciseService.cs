@@ -2,8 +2,8 @@
 using Server.Application.DTOs;
 using Server.Application.Exceptions;
 using Server.DB;
+using Server.Domain.Enums;
 using Server.Entities;
-using Server.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Server.Services
@@ -40,6 +40,27 @@ namespace Server.Services
             return ConvertToDTO(exercise, recruitId);
         }
 
+        public void AdvanceStatus(Guid id)
+        {
+            Database.Modify(session =>
+            {
+                var exercise = session.Get<RecruitExercise>(id);
+
+                EnsureExerciseFound(exercise);
+
+                var values = Enum.GetValues(typeof(ExerciseStatus)).Cast<ExerciseStatus>().ToList();
+                var currentIndex = values.IndexOf(exercise.Status);
+
+                if (currentIndex == values.Count - 1)
+                {
+                    throw new AdvanceException();
+                }
+                
+                exercise.Status = values[currentIndex + 1];
+
+                session.SaveOrUpdate(exercise);
+            });
+        }
 
         private void EnsureExerciseFound([NotNull] RecruitExercise? recruitExercise)
         {

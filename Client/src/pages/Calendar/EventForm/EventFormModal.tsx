@@ -1,13 +1,6 @@
-import Event from '@entities/Event';
+import UserEvent from '@entities/UserEvent';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Stack
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -25,7 +18,7 @@ interface EventFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (values: EventFormSubmitValues) => void | Promise<void>;
-  event?: Event | null;
+  event?: UserEvent | null;
 }
 
 const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProps) => {

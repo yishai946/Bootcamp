@@ -13,7 +13,15 @@ interface AppProvidersProps {
 }
 
 const AppProviders = ({ children }: AppProvidersProps) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      },
+    },
+  });
 
   return (
     <CacheProvider value={rtlCache}>

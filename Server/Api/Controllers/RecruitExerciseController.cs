@@ -21,5 +21,12 @@ namespace Server.Api.Controllers
         [HttpGet("{recruitId}/exercise/{exerciseId}")]
         public IActionResult GetByExerciseId(Guid recruitId, Guid exerciseId) =>
             Ok(RecruitExerciseService.GetByExerciseId(recruitId, exerciseId));
+
+        [HttpPatch("{id}/advance")]
+        public IActionResult AdvanceStatus(Guid id) {
+            RecruitExerciseService.AdvanceStatus(id);
+
+            return Ok("Recruit exercise advanced successfully");
+        }
     }
 }

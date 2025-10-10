@@ -1,0 +1,133 @@
+import EventDetailsModal from '@components/Event/EventDetailsModal';
+import UserEvent from '@entities/UserEvent';
+import RecruitExercise from '@entities/RecruitExcercise';
+import { EventTypeColors } from '@enums/EventType';
+import { ExerciseStatus, ExerciseStatusSimplifiedColors } from '@enums/ExerciseStatus';
+import heLocale from '@fullcalendar/core/locales/he';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import FullCalendar from '@fullcalendar/react';
+import AddIcon from '@mui/icons-material/Add';
+import { Box, Fab } from '@mui/material';
+import { useState } from 'react';
+import EventFormModal from './EventForm/EventFormModal';
+
+interface CalendarProps {
+  exercises: RecruitExercise[];
+  events: UserEvent[];
+}
+
+const Calendar = ({ exercises, events }: CalendarProps) => {
+  const [selectedEvent, setSelectedEvent] = useState<UserEvent | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const getExerciseMilestones = (exercise: RecruitExercise, index: number) =>
+    [
+      {
+        title: `${index + 1} - התחלה`,
+        start: exercise.startDate || undefined,
+        allDay: true,
+        color: ExerciseStatusSimplifiedColors[ExerciseStatus.InProgress],
+      },
+      {
+        title: `${index + 2} - סיום`,
+        start: exercise.doneDate || undefined,
+        allDay: true,
+        color: ExerciseStatusSimplifiedColors[ExerciseStatus.Done],
+      },
+    ].filter((e) => !!e.start);
+
+  const mappedEvents = events.map((e) => ({ ...e, color: EventTypeColors[e.type] }));
+  const mappedExercises = exercises
+    .filter((e) => e.status !== ExerciseStatus.Fixed && e.status !== ExerciseStatus.CodeReview)
+    .flatMap((e, i) => getExerciseMilestones(e, i * 2));
+  const allEvents = [...mappedEvents, ...mappedExercises];
+
+  const handleOpenDetails = (event: UserEvent) => {
+    setIsDetailsOpen(true);
+    setSelectedEvent(event);
+  };
+
+  const handleCloseDetails = () => {
+    setIsDetailsOpen(false);
+    setSelectedEvent(null);
+  };
+
+  const handleOpenForm = (event?: UserEvent) => {
+    setIsDetailsOpen(false);
+    setIsFormOpen(true);
+    event && setSelectedEvent(event);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    setSelectedEvent(null);
+  };
+
+  return (
+    <Box height="100%">
+      <Box
+        sx={{
+          width: '80%',
+          height: '100%',
+          mx: 'auto',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+        }}
+      >
+        <Box sx={{ flex: 1, minHeight: 0 }}>
+          <FullCalendar
+            height="100%"
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            locales={[heLocale]}
+            locale="he"
+            events={allEvents}
+            showNonCurrentDates={false}
+            fixedWeekCount={false}
+            eventClick={(info) => {
+              const id = info.event.id;
+              const original = events.find((e) => e.id === id);
+
+              if (original) {
+                handleOpenDetails(original);
+              }
+            }}
+          />
+        </Box>
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => handleOpenForm()}
+          sx={{
+            position: 'fixed',
+            left: 24,
+            bottom: 24,
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
+      <EventFormModal
+        isOpen={isFormOpen}
+        onClose={handleCloseForm}
+        onSubmit={async (values) => {
+          // Handle event creation
+          console.log('Creating event with values:', values);
+          setIsFormOpen(false);
+        }}
+        event={selectedEvent}
+      />
+      <EventDetailsModal
+        isOpen={isDetailsOpen}
+        event={selectedEvent}
+        onClose={handleCloseDetails}
+        onEdit={handleOpenForm}
+      />
+    </Box>
+  );
+};
+
+export default Calendar;
