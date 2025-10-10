@@ -9,10 +9,12 @@ import ExerciseButton from './ExerciseButton';
 import ExerciseDates from './ExerciseDates';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { advanceRecruitExerciseStatus, getByExerciseId } from '@api/endpoints/recruitExercises';
+import { useMessage } from '@providers/MessageProvider';
 
 const Exercise = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useUser();
+  const { handleChange } = useMessage();
   const queryClient = useQueryClient();
 
   const {
@@ -31,9 +33,11 @@ const Exercise = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recruitExercise', id, user?.id] });
       queryClient.invalidateQueries({ queryKey: ['recruitExercises', user?.id] });
+      handleChange('סטטוס התרגיל קודם בהצלחה', 'success');
     },
     onError: (error) => {
       console.error('Failed to advance exercise status:', error);
+      handleChange('לא הצלחנו לעדכן את סטטוס התרגיל. אנא נסה שוב.', 'error');
     },
   });
 
@@ -53,7 +57,11 @@ const Exercise = () => {
       <Divider />
       <ExerciseDates recruitExercise={recruitExercise} />
       <Divider />
-      <ExerciseButton status={recruitExercise.status} recruitExerciseId={recruitExercise.id} onAdvance={handleAdvanceExercise} />
+      <ExerciseButton
+        status={recruitExercise.status}
+        recruitExerciseId={recruitExercise.id}
+        onAdvance={handleAdvanceExercise}
+      />
     </Column>
   );
 };

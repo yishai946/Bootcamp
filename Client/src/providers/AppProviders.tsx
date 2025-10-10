@@ -7,6 +7,7 @@ import { UserProvider } from './UserProvider';
 import ErrorBoundary from '@components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { MessageProvider } from './MessageProvider';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -28,13 +29,15 @@ const AppProviders = ({ children }: AppProvidersProps) => {
       <ThemeProvider theme={LightTheme}>
         <Column height="100vh">
           <ErrorBoundary>
-            <QueryClientProvider client={queryClient}>
-              <UserProvider>
-                <CssBaseline />
-                {children}
-              </UserProvider>
-              {import.meta.env.DEV && <ReactQueryDevtools />}
-            </QueryClientProvider>
+            <MessageProvider>
+              <QueryClientProvider client={queryClient}>
+                <UserProvider>
+                  <CssBaseline />
+                  {children}
+                </UserProvider>
+                {import.meta.env.DEV && <ReactQueryDevtools />}
+              </QueryClientProvider>
+            </MessageProvider>
           </ErrorBoundary>
         </Column>
       </ThemeProvider>
