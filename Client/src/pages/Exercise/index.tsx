@@ -52,7 +52,7 @@ const Exercise = () => {
   ) : (
     <Column gap={4} mb={2} pt={0}>
       <Box dir={recruitExercise.exercise.rtl ? 'rtl' : 'ltr'} mt={2}>
-        <ReactMarkdown>{recruitExercise.exercise.contentFile}</ReactMarkdown>
+        <ReactMarkdown>{recruitExercise.exercise.content}</ReactMarkdown>
       </Box>
       <Divider />
       <ExerciseDates recruitExercise={recruitExercise} />

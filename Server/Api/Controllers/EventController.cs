@@ -15,7 +15,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserEvents(Guid id) =>
-            Ok(EventService.GetUserEvents(id));
+        public IActionResult GetUserEvents(Guid id, [FromQuery] int? limit = null) =>
+            Ok(EventService.GetUserEvents(id, limit));
     }
 }

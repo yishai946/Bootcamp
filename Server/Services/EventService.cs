@@ -14,11 +14,19 @@ namespace Server.Services
             Database = database;
         }
 
-        public IList<EventDTO> GetUserEvents(Guid id)
+        public List<EventDTO> GetUserEvents(Guid id, int? limit)
         {
-            var events = Database.Read(session => session.Query<Event>()
-                .Where(userEvent => userEvent.User.Id == id)
-                .ToList());
+            var events = Database.Read(session =>
+            {
+                IQueryable<Event> query = session.Query<Event>()
+                    .Where(userEvent => userEvent.User.Id == id)
+                    .OrderBy(userEvent => userEvent.StartTime);
+
+                if (limit.HasValue)
+                    query = query.Take(limit.Value);
+
+                return query.ToList();
+            });
 
             return events.Select(userEvent => ConvertToDTO(userEvent, id)).ToList();
         }

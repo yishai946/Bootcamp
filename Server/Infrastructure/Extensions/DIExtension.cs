@@ -9,6 +9,7 @@ namespace Server.Infrastructure.Extensions
             services.AddScoped<UserService>();
             services.AddScoped<RecruitExerciseService>();
             services.AddScoped<EventService>();
+            services.AddScoped<ExerciseService>();
 
             return services;
         }

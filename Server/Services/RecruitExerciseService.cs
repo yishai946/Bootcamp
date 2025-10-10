@@ -11,13 +11,15 @@ namespace Server.Services
     public class RecruitExerciseService
     {
         private readonly Database Database;
+        private readonly ExerciseService ExerciseService;
 
-        public RecruitExerciseService(Database database)
+        public RecruitExerciseService(Database database, ExerciseService exerciseService)
         {
             Database = database;
+            ExerciseService = exerciseService;
         }
 
-        public IList<RecruitExerciseDTO> GetAll(Guid id)
+        public List<RecruitExerciseDTO> GetAll(Guid id)
         {
             var exrcises = Database.Read(session => session.Query<RecruitExercise>()
                 .Where(recruitExercise => recruitExercise.Recruit.Id == id)
@@ -76,11 +78,11 @@ namespace Server.Services
                 Id = recruitExercise.Id,
                 CrDate = recruitExercise.CrDate,
                 DoneDate = recruitExercise.DoneDate,
-                Exercise = recruitExercise.Exercise,
                 Status = recruitExercise.Status,
                 FixDate = recruitExercise.FixDate,
                 StartDate = recruitExercise.StartDate,
-                RecruitId = recruitId
+                RecruitId = recruitId,
+                Exercise = ExerciseService.ConvertToDTO(recruitExercise.Exercise)
             };
     }
 }

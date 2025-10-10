@@ -5,6 +5,8 @@ import UpcomingEvents from '.';
 import { useQuery } from '@tanstack/react-query';
 import { getUserEvents } from '@api/endpoints/events';
 
+const LIMIT = 3;
+
 const UpcomingEventsDisplay = () => {
   const { user } = useUser();
   const {
@@ -13,8 +15,8 @@ const UpcomingEventsDisplay = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['userEvents', user?.id],
-    queryFn: ({ queryKey }) => getUserEvents(queryKey[1]!),
+    queryKey: ['userEvents', user?.id, LIMIT],
+    queryFn: () => getUserEvents(user!.id, LIMIT),
     enabled: !!user?.id,
   });
 

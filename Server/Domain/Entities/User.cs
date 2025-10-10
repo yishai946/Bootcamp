@@ -12,7 +12,7 @@ namespace Server.Entities
         public virtual Role Role { get; set; }
         public virtual Team Team { get; set; } = default!;
 
-        public virtual IList<Event> Events { get; set; } = [];
-        public virtual IList<RecruitExercise> RecruitExercises { get; set; } = [];
+        public virtual List<Event> Events { get; set; } = [];
+        public virtual List<RecruitExercise> RecruitExercises { get; set; } = [];
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Server.Infrastructure.Extensions;
+using Server.Infrastructure.Middlewares;
 using StackExchange.Profiling.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiniProfiler();
 app.UseRouting();
 app.UseCors("FrontendCors");

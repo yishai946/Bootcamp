@@ -1,5 +1,4 @@
 ﻿using Server.Domain.Enums;
-using Server.Entities;
 
 namespace Server.Application.DTOs
 {
@@ -7,7 +6,7 @@ namespace Server.Application.DTOs
     {
         public Guid Id { get; set; } = default!;
         public Guid RecruitId { get; set; } = default!;
-        public Exercise Exercise { get; set; } = default!;
+        public ExerciseDTO Exercise { get; set; } = default!;
         public ExerciseStatus Status { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? FixDate { get; set; }

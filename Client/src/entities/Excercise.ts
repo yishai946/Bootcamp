@@ -1,7 +1,7 @@
 interface Exercise {
   id: string;
   title: string;
-  contentFile: string;
+  content: string;
   workDays: number;
   rtl: boolean;
 }
