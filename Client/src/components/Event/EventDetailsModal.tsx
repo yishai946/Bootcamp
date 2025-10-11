@@ -1,4 +1,4 @@
-import Event from '@entities/Event';
+import UserEvent from '@entities/UserEvent';
 import { EventTypeNames } from '@enums/EventType';
 import {
   Button,
@@ -13,9 +13,9 @@ import { formatDate } from '@utils/helperFuncs';
 
 interface EventDetailsModalProps {
   isOpen: boolean;
-  event: Event | null;
+  event: UserEvent | null;
   onClose: () => void;
-  onEdit?: (event: Event) => void;
+  onEdit?: (event: UserEvent) => void;
 }
 
 const EventDetailsModal = ({ isOpen, event, onClose, onEdit }: EventDetailsModalProps) => (

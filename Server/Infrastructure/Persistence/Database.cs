@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg;
 using NHibernate;
 using NHibernate.Driver;
 using ISession = NHibernate.ISession;
+using Server.Infrastructure.Persistence;
 
 namespace Server.DB
 {
@@ -23,6 +24,10 @@ namespace Server.DB
                 {
                     map.FluentMappings.AddFromAssemblyOf<Program>();
                 })
+                .ExposeConfiguration(cfg =>
+                {
+                    cfg.SetInterceptor(new MiniProfilerInterceptor());
+                })
                 .BuildSessionFactory();
         }
 
@@ -35,10 +40,27 @@ namespace Server.DB
 
         public T Read<T>(Func<ISession, T> func)
         {
-            using (var session = OpenSession())
+            using var session = OpenSession();
+            return func(session);
+        }
+
+        public void Modify(Action<ISession> action)
+        {
+            using var session = OpenSession();
+            using var transaction = session.BeginTransaction();
+            try
             {
-                return func(session);
+                action(session);
+                session.Flush();
+                transaction.Commit();
+            }
+            catch
+            {
+                if (transaction.IsActive)
+                    transaction.Rollback();
+                throw;
             }
         }
+
     }
 }

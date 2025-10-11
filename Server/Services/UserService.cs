@@ -1,13 +1,11 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using NHibernate.Linq;
+using Server.Application.DTOs;
 using Server.DB;
 using Server.DTOs;
 using Server.Entities;
 using Server.Exceptions;
 using Server.Infrastructure.Security;
 using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Server.Services
 {
@@ -15,7 +13,6 @@ namespace Server.Services
     {
         private readonly Database Database;
         private readonly TokenService TokenService;
-
 
         public UserService(Database database, TokenService tokenService)
         {
@@ -26,7 +23,8 @@ namespace Server.Services
         public LoginResDTO Login(LoginReqDTO loginData)
         {
             var user = Database.Read(session => session.Query<User>()
-                .Where(u => u.Username == loginData.Username)
+                .Where(user => user.Username == loginData.Username)
+                .Fetch(user => user.Team)
                 .SingleOrDefault());
 
             EnsureUserFound(user);
@@ -41,7 +39,7 @@ namespace Server.Services
             return ConvertToLoginDto(accessToken, user);
         }
 
-        public void EnsureUserFound([NotNull] User? user)
+        private void EnsureUserFound([NotNull] User? user)
         {
             if (user == null)
             {
@@ -52,11 +50,15 @@ namespace Server.Services
         private LoginResDTO ConvertToLoginDto(string token, User user) =>
             new()
             {
-                AccessToken = token,
-                Name = user.Name,
-                Role = user.Role,
-                Team = new TeamDTO { Id = user.Team.Id, Name = user.Team.Name },
-                Username = user.Username
+                Token = token,
+                User = new()
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    Role = user.Role,
+                    Team = new() { Id = user.Team.Id, Name = user.Team.Name },
+                    Username = user.Username
+                }
             };
     }
 }

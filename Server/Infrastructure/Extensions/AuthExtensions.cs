@@ -33,20 +33,6 @@ namespace Server.Infrastructure.Extensions
                         ValidateLifetime = false,
                         RequireExpirationTime = false
                     };
-
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = ctx =>
-                        {
-                            Console.WriteLine($"JWT auth failed: {ctx.Exception.Message}");
-                            return Task.CompletedTask;
-                        },
-                        OnChallenge = ctx =>
-                        {
-                            Console.WriteLine($"JWT challenge: {ctx.Error} - {ctx.ErrorDescription}");
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
 
             services.AddAuthorization();

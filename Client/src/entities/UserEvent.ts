@@ -1,6 +1,6 @@
 import { EventType } from '@enums/EventType';
 
-interface Event {
+interface UserEvent {
   id: string;
   userId: string;
   type: EventType;
@@ -13,4 +13,4 @@ interface Event {
   updatedAt: string;
 }
 
-export default Event;
+export default UserEvent;

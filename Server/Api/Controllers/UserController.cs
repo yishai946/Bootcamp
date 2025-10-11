@@ -17,16 +17,8 @@ namespace Server.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginReqDTO loginData)
-        {
-            try
-            {
-                return Ok(UserService.Login(loginData));
-            }
-            catch (LoginException exception)
-            {
-                return Unauthorized(exception.Message);
-            }
-        }
+        [AllowAnonymous]
+        public IActionResult Login([FromBody] LoginReqDTO loginData) => 
+            Ok(UserService.Login(loginData));
     }
 }

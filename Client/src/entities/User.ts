@@ -5,7 +5,10 @@ interface User {
   name: string;
   username: string;
   role: Role;
-  teamId: string;
+  team: {
+    id: string;
+    name: string;
+  };
 }
 
 export default User;

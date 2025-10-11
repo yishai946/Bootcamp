@@ -24,12 +24,9 @@ namespace Server.Mappings
 
             Map(x => x.Title).Column("title").Not.Nullable();
             Map(x => x.Description).Column("description");
-
+            Map(x => x.AllDay).Column("all_day").Not.Nullable();
             Map(x => x.StartTime).Column("start_time").Not.Nullable();
-            Map(x => x.CrTime).Column("cr_time").Not.Nullable();
-            Map(x => x.FixTime).Column("fix_time").Not.Nullable();
-            Map(x => x.DoneTime).Column("done_time").Not.Nullable();
-
+            Map(x => x.EndTime).Column("end_time").Not.Nullable();
             Map(x => x.CreatedAt).Column("created_at").Not.Nullable();
             Map(x => x.UpdatedAt).Column("updated_at").Not.Nullable();
         }

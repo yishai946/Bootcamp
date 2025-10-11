@@ -18,7 +18,7 @@ interface Page {
   title?: string;
   isVisibleInMenu: boolean;
   icon?: ReactNode;
-  isProtected?: boolean; 
+  isProtected?: boolean;
   allowedRoles?: Role[];
   isPublicOnly?: boolean;
 }

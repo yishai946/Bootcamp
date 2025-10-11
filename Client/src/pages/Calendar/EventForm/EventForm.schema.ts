@@ -1,7 +1,7 @@
 // eventForm.schema.ts
 import { z } from 'zod';
 import { EventType } from '@enums/EventType';
-import Event from '@entities/Event';
+import UserEvent from '@entities/UserEvent';
 import { toDatetimeLocalString } from '@utils/helperFuncs';
 
 export const eventFormSchema = z
@@ -54,7 +54,7 @@ export const DEFAULT_VALUES: EventFormValues = {
   description: undefined,
 };
 
-export const mapEventToFormValues = (event?: Event | null): Partial<EventFormValues> =>
+export const mapEventToFormValues = (event?: UserEvent | null): Partial<EventFormValues> =>
   !event
     ? {}
     : {

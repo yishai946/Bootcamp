@@ -1,12 +1,12 @@
 import Row from '@components/Containers/Row';
-import Event from '@entities/Event';
+import UserEvent from '@entities/UserEvent';
 import { EventTypeIcons } from '@enums/EventType';
 import { Button, Typography } from '@mui/material';
 import { formatDate } from '@utils/helperFuncs';
 
 interface UpcomingEventProps {
-  event: Event;
-  onSelect?: (event: Event) => void;
+  event: UserEvent;
+  onSelect?: (event: UserEvent) => void;
 }
 
 const UpcomingEvent = ({ event, onSelect }: UpcomingEventProps) => (

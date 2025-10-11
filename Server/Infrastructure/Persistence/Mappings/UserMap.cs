@@ -16,8 +16,7 @@ namespace Server.Mappings
             Map(user => user.Role).Column("role").CustomType<Role>().Not.Nullable();
 
             References(user => user.Team).Column("team_id")
-                .ForeignKey("fk_users_team")
-                .Not.LazyLoad();
+                .ForeignKey("fk_users_team");
 
             HasMany(user => user.Events)
                 .KeyColumn("user_id")

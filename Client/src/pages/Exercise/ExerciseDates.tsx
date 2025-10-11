@@ -1,12 +1,9 @@
 import Row from '@components/Containers/Row';
-import Exercise from '@entities/Excercise';
 import RecruitExercise from '@entities/RecruitExcercise';
-import { ExerciseStatus, ExerciseStatusColors, STATUSES } from '@enums/ExerciseStatus';
-import { Button } from '@mui/material';
+import { ExerciseStatus, STATUSES } from '@enums/ExerciseStatus';
 import DateField from './DateField';
 
 interface DetailsProps {
-  exercise: Exercise;
   recruitExercise: RecruitExercise;
 }
 

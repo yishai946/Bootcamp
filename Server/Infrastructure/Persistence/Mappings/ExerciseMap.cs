@@ -14,18 +14,6 @@ namespace Server.Mappings
             Map(exercise => exercise.ContentFile).Column("content_file").Not.Nullable();
             Map(exercise => exercise.WorkDays).Column("work_days").Not.Nullable().Precision(3).Scale(1);
             Map(exercise => exercise.Rtl).Column("rtl").Not.Nullable();
-
-            HasMany(exercise => exercise.TeamExercises)
-                .KeyColumn("exercise_id")
-                .Table("team_exercises")
-                .Inverse()
-                .Cascade.AllDeleteOrphan();
-
-            HasMany(exercise => exercise.RecruitExercises)
-                .KeyColumn("exercise_id")
-                .Table("recruit_exercises")
-                .Inverse()
-                .Cascade.None();
         }
     }
 }

@@ -1,5 +1,5 @@
 import InfoContainer from '@components/Containers/InfoContainer';
-import Event from '@entities/Event';
+import UserEvent from '@entities/UserEvent';
 import EventIcon from '@mui/icons-material/Event';
 import { Button } from '@mui/material';
 import { useState } from 'react';
@@ -10,13 +10,13 @@ import UpcomingEvent from './UpcomingEvent';
 import Column from '@components/Containers/Column';
 
 interface UpcomingEventsProps {
-  events: Event[];
+  events: UserEvent[];
 }
 
 const UpcomingEvents = ({ events }: UpcomingEventsProps) => {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<UserEvent | null>(null);
 
-  const handleSelectEvent = (event: Event) => {
+  const handleSelectEvent = (event: UserEvent) => {
     setSelectedEvent(event);
   };
 
@@ -32,7 +32,7 @@ const UpcomingEvents = ({ events }: UpcomingEventsProps) => {
       gap={2}
       justifyContent="space-between"
     >
-      <Column width="100%" height="100%">
+      <Column width="100%" height="100%" gap={2}>
         {events.length === 0 ? (
           <NoUpcomingEvents />
         ) : (

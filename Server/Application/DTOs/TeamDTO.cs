@@ -1,4 +1,4 @@
-﻿namespace Server.DTOs
+﻿namespace Server.Application.DTOs
 {
     public class TeamDTO
     {

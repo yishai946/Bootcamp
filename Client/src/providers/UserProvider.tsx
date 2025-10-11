@@ -1,10 +1,10 @@
-import { login as apiLogin } from '@api/user';
+import { login as apiLogin } from '@api/endpoints/users';
 import User from '@entities/User';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface UserContextType {
   user: User | null;
-  isPending: boolean;
+  loading: boolean;
   error: Error | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -17,22 +17,25 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const [isPending, setIsPending] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const login = async (username: string, password: string) => {
-    setIsPending(true);
+    setLoading(true);
     setError(null);
     try {
-      const loggedInUser = await apiLogin(username, password);
-      setUser(loggedInUser);
-      localStorage.setItem('user', JSON.stringify(loggedInUser));
+      const loginResponse = await apiLogin(username, password);
+
+      setUser(loginResponse.user);
+
+      localStorage.setItem('user', JSON.stringify(loginResponse.user));
+      localStorage.setItem('token', loginResponse.token);
     } catch (err) {
       setError(err as Error);
       setUser(null);
       localStorage.removeItem('user');
     } finally {
-      setIsPending(false);
+      setLoading(false);
     }
   };
 
@@ -40,6 +43,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setUser(null);
     setError(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
   };
 
   useEffect(() => {
@@ -50,7 +54,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, isPending, error, login, logout }}>
+    <UserContext.Provider value={{ user, loading, error, login, logout }}>
       {children}
     </UserContext.Provider>
   );
