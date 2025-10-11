@@ -1,4 +1,6 @@
-﻿using Server.Application.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Server.Application.Services;
+using Server.Infrastructure.Security;
 
 namespace Server.Infrastructure.Extensions
 {

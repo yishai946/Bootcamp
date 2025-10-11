@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Server.Application.Services;
 
 namespace Server.Api.Controllers
@@ -15,6 +16,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "SameUserOrInstructor")]
         public IActionResult GetAll(Guid id) =>
             Ok(RecruitExerciseService.GetAll(id));
 
@@ -23,7 +25,8 @@ namespace Server.Api.Controllers
             Ok(RecruitExerciseService.GetByExerciseId(recruitId, exerciseId));
 
         [HttpPatch("{id}/advance")]
-        public IActionResult AdvanceStatus(Guid id) {
+        public IActionResult AdvanceStatus(Guid id)
+        {
             RecruitExerciseService.AdvanceStatus(id);
 
             return Ok("Recruit exercise advanced successfully");

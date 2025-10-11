@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Server.Infrastructure.Options;
 using Server.Infrastructure.Security;
@@ -35,7 +36,14 @@ namespace Server.Infrastructure.Extensions
                     };
                 });
 
-            services.AddAuthorization();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IAuthorizationHandler, SameUserOrSuperiorPolicy>();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("SameUserOrInstructor", policy =>
+                    policy.Requirements.Add(new SameUserOrSuperiorRequirement()));
+            });
 
             services.AddScoped<TokenService>();
 

@@ -17,9 +17,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddFrontendCors();
+builder.Services.AddDI();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddJwtAuth(builder.Configuration);
-builder.Services.AddDI();
 builder.Services.AddMiniProfiler(options =>
 {
     options.RouteBasePath = "/profiler";

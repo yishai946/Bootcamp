@@ -44,6 +44,57 @@ CREATE TABLE IF NOT EXISTS bootcamp.users (
   updated_at     timestamptz NOT NULL DEFAULT now()
 );
 
+CREATE OR REPLACE FUNCTION bootcamp.validate_recruit_instructor_roles()
+RETURNS TRIGGER AS $$
+DECLARE
+    recruit_role INT;
+    instructor_role INT;
+BEGIN
+    SELECT role INTO recruit_role FROM bootcamp.users WHERE id = NEW.recruit_id;
+    SELECT role INTO instructor_role FROM bootcamp.users WHERE id = NEW.instructor_id;
+
+    IF recruit_role IS NULL OR instructor_role IS NULL THEN
+        RAISE EXCEPTION 'Recruit or instructor not found in users table';
+    END IF;
+
+    IF recruit_role <> 2 THEN
+        RAISE EXCEPTION 'Recruit must have role = 2 (Recruit)';
+    END IF;
+
+    IF instructor_role <> 1 THEN
+        RAISE EXCEPTION 'Instructor must have role = 1 (Instructor)';
+    END IF;
+
+    IF NEW.recruit_id = NEW.instructor_id THEN
+        RAISE EXCEPTION 'Recruit and instructor cannot be the same user';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Now create the table
+CREATE TABLE IF NOT EXISTS bootcamp.recruit_instructor
+(
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    recruit_id UUID NOT NULL UNIQUE,
+    instructor_id UUID NOT NULL UNIQUE,
+    CONSTRAINT recruit_instructor_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_recruit FOREIGN KEY (recruit_id)
+        REFERENCES bootcamp.users (id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_instructor FOREIGN KEY (instructor_id)
+        REFERENCES bootcamp.users (id)
+        ON DELETE CASCADE
+);
+
+-- Attach the trigger
+CREATE TRIGGER trg_validate_recruit_instructor_roles
+BEFORE INSERT OR UPDATE ON bootcamp.recruit_instructor
+FOR EACH ROW
+EXECUTE FUNCTION bootcamp.validate_recruit_instructor_roles();
+
+
 CREATE INDEX IF NOT EXISTS ix_users_team_id ON bootcamp.users(team_id);
 
 -- exercises (catalog of exercises)

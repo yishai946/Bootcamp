@@ -5,6 +5,7 @@ using Server.Domain.Entities;
 using Server.Application.Exceptions;
 using Server.Infrastructure.Security;
 using System.Diagnostics.CodeAnalysis;
+using Server.Domain.Enums;
 
 namespace Server.Application.Services
 {
@@ -37,6 +38,22 @@ namespace Server.Application.Services
 
             return ConvertToLoginDto(accessToken, user);
         }
+
+        public bool IsRecruitOfInstructor(Guid intructorId, Guid recruitId) =>
+            Database.Read(session => session.Query<RecruitInstructor>()
+                .Any(recruitInstructor => recruitInstructor.Instructor.Id == intructorId
+                     && recruitInstructor.Recruit.Id == recruitId));
+
+        public bool IsRecruitOfTeamLeader(Guid teamLeaderId, Guid recruitId) =>
+            Database.Read(session =>
+                session.Query<User>()
+                    .Where(leader => leader.Id == teamLeaderId && leader.Role == Role.TeamLeader)
+                    .Join(session.Query<User>().Where(r => r.Id == recruitId && r.Role == Role.Recruit),
+                          leader => leader.Team.Id,
+                          recruit => recruit.Team.Id,
+                          (leader, recruit) => leader)
+                    .Any()
+            );
 
         private void EnsureUserFound([NotNull] User? user)
         {

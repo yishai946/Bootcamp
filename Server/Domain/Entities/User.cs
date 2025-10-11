@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Server.Domain.Enums;
+﻿using Server.Domain.Enums;
 
 namespace Server.Domain.Entities
 {
@@ -12,7 +11,7 @@ namespace Server.Domain.Entities
         public virtual Role Role { get; set; }
         public virtual Team Team { get; set; } = default!;
 
-        public virtual List<Event> Events { get; set; } = [];
-        public virtual List<RecruitExercise> RecruitExercises { get; set; } = [];
+        public virtual IList<Event> Events { get; set; } = [];
+        public virtual IList<RecruitExercise> RecruitExercises { get; set; } = [];
     }
 }

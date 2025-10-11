@@ -47,6 +47,16 @@ CREATE TABLE IF NOT EXISTS bootcamp.recruit_exercises
     CONSTRAINT recruit_exercises_recruit_id_exercise_id_key UNIQUE (recruit_id, exercise_id)
 );
 
+CREATE TABLE IF NOT EXISTS bootcamp.recruit_instructor
+(
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    recruit_id uuid NOT NULL,
+    instructor_id uuid NOT NULL,
+    CONSTRAINT recruit_instructor_pkey PRIMARY KEY (id),
+    CONSTRAINT recruit_instructor_instructor_id_key UNIQUE (instructor_id),
+    CONSTRAINT recruit_instructor_recruit_id_key UNIQUE (recruit_id)
+);
+
 CREATE TABLE IF NOT EXISTS bootcamp.team_exercises
 (
     id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -106,6 +116,24 @@ ALTER TABLE IF EXISTS bootcamp.recruit_exercises
     ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS ix_recruit_exercises_recruit_id
     ON bootcamp.recruit_exercises(recruit_id);
+
+
+ALTER TABLE IF EXISTS bootcamp.recruit_instructor
+    ADD CONSTRAINT fk_instructor FOREIGN KEY (instructor_id)
+    REFERENCES bootcamp.users (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS recruit_instructor_instructor_id_key
+    ON bootcamp.recruit_instructor(instructor_id);
+
+
+ALTER TABLE IF EXISTS bootcamp.recruit_instructor
+    ADD CONSTRAINT fk_recruit FOREIGN KEY (recruit_id)
+    REFERENCES bootcamp.users (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS recruit_instructor_recruit_id_key
+    ON bootcamp.recruit_instructor(recruit_id);
 
 
 ALTER TABLE IF EXISTS bootcamp.team_exercises

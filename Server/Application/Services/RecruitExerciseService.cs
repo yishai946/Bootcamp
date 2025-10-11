@@ -42,7 +42,6 @@ namespace Server.Application.Services
             });
         }
 
-
         public RecruitExerciseDTO GetByExerciseId(Guid recruitId, Guid exerciseId)
         {
             var exercise = Database.Read(session => session.Query<RecruitExercise>()
