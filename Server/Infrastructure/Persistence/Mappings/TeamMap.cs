@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
-using Server.Entities;
+using Server.Domain.Entities;
 
-namespace Server.Mappings
+namespace Server.Infrastructure.Persistence.Mappings
 {
     public class TeamMap : ClassMap<Team>
     {

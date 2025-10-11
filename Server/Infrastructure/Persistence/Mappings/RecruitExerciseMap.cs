@@ -1,8 +1,8 @@
 ﻿using FluentNHibernate.Mapping;
 using Server.Domain.Enums;
-using Server.Entities;
+using Server.Domain.Entities;
 
-namespace Server.Mappings
+namespace Server.Infrastructure.Persistence.Mappings
 {
     public class RecruitExerciseMap : ClassMap<RecruitExercise>
     {

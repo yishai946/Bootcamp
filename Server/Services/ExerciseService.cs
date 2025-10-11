@@ -1,7 +1,7 @@
 ﻿using Server.Application.DTOs;
 using Server.Application.Exceptions;
-using Server.DB;
-using Server.Entities;
+using Server.Infrastructure.Persistence;
+using Server.Domain.Entities;
 
 namespace Server.Services
 {

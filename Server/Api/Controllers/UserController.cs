@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Server.DTOs;
-using Server.Exceptions;
+using Server.Application.DTOs;
+using Server.Application.Exceptions;
 using Server.Services;
-namespace Server.Controllers
+namespace Server.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
