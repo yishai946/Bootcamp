@@ -1,5 +1,4 @@
 ﻿using Server.Application.Exceptions;
-using Server.Exceptions;
 using System.Net;
 using System.Text.Json;
 

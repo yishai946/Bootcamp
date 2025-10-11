@@ -1,4 +1,4 @@
-﻿namespace Server.Exceptions
+﻿namespace Server.Application.Exceptions
 {
     public class LoginException : Exception
     {

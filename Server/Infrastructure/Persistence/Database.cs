@@ -5,7 +5,7 @@ using NHibernate.Driver;
 using ISession = NHibernate.ISession;
 using Server.Infrastructure.Persistence;
 
-namespace Server.DB
+namespace Server.Infrastructure.Persistence
 {
     public class Database : IDisposable
     {

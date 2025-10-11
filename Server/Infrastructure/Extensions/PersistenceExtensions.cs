@@ -1,4 +1,4 @@
-﻿using Server.DB;
+﻿using Server.Infrastructure.Persistence;
 
 namespace Server.Infrastructure.Extensions
 {

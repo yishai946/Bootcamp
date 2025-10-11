@@ -1,6 +1,6 @@
 ﻿using Server.Domain.Enums;
 
-namespace Server.Entities
+namespace Server.Domain.Entities
 {
     public class RecruitExercise
     {

@@ -1,13 +1,12 @@
 ﻿using NHibernate.Linq;
 using Server.Application.DTOs;
-using Server.DB;
-using Server.DTOs;
-using Server.Entities;
-using Server.Exceptions;
+using Server.Infrastructure.Persistence;
+using Server.Domain.Entities;
+using Server.Application.Exceptions;
 using Server.Infrastructure.Security;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Server.Services
+namespace Server.Application.Services
 {
     public class UserService
     {

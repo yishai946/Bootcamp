@@ -1,12 +1,12 @@
 ﻿using NHibernate.Linq;
 using Server.Application.DTOs;
 using Server.Application.Exceptions;
-using Server.DB;
+using Server.Infrastructure.Persistence;
 using Server.Domain.Enums;
-using Server.Entities;
+using Server.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Server.Services
+namespace Server.Application.Services
 {
     public class RecruitExerciseService
     {
