@@ -20,6 +20,10 @@ namespace Server.Mappings
                 .Column("team_id")
                 .Not.Nullable()
                 .ForeignKey("fk_te_team");
+
+            Map(teamExercise => teamExercise.CreatedAt).Not.Nullable();
+            Map(teamExercise => teamExercise.UpdatedAt).Not.Nullable();
+            Map(teamExercise => teamExercise.Position).Not.Nullable();
         }
     }
 }

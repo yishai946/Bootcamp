@@ -19,15 +19,29 @@ namespace Server.Services
             ExerciseService = exerciseService;
         }
 
-        public List<RecruitExerciseDTO> GetAll(Guid id)
+        public List<RecruitExerciseDTO> GetAll(Guid recruitId)
         {
-            var exrcises = Database.Read(session => session.Query<RecruitExercise>()
-                .Where(recruitExercise => recruitExercise.Recruit.Id == id)
-                .Fetch(recruitExercise => recruitExercise.Exercise)
-                .ToList());
+            return Database.Read(session =>
+            {
+                var query =
+                    from rcruitExercises in session.Query<RecruitExercise>()
+                    where rcruitExercises.Recruit.Id == recruitId
+                    from teamExercises in session.Query<TeamExercise>()
+                        .Where(teamExercise => teamExercise.Team.Id == rcruitExercises.Recruit.Team.Id &&
+                                     teamExercise.Exercise.Id == rcruitExercises.Exercise.Id)
+                    orderby teamExercises.Position
+                    select rcruitExercises;
 
-            return exrcises.Select(exercise => ConvertToDTO(exercise, id)).ToList();
+                var recruitExercises = query
+                    .Fetch(recruitExercise => recruitExercise.Exercise)
+                    .ToList();
+
+                return recruitExercises
+                    .Select(recruitExercise => ConvertToDTO(recruitExercise, recruitId))
+                    .ToList();
+            });
         }
+
 
         public RecruitExerciseDTO GetByExerciseId(Guid recruitId, Guid exerciseId)
         {
@@ -82,7 +96,7 @@ namespace Server.Services
                 FixDate = recruitExercise.FixDate,
                 StartDate = recruitExercise.StartDate,
                 RecruitId = recruitId,
-                Exercise = ExerciseService.ConvertToDTO(recruitExercise.Exercise)
+                Exercise = ExerciseService.ConvertToDTO(recruitExercise.Exercise),
             };
     }
 }
