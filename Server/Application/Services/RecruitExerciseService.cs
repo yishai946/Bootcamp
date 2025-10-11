@@ -6,7 +6,7 @@ using Server.Domain.Enums;
 using Server.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Server.Services
+namespace Server.Application.Services
 {
     public class RecruitExerciseService
     {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.Application.DTOs;
 using Server.Application.Exceptions;
-using Server.Services;
+using Server.Application.Services;
 namespace Server.Api.Controllers
 {
     [ApiController]

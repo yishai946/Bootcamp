@@ -1,4 +1,4 @@
-﻿using Server.Services;
+﻿using Server.Application.Services;
 
 namespace Server.Infrastructure.Extensions
 {

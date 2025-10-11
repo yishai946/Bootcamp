@@ -3,7 +3,7 @@ using Server.Application.Exceptions;
 using Server.Infrastructure.Persistence;
 using Server.Domain.Entities;
 
-namespace Server.Services
+namespace Server.Application.Services
 {
     public class ExerciseService
     {
