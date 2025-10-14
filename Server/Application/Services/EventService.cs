@@ -14,12 +14,12 @@ namespace Server.Application.Services
             Database = database;
         }
 
-        public List<EventDTO> GetUserEvents(Guid id, int? limit)
+        public List<EventDTO> GetUserEvents(Guid userId, int? limit)
         {
             var events = Database.Read(session =>
             {
                 IQueryable<Event> query = session.Query<Event>()
-                    .Where(userEvent => userEvent.User.Id == id)
+                    .Where(userEvent => userEvent.User.Id == userId)
                     .OrderBy(userEvent => userEvent.StartTime);
 
                 if (limit.HasValue)
@@ -28,7 +28,7 @@ namespace Server.Application.Services
                 return query.ToList();
             });
 
-            return events.Select(userEvent => ConvertToDTO(userEvent, id)).ToList();
+            return events.Select(userEvent => ConvertToDTO(userEvent, userId)).ToList();
         }
 
         private EventDTO ConvertToDTO(Event userEvent, Guid userId) =>

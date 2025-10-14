@@ -41,8 +41,10 @@ namespace Server.Infrastructure.Extensions
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("SameUserOrInstructor", policy =>
-                    policy.Requirements.Add(new SameUserOrSuperiorRequirement()));
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddRequirements(new SameUserOrSuperiorRequirement())
+                    .Build();
             });
 
             services.AddScoped<TokenService>();

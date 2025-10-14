@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Server.Application.Services;
 
 namespace Server.Api.Controllers
@@ -14,8 +15,8 @@ namespace Server.Api.Controllers
             EventService = eventService;
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetUserEvents(Guid id, [FromQuery] int? limit = null) =>
-            Ok(EventService.GetUserEvents(id, limit));
+        [HttpGet("{userId}")]
+        public IActionResult GetUserEvents(Guid userId, [FromQuery] int? limit = null) =>
+            Ok(EventService.GetUserEvents(userId, limit));
     }
 }

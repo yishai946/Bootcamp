@@ -15,19 +15,18 @@ namespace Server.Api.Controllers
             RecruitExerciseService = recruitExerciseService;
         }
 
-        [HttpGet("{id}")]
-        [Authorize(Policy = "SameUserOrInstructor")]
-        public IActionResult GetAll(Guid id) =>
-            Ok(RecruitExerciseService.GetAll(id));
+        [HttpGet("{userId}")]
+        public IActionResult GetAll(Guid userId) =>
+            Ok(RecruitExerciseService.GetAll(userId));
 
-        [HttpGet("{recruitId}/exercise/{exerciseId}")]
-        public IActionResult GetByExerciseId(Guid recruitId, Guid exerciseId) =>
-            Ok(RecruitExerciseService.GetByExerciseId(recruitId, exerciseId));
+        [HttpGet("{userId}/exercise/{exerciseId}")]
+        public IActionResult GetByExerciseId(Guid userId, Guid exerciseId) =>
+            Ok(RecruitExerciseService.GetByExerciseId(userId, exerciseId));
 
-        [HttpPatch("{id}/advance")]
-        public IActionResult AdvanceStatus(Guid id)
+        [HttpPatch("{userId}/exercise/{exerciseId}/advance")]
+        public IActionResult AdvanceStatus(Guid userId, Guid exerciseId)
         {
-            RecruitExerciseService.AdvanceStatus(id);
+            RecruitExerciseService.AdvanceStatus(userId, exerciseId);
 
             return Ok("Recruit exercise advanced successfully");
         }

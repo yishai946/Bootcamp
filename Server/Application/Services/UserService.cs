@@ -44,14 +44,14 @@ namespace Server.Application.Services
                 .Any(recruitInstructor => recruitInstructor.Instructor.Id == intructorId
                      && recruitInstructor.Recruit.Id == recruitId));
 
-        public bool IsRecruitOfTeamLeader(Guid teamLeaderId, Guid recruitId) =>
+        public bool IsUserOfTeamLeader(Guid teamLeaderId, Guid targetUserId) =>
             Database.Read(session =>
                 session.Query<User>()
                     .Where(leader => leader.Id == teamLeaderId && leader.Role == Role.TeamLeader)
-                    .Join(session.Query<User>().Where(r => r.Id == recruitId && r.Role == Role.Recruit),
+                    .Join(session.Query<User>().Where(u => u.Id == targetUserId),
                           leader => leader.Team.Id,
-                          recruit => recruit.Team.Id,
-                          (leader, recruit) => leader)
+                          user => user.Team.Id,
+                          (leader, user) => leader)
                     .Any()
             );
 

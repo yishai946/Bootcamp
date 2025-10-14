@@ -3,8 +3,7 @@ import { Button } from '@mui/material';
 
 interface ExerciseButtonProps {
   status: ExerciseStatus;
-  recruitExerciseId: string;
-  onAdvance: (exerciseId: string) => void;
+  onAdvance: () => void;
 }
 
 const buttonLabels: Partial<Record<ExerciseStatus, string>> = {
@@ -14,11 +13,11 @@ const buttonLabels: Partial<Record<ExerciseStatus, string>> = {
   [ExerciseStatus.Fixed]: 'סיים תרגיל',
 };
 
-const ExerciseButton = ({ status, recruitExerciseId, onAdvance }: ExerciseButtonProps) =>
+const ExerciseButton = ({ status, onAdvance }: ExerciseButtonProps) =>
   status !== ExerciseStatus.Done && (
     <Button
       variant="contained"
-      onClick={() => onAdvance(recruitExerciseId)}
+      onClick={onAdvance}
       sx={{ background: ExerciseStatusColors[(status + 1) as ExerciseStatus], fontSize: 16 }}
     >
       {buttonLabels[status]}

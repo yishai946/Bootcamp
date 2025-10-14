@@ -29,7 +29,8 @@ const Exercise = () => {
   });
 
   const advanceExerciseMutation = useMutation({
-    mutationFn: (exerciseId: string) => advanceRecruitExerciseStatus(exerciseId),
+    mutationFn: ({ userId, exerciseId }: { userId: string; exerciseId: string }) =>
+      advanceRecruitExerciseStatus(userId, exerciseId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['recruitExercise', id, user?.id] });
       queryClient.invalidateQueries({ queryKey: ['recruitExercises', user?.id] });
@@ -41,8 +42,8 @@ const Exercise = () => {
     },
   });
 
-  const handleAdvanceExercise = (exerciseId: string) => {
-    advanceExerciseMutation.mutate(exerciseId);
+  const handleAdvanceExercise = () => {
+    advanceExerciseMutation.mutate({ userId: user!.id, exerciseId: recruitExercise?.exercise.id! });
   };
 
   return isPending ? (
@@ -57,11 +58,7 @@ const Exercise = () => {
       <Divider />
       <ExerciseDates recruitExercise={recruitExercise} />
       <Divider />
-      <ExerciseButton
-        status={recruitExercise.status}
-        recruitExerciseId={recruitExercise.id}
-        onAdvance={handleAdvanceExercise}
-      />
+      <ExerciseButton status={recruitExercise.status} onAdvance={handleAdvanceExercise} />
     </Column>
   );
 };

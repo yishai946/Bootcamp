@@ -24,7 +24,7 @@ namespace Server.Infrastructure.Security
             if (userIdClaim == null)
                 return Task.CompletedTask;
 
-            var routeIdStr = httpContext?.Request.RouteValues["id"]?.ToString();
+            var routeIdStr = httpContext?.Request.RouteValues["userId"]?.ToString();
             if (routeIdStr == null)
                 return Task.CompletedTask;
 
@@ -45,7 +45,7 @@ namespace Server.Infrastructure.Security
                 return Task.CompletedTask;
             }
 
-            if (role == "TeamLeader" && UserService.IsRecruitOfTeamLeader(userId, targetId))
+            if (role == "TeamLeader" && UserService.IsUserOfTeamLeader(userId, targetId))
             {
                 context.Succeed(requirement);
 

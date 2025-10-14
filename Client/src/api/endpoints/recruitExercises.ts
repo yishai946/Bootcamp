@@ -14,8 +14,8 @@ const getByExerciseId: (
     )
   ).data;
 
-const advanceRecruitExerciseStatus: (exerciseId: string) => Promise<void> = async (exerciseId) => {
-  await axiosInstance.patch(`/RecruitExercise/${exerciseId}/advance`);
+const advanceRecruitExerciseStatus: (userId: string, exerciseId: string) => Promise<void> = async (userId, exerciseId) => {
+  await axiosInstance.patch(`/RecruitExercise/${userId}/exercise/${exerciseId}/advance`);
 };
 
 export { getRecruitExercises, getByExerciseId, advanceRecruitExerciseStatus };

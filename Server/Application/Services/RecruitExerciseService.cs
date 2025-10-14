@@ -19,13 +19,13 @@ namespace Server.Application.Services
             ExerciseService = exerciseService;
         }
 
-        public List<RecruitExerciseDTO> GetAll(Guid recruitId)
+        public List<RecruitExerciseDTO> GetAll(Guid userId)
         {
             return Database.Read(session =>
             {
                 var query =
                     from rcruitExercises in session.Query<RecruitExercise>()
-                    where rcruitExercises.Recruit.Id == recruitId
+                    where rcruitExercises.Recruit.Id == userId
                     from teamExercises in session.Query<TeamExercise>()
                         .Where(teamExercise => teamExercise.Team.Id == rcruitExercises.Recruit.Team.Id &&
                                      teamExercise.Exercise.Id == rcruitExercises.Exercise.Id)
@@ -37,43 +37,45 @@ namespace Server.Application.Services
                     .ToList();
 
                 return recruitExercises
-                    .Select(recruitExercise => ConvertToDTO(recruitExercise, recruitId))
+                    .Select(recruitExercise => ConvertToDTO(recruitExercise, userId))
                     .ToList();
             });
         }
 
-        public RecruitExerciseDTO GetByExerciseId(Guid recruitId, Guid exerciseId)
+        public RecruitExerciseDTO GetByExerciseId(Guid userId, Guid exerciseId)
         {
             var exercise = Database.Read(session => session.Query<RecruitExercise>()
-                .Where(recruitExercise => recruitExercise.Recruit.Id == recruitId &&
+                .Where(recruitExercise => recruitExercise.Recruit.Id == userId &&
                     recruitExercise.Exercise.Id == exerciseId)
                 .Fetch(recruitExercise => recruitExercise.Exercise)
                 .SingleOrDefault());
 
             EnsureExerciseFound(exercise);
 
-            return ConvertToDTO(exercise, recruitId);
+            return ConvertToDTO(exercise, userId);
         }
 
-        public void AdvanceStatus(Guid id)
+        public void AdvanceStatus(Guid userId, Guid exerciseId)
         {
             Database.Modify(session =>
             {
-                var exercise = session.Get<RecruitExercise>(id);
+                var recruitExercise = session.Query<RecruitExercise>()
+                    .Where(recruitExercise => recruitExercise.Exercise.Id == exerciseId && recruitExercise.Recruit.Id == userId)
+                    .SingleOrDefault();
 
-                EnsureExerciseFound(exercise);
+                EnsureExerciseFound(recruitExercise);
 
                 var values = Enum.GetValues(typeof(ExerciseStatus)).Cast<ExerciseStatus>().ToList();
-                var currentIndex = values.IndexOf(exercise.Status);
+                var currentIndex = values.IndexOf(recruitExercise.Status);
 
                 if (currentIndex == values.Count - 1)
                 {
                     throw new AdvanceException();
                 }
-                
-                exercise.Status = values[currentIndex + 1];
 
-                session.SaveOrUpdate(exercise);
+                recruitExercise.Status = values[currentIndex + 1];
+
+                session.SaveOrUpdate(recruitExercise);
             });
         }
 
@@ -85,7 +87,7 @@ namespace Server.Application.Services
             }
         }
 
-        private RecruitExerciseDTO ConvertToDTO(RecruitExercise recruitExercise, Guid recruitId) =>
+        private RecruitExerciseDTO ConvertToDTO(RecruitExercise recruitExercise, Guid userId) =>
             new()
             {
                 Id = recruitExercise.Id,
@@ -94,7 +96,7 @@ namespace Server.Application.Services
                 Status = recruitExercise.Status,
                 FixDate = recruitExercise.FixDate,
                 StartDate = recruitExercise.StartDate,
-                RecruitId = recruitId,
+                RecruitId = userId,
                 Exercise = ExerciseService.ConvertToDTO(recruitExercise.Exercise),
             };
     }
