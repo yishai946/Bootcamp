@@ -5,19 +5,14 @@ using Server.Infrastructure.Persistence;
 using Server.Domain.Enums;
 using Server.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
+using Server.Infrastructure.Security;
 
 namespace Server.Application.Services
 {
-    public class RecruitExerciseService
+    public class RecruitExerciseService(Database database, HierarchyAuthorizationService authService)
     {
-        private readonly Database Database;
-        private readonly ExerciseService ExerciseService;
-
-        public RecruitExerciseService(Database database, ExerciseService exerciseService)
-        {
-            Database = database;
-            ExerciseService = exerciseService;
-        }
+        private readonly Database Database = database;
+        private readonly HierarchyAuthorizationService AuthService = authService;
 
         public List<RecruitExerciseDTO> GetAll(Guid userId)
         {
@@ -37,33 +32,37 @@ namespace Server.Application.Services
                     .ToList();
 
                 return recruitExercises
-                    .Select(recruitExercise => ConvertToDTO(recruitExercise, userId))
+                    .Select(recruitExercise => new RecruitExerciseDTO(recruitExercise))
                     .ToList();
             });
         }
 
-        public RecruitExerciseDTO GetByExerciseId(Guid userId, Guid exerciseId)
+        public RecruitExerciseDTO GetById(Guid recruitExerciseId, Guid currentUserId, string currentUserRole)
         {
-            var exercise = Database.Read(session => session.Query<RecruitExercise>()
-                .Where(recruitExercise => recruitExercise.Recruit.Id == userId &&
-                    recruitExercise.Exercise.Id == exerciseId)
+            var recruitExercise = Database.Read(session => session.Query<RecruitExercise>()
+                .Where(recruitExercise => recruitExercise.Id == recruitExerciseId)
                 .Fetch(recruitExercise => recruitExercise.Exercise)
+                .Fetch(recruitExercise => recruitExercise.Recruit)
                 .SingleOrDefault());
 
-            EnsureExerciseFound(exercise);
+            EnsureExerciseFound(recruitExercise);
+            AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, recruitExercise.Recruit.Id);
 
-            return ConvertToDTO(exercise, userId);
+            return new RecruitExerciseDTO(recruitExercise);
         }
 
-        public void AdvanceStatus(Guid userId, Guid exerciseId)
+        public void AdvanceStatus(Guid recruitExerciseId, Guid currentUserId, string currentUserRole)
         {
             Database.Modify(session =>
             {
-                var recruitExercise = session.Query<RecruitExercise>()
-                    .Where(recruitExercise => recruitExercise.Exercise.Id == exerciseId && recruitExercise.Recruit.Id == userId)
-                    .SingleOrDefault();
+                var recruitExercise = Database.Read(session => session.Query<RecruitExercise>()
+                .Where(recruitExercise => recruitExercise.Id == recruitExerciseId)
+                .Fetch(recruitExercise => recruitExercise.Exercise)
+                .Fetch(recruitExercise => recruitExercise.Recruit)
+                .SingleOrDefault());
 
                 EnsureExerciseFound(recruitExercise);
+                AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, recruitExercise.Recruit.Id);
 
                 var values = Enum.GetValues(typeof(ExerciseStatus)).Cast<ExerciseStatus>().ToList();
                 var currentIndex = values.IndexOf(recruitExercise.Status);
@@ -86,18 +85,5 @@ namespace Server.Application.Services
                 throw new NotFoundException("recruit exercise not found");
             }
         }
-
-        private RecruitExerciseDTO ConvertToDTO(RecruitExercise recruitExercise, Guid userId) =>
-            new()
-            {
-                Id = recruitExercise.Id,
-                CrDate = recruitExercise.CrDate,
-                DoneDate = recruitExercise.DoneDate,
-                Status = recruitExercise.Status,
-                FixDate = recruitExercise.FixDate,
-                StartDate = recruitExercise.StartDate,
-                RecruitId = userId,
-                Exercise = ExerciseService.ConvertToDTO(recruitExercise.Exercise),
-            };
     }
 }

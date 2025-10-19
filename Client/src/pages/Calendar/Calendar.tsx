@@ -10,13 +10,16 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab } from '@mui/material';
 import { useState } from 'react';
 import EventFormModal from './EventForm/EventFormModal';
+import EventCreateDTO from 'DTOs/EventCreateDTO';
 
 interface CalendarProps {
   exercises: RecruitExercise[];
   events: UserEvent[];
+  handleCreateEvent: (eventData: Omit<EventCreateDTO, 'userId'>) => void;
+  handleDeleteEvent: (eventId: string) => void;
 }
 
-const Calendar = ({ exercises, events }: CalendarProps) => {
+const Calendar = ({ exercises, events, handleCreateEvent, handleDeleteEvent }: CalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<UserEvent | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -28,19 +31,27 @@ const Calendar = ({ exercises, events }: CalendarProps) => {
         start: exercise.startDate || undefined,
         allDay: true,
         color: ExerciseStatusSimplifiedColors[ExerciseStatus.InProgress],
+        extendedProps: { isMilestone: true },
       },
       {
         title: `${index + 2} - סיום`,
         start: exercise.doneDate || undefined,
         allDay: true,
         color: ExerciseStatusSimplifiedColors[ExerciseStatus.Done],
+        extendedProps: { isMilestone: true },
       },
     ].filter((e) => !!e.start);
 
-  const mappedEvents = events.map((e) => ({ ...e, color: EventTypeColors[e.type] }));
+  const mappedEvents = events.map((e) => ({
+    ...e,
+    color: EventTypeColors[e.type],
+    extendedProps: e,
+  }));
+
   const mappedExercises = exercises
     .filter((e) => e.status !== ExerciseStatus.Fixed && e.status !== ExerciseStatus.CodeReview)
     .flatMap((e, i) => getExerciseMilestones(e, i * 2));
+
   const allEvents = [...mappedEvents, ...mappedExercises];
 
   const handleOpenDetails = (event: UserEvent) => {
@@ -62,6 +73,16 @@ const Calendar = ({ exercises, events }: CalendarProps) => {
   const handleCloseForm = () => {
     setIsFormOpen(false);
     setSelectedEvent(null);
+  };
+
+  const onDeleteEvent = (eventId: string) => {
+    handleDeleteEvent(eventId);
+    handleCloseDetails();
+  };
+
+  const onCreateEvent = (eventData: Omit<EventCreateDTO, 'userId'>) => {
+    handleCreateEvent(eventData);
+    handleCloseForm();
   };
 
   return (
@@ -87,14 +108,10 @@ const Calendar = ({ exercises, events }: CalendarProps) => {
             events={allEvents}
             showNonCurrentDates={false}
             fixedWeekCount={false}
-            eventClick={(info) => {
-              const id = info.event.id;
-              const original = events.find((e) => e.id === id);
-
-              if (original) {
-                handleOpenDetails(original);
-              }
-            }}
+            eventClick={(info) =>
+              !info.event.extendedProps.isMilestone &&
+              handleOpenDetails(info.event.extendedProps as UserEvent)
+            }
           />
         </Box>
         <Fab
@@ -113,11 +130,7 @@ const Calendar = ({ exercises, events }: CalendarProps) => {
       <EventFormModal
         isOpen={isFormOpen}
         onClose={handleCloseForm}
-        onSubmit={async (values) => {
-          // Handle event creation
-          console.log('Creating event with values:', values);
-          setIsFormOpen(false);
-        }}
+        onSubmit={onCreateEvent}
         event={selectedEvent}
       />
       <EventDetailsModal
@@ -125,6 +138,7 @@ const Calendar = ({ exercises, events }: CalendarProps) => {
         event={selectedEvent}
         onClose={handleCloseDetails}
         onEdit={handleOpenForm}
+        onDelete={onDeleteEvent}
       />
     </Box>
   );

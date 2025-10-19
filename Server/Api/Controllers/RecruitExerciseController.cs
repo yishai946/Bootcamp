@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Application.Services;
+using Server.Infrastructure.Extensions;
 
 namespace Server.Api.Controllers
 {
@@ -15,18 +16,29 @@ namespace Server.Api.Controllers
             RecruitExerciseService = recruitExerciseService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("user/{userId}")]
+        [Authorize(Policy = "SameUserOrHigher")]
         public IActionResult GetAll(Guid userId) =>
             Ok(RecruitExerciseService.GetAll(userId));
 
-        [HttpGet("{userId}/exercise/{exerciseId}")]
-        public IActionResult GetByExerciseId(Guid userId, Guid exerciseId) =>
-            Ok(RecruitExerciseService.GetByExerciseId(userId, exerciseId));
-
-        [HttpPatch("{userId}/exercise/{exerciseId}/advance")]
-        public IActionResult AdvanceStatus(Guid userId, Guid exerciseId)
+        [HttpGet("{recruitExerciseId}")]
+        [Authorize]
+        public IActionResult GetById(Guid recruitExerciseId)
         {
-            RecruitExerciseService.AdvanceStatus(userId, exerciseId);
+            var currentUserId = User.GetUserId();
+            var role = User.GetUserRole();
+
+            return Ok(RecruitExerciseService.GetById(recruitExerciseId, currentUserId, role));
+        }
+
+        [HttpPatch("{recruitExerciseId}/advance")]
+        [Authorize]
+        public IActionResult AdvanceStatus(Guid recruitExerciseId)
+        {
+            var currentUserId = User.GetUserId();
+            var role = User.GetUserRole();
+
+            RecruitExerciseService.AdvanceStatus(recruitExerciseId, currentUserId, role);
 
             return Ok("Recruit exercise advanced successfully");
         }

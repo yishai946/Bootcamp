@@ -13,6 +13,7 @@ namespace Server.Infrastructure.Middlewares
         {
             { typeof(NotFoundException), HttpStatusCode.NotFound },
             { typeof(UnauthorizedAccessException), HttpStatusCode.Unauthorized },
+            { typeof(ForbiddenException), HttpStatusCode.Forbidden },
             { typeof(ArgumentException), HttpStatusCode.BadRequest },
             { typeof(KeyNotFoundException), HttpStatusCode.NotFound },
             { typeof(InvalidOperationException), HttpStatusCode.BadRequest },

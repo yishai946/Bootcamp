@@ -7,7 +7,7 @@ interface UserEvent {
   title: string;
   description?: string;
   start: string;
-  end: string;
+  end?: string;
   allDay: boolean;
   createdAt: string;
   updatedAt: string;

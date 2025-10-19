@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Application.DTOs;
-using Server.Application.Exceptions;
 using Server.Application.Services;
 namespace Server.Api.Controllers
 {

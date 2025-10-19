@@ -8,7 +8,7 @@ import LoadingScreen from '../../Router/LoadingScreen';
 import ExerciseButton from './ExerciseButton';
 import ExerciseDates from './ExerciseDates';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { advanceRecruitExerciseStatus, getByExerciseId } from '@api/endpoints/recruitExercises';
+import { advanceRecruitExerciseStatus, getById } from '@api/endpoints/recruitExercises';
 import { useMessage } from '@providers/MessageProvider';
 
 const Exercise = () => {
@@ -23,16 +23,15 @@ const Exercise = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['recruitExercise', id, user?.id],
-    queryFn: ({ queryKey }) => getByExerciseId(queryKey[1]!, queryKey[2]!),
-    enabled: !!id && !!user?.id,
+    queryKey: ['recruitExercise', id],
+    queryFn: ({ queryKey }) => getById(queryKey[1]!),
+    enabled: !!id,
   });
 
   const advanceExerciseMutation = useMutation({
-    mutationFn: ({ userId, exerciseId }: { userId: string; exerciseId: string }) =>
-      advanceRecruitExerciseStatus(userId, exerciseId),
+    mutationFn: (id: string) => advanceRecruitExerciseStatus(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['recruitExercise', id, user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['recruitExercise', id] });
       queryClient.invalidateQueries({ queryKey: ['recruitExercises', user?.id] });
       handleChange('סטטוס התרגיל קודם בהצלחה', 'success');
     },
@@ -43,7 +42,7 @@ const Exercise = () => {
   });
 
   const handleAdvanceExercise = () => {
-    advanceExerciseMutation.mutate({ userId: user!.id, exerciseId: recruitExercise?.exercise.id! });
+    advanceExerciseMutation.mutate(id!);
   };
 
   return isPending ? (

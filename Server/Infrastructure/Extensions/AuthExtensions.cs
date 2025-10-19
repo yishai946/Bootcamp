@@ -37,17 +37,20 @@ namespace Server.Infrastructure.Extensions
                 });
 
             services.AddHttpContextAccessor();
-            services.AddScoped<IAuthorizationHandler, SameUserOrSuperiorPolicy>();
-
             services.AddAuthorization(options =>
             {
+                options.AddPolicy("SameUserOrHigher", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new SameUserOrSuperiorRequirement());
+                });
+
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .AddRequirements(new SameUserOrSuperiorRequirement())
                     .Build();
             });
 
-            services.AddScoped<TokenService>();
+            services.AddScoped<IAuthorizationHandler, SameUserOrSuperiorPolicy>();
 
             return services;
         }

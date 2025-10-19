@@ -1,3 +1,4 @@
+import Row from '@components/Containers/Row';
 import UserEvent from '@entities/UserEvent';
 import { EventTypeNames } from '@enums/EventType';
 import {
@@ -6,19 +7,22 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
   Stack,
   Typography,
 } from '@mui/material';
 import { formatDate } from '@utils/helperFuncs';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface EventDetailsModalProps {
   isOpen: boolean;
   event: UserEvent | null;
   onClose: () => void;
   onEdit?: (event: UserEvent) => void;
+  onDelete?: (eventId: string) => void;
 }
 
-const EventDetailsModal = ({ isOpen, event, onClose, onEdit }: EventDetailsModalProps) => (
+const EventDetailsModal = ({ isOpen, event, onClose, onEdit, onDelete }: EventDetailsModalProps) => (
   <Dialog
     open={isOpen}
     onClose={onClose}
@@ -39,16 +43,18 @@ const EventDetailsModal = ({ isOpen, event, onClose, onEdit }: EventDetailsModal
             </Stack>
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
-                תחילת האירוע
+                {event.end ? 'תחילת האירוע' : 'תאריך'}
               </Typography>
               <Typography variant="body1">{formatDate(event.start, !event.allDay)}</Typography>
             </Stack>
-            <Stack>
-              <Typography variant="subtitle2" color="text.secondary">
-                סיום האירוע
-              </Typography>
-              <Typography variant="body1">{formatDate(event.end, !event.allDay)}</Typography>
-            </Stack>
+            {event.end && (
+              <Stack>
+                <Typography variant="subtitle2" color="text.secondary">
+                  סיום האירוע
+                </Typography>
+                <Typography variant="body1">{formatDate(event.end, !event.allDay)}</Typography>
+              </Stack>
+            )}
             <Stack>
               <Typography variant="subtitle2" color="text.secondary">
                 תיאור
@@ -60,10 +66,18 @@ const EventDetailsModal = ({ isOpen, event, onClose, onEdit }: EventDetailsModal
           </Stack>
         </DialogContent>
         <DialogActions>
-          {onEdit && (
-            <Button onClick={() => onEdit(event)} variant="contained" color="warning">
-              עריכה
-            </Button>
+          {onEdit && onDelete && (
+            <Row justifyContent="space-between" width="100%">
+              <IconButton
+                onClick={() => onDelete(event.id)}
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+              <Button onClick={() => onEdit(event)} variant="contained" color="warning">
+                עריכה
+              </Button>
+            </Row>
           )}
           <Button onClick={onClose} variant="contained" color="primary">
             סגירה

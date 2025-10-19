@@ -26,7 +26,7 @@ namespace Server.Infrastructure.Persistence.Mappings
             Map(x => x.Description).Column("description");
             Map(x => x.AllDay).Column("all_day").Not.Nullable();
             Map(x => x.StartTime).Column("start_time").Not.Nullable();
-            Map(x => x.EndTime).Column("end_time").Not.Nullable();
+            Map(x => x.EndTime).Column("end_time");
             Map(x => x.CreatedAt).Column("created_at").Not.Nullable();
             Map(x => x.UpdatedAt).Column("updated_at").Not.Nullable();
         }

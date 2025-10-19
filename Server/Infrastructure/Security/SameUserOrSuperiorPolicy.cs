@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Server.Application.Services;
 using System.Security.Claims;
 
 namespace Server.Infrastructure.Security
@@ -7,52 +6,40 @@ namespace Server.Infrastructure.Security
     public class SameUserOrSuperiorPolicy : AuthorizationHandler<SameUserOrSuperiorRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserService UserService;
+        private readonly HierarchyAuthorizationService HierarchyAuth;
 
-        public SameUserOrSuperiorPolicy(IHttpContextAccessor httpContextAccessor, UserService userService)
+        public SameUserOrSuperiorPolicy(IHttpContextAccessor httpContextAccessor, HierarchyAuthorizationService hierarchyAuth)
         {
             _httpContextAccessor = httpContextAccessor;
-            UserService = userService;
+            HierarchyAuth = hierarchyAuth;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SameUserOrSuperiorRequirement requirement)
+        protected override Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            SameUserOrSuperiorRequirement requirement)
         {
-            var httpContext = _httpContextAccessor.HttpContext;
+            var httpContext = _httpContextAccessor.HttpContext!;
+            if (httpContext.Items.ContainsKey("SameUserOrSuperiorChecked"))
+            {
+                context.Succeed(requirement);
+                return Task.CompletedTask;
+            }
+
             var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = context.User.FindFirst(ClaimTypes.Role)?.Value;
+            var routeIdStr = httpContext.Request.RouteValues["userId"]?.ToString();
 
-            if (userIdClaim == null)
-                return Task.CompletedTask;
-
-            var routeIdStr = httpContext?.Request.RouteValues["userId"]?.ToString();
-            if (routeIdStr == null)
-                return Task.CompletedTask;
-
-            var targetId = Guid.Parse(routeIdStr);
-            var userId = Guid.Parse(userIdClaim);
-
-            if (targetId == userId)
+            if (userIdClaim is null || routeIdStr is null)
             {
-                context.Succeed(requirement);
-
                 return Task.CompletedTask;
             }
 
-            if (role == "Instructor" && UserService.IsRecruitOfInstructor(userId, targetId))
-            {
-                context.Succeed(requirement);
+            HierarchyAuth.EnsureSameUserOrSuperior(Guid.Parse(userIdClaim), role!, Guid.Parse(routeIdStr));
 
-                return Task.CompletedTask;
-            }
-
-            if (role == "TeamLeader" && UserService.IsUserOfTeamLeader(userId, targetId))
-            {
-                context.Succeed(requirement);
-
-                return Task.CompletedTask;
-            }
-
+            httpContext.Items["SameUserOrSuperiorChecked"] = true;
+            context.Succeed(requirement);
             return Task.CompletedTask;
         }
+
     }
 }

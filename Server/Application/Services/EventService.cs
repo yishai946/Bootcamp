@@ -1,20 +1,19 @@
-﻿using NHibernate.Linq;
-using Server.Application.DTOs;
+﻿using Server.Application.DTOs;
 using Server.Infrastructure.Persistence;
 using Server.Domain.Entities;
+using Server.Infrastructure.Security;
+using NHibernate.Linq;
+using Server.Application.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Server.Application.Services
 {
-    public class EventService
+    public class EventService(Database database, HierarchyAuthorizationService authService)
     {
-        private readonly Database Database;
+        private readonly Database Database = database;
+        private readonly HierarchyAuthorizationService AuthService = authService;
 
-        public EventService(Database database)
-        {
-            Database = database;
-        }
-
-        public List<EventDTO> GetUserEvents(Guid userId, int? limit)
+        public List<EventDTO> GetUserEvents(Guid userId, int? limit, DateTime? from = null, DateTime? to = null)
         {
             var events = Database.Read(session =>
             {
@@ -22,28 +21,75 @@ namespace Server.Application.Services
                     .Where(userEvent => userEvent.User.Id == userId)
                     .OrderBy(userEvent => userEvent.StartTime);
 
+                if (from.HasValue)
+                    query = query.Where(userEvent => userEvent.EndTime.HasValue ? userEvent.EndTime >= from.Value : userEvent.StartTime >= from.Value);
+
+                if (to.HasValue)
+                    query = query.Where(userEvent => userEvent.StartTime <= to.Value);
+
                 if (limit.HasValue)
                     query = query.Take(limit.Value);
 
                 return query.ToList();
             });
 
-            return events.Select(userEvent => ConvertToDTO(userEvent, userId)).ToList();
+            return events.Select(userEvent => new EventDTO(userEvent)).ToList();
         }
 
-        private EventDTO ConvertToDTO(Event userEvent, Guid userId) =>
-            new()
+        public void Create(EventCreateDTO eventData, Guid currentUserId, string currentUserRole)
+        {
+            AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, eventData.UserId);
+
+
+            Database.Modify(session =>
             {
-                Id = userEvent.Id,
-                CreatedAt = userEvent.CreatedAt,
-                Description = userEvent.Description,
-                Title = userEvent.Title,
-                Type = userEvent.Type,
-                End = userEvent.EndTime,
-                Start = userEvent.StartTime,
-                AllDay = userEvent.AllDay,
-                UpdatedAt = userEvent.UpdatedAt,
-                UserId = userId
-            };
+                var user = session.Get<User>(eventData.UserId);
+
+                var newEvent = new Event()
+                {
+                    User = user,
+                    Title = eventData.Title,
+                    Description = eventData.Description,
+                    StartTime = DateTime.SpecifyKind(eventData.Start, DateTimeKind.Utc),
+                    AllDay = eventData.AllDay,
+                    Type = eventData.Type,
+                };
+
+                if (!eventData.AllDay && !eventData.End.HasValue)
+                {
+                    throw new ArgumentException("Non all-day events must have an end time.");
+                }
+
+                if (eventData.End.HasValue)
+                {
+                    newEvent.EndTime = DateTime.SpecifyKind(eventData.End.Value, DateTimeKind.Utc);
+                }
+
+                session.Save(newEvent);
+            });
+        }
+
+        public void Delete(Guid eventId, Guid currentUserId, string currentUserRole) =>
+            Database.Modify(session =>
+            {
+                var existingEvent = session.Query<Event>()
+                    .Where(existingEvent => existingEvent.Id == eventId)
+                    .Fetch(existingEvent => existingEvent.User)
+                    .SingleOrDefault();
+
+                EnsureEventFound(existingEvent);
+
+                AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, existingEvent!.User.Id);
+
+                session.Delete(existingEvent);
+            });
+
+        public void EnsureEventFound(Event? @event)
+        {
+            if (@event == null)
+            {
+                throw new NotFoundException("Event not found");
+            }
+        }
     }
 }

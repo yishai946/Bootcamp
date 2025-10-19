@@ -57,10 +57,7 @@ const ExerciseStepper = ({ exercises, sx }: ExerciseStepperProps) => {
           </Typography>
           <Row gap={2} alignItems="center" mb={2}>
             {getStepIcon(currentExercise.status)}
-            <ExerciseCard
-              exerciseStatus={currentExercise.status}
-              exercise={currentExercise.exercise}
-            />
+            <ExerciseCard recruitExercise={currentExercise} />
           </Row>
           <Divider />
         </>
@@ -80,10 +77,7 @@ const ExerciseStepper = ({ exercises, sx }: ExerciseStepperProps) => {
         {exercises.map((recruitExercise) => (
           <Step key={recruitExercise.id}>
             <StepLabel icon={getStepIcon(recruitExercise.status)}>
-              <ExerciseCard
-                exercise={recruitExercise.exercise}
-                exerciseStatus={recruitExercise.status}
-              />
+              <ExerciseCard recruitExercise={recruitExercise} />
             </StepLabel>
           </Step>
         ))}

@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS bootcamp.events (
   title        text NOT NULL,
   description  text,
   start_time   timestamptz NOT NULL,
-  end_time     timestamptz NOT NULL,
+  end_time     timestamptz,
   created_at   timestamptz NOT NULL DEFAULT now(),
   updated_at   timestamptz NOT NULL DEFAULT now(),
   CHECK (end_time > start_time)
@@ -144,6 +144,61 @@ CREATE TABLE IF NOT EXISTS bootcamp.events (
 
 CREATE INDEX IF NOT EXISTS ix_events_user_id ON bootcamp.events(user_id);
 CREATE INDEX IF NOT EXISTS ix_events_user_time ON bootcamp.events(user_id, start_time);
+
+-- recurring events
+CREATE TABLE IF NOT EXISTS bootcamp.recurring_event_series (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid NOT NULL REFERENCES bootcamp.users(id) ON DELETE CASCADE,
+    title text NOT NULL,
+    description text,
+    dtstart timestamptz NOT NULL,        -- first occurrence
+    duration interval NOT NULL,          -- how long each event lasts
+    rrule text NOT NULL,                 -- iCalendar RRULE
+    all_day boolean NOT NULL DEFAULT false,
+    timezone text,                       -- optional (e.g., 'Asia/Jerusalem')
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_series_user_dtstart
+  ON bootcamp.recurring_event_series (user_id, dtstart);
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'recurring_exception_kind') THEN
+    CREATE TYPE bootcamp.recurring_exception_kind AS ENUM ('cancel', 'override');
+  END IF;
+END$$;
+
+-- Exceptions for recurring events (cancel / override)
+CREATE TABLE IF NOT EXISTS bootcamp.recurring_event_exceptions (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    series_id uuid NOT NULL REFERENCES bootcamp.recurring_event_series(id) ON DELETE CASCADE,
+    occurrence_start timestamptz NOT NULL,   -- original instance start
+    kind bootcamp.recurring_exception_kind NOT NULL,
+    new_start_time timestamptz,
+    new_end_time timestamptz,
+    new_all_day boolean,
+    new_title text,
+    new_description text,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (series_id, occurrence_start)
+);
+
+CREATE INDEX IF NOT EXISTS idx_series_occurrence
+  ON bootcamp.recurring_event_exceptions (series_id, occurrence_start);
+
+-- global days off
+CREATE TABLE IF NOT EXISTS bootcamp.global_days_off (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    date date NOT NULL,
+    allDay boolean NOT NULL DEFAULT true,
+    name text NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (date)
+);
 
 -- ---------- team_exercises (per-team exercise lineup + ordering) ----------
 CREATE TABLE IF NOT EXISTS bootcamp.team_exercises (

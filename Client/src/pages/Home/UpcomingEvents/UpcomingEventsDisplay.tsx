@@ -3,9 +3,9 @@ import { useUser } from '@providers/UserProvider';
 import UpcomingEventsSkeleton from '@skeletons/UpcomingEventsSkeleton';
 import UpcomingEvents from '.';
 import { useQuery } from '@tanstack/react-query';
-import { getUserEvents } from '@api/endpoints/events';
+import { getUserCalendar } from '@api/endpoints/events';
 
-const LIMIT = 3;
+const from = new Date();
 
 const UpcomingEventsDisplay = () => {
   const { user } = useUser();
@@ -15,8 +15,8 @@ const UpcomingEventsDisplay = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['userEvents', user?.id, LIMIT],
-    queryFn: () => getUserEvents(user!.id, LIMIT),
+    queryKey: ['userCalendar', user?.id, 3, from.getDate()],
+    queryFn: () => getUserCalendar(user!.id, 3, from),
     enabled: !!user?.id,
   });
 

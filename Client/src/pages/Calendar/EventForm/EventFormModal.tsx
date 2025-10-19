@@ -48,7 +48,7 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
     const normalizedValues: EventFormValues = {
       ...values,
       start: new Date(values.start).toISOString(),
-      end: new Date(values.end).toISOString(),
+      end: values.end ? new Date(values.end).toISOString() : undefined,
       description: trimmedDescription ? trimmedDescription : undefined,
     };
 
@@ -78,21 +78,21 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
             <Stack gap={3}>
               <RHFTextField name="title" label="שם האירוע" required />
               <EventTypeSelect />
+              <RHFSwitch name="allDay" label="כל היום" />
               <RHFTextField
                 name="start"
                 label="תאריך התחלה"
-                type="datetime-local"
+                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
                 required
               />
               <RHFTextField
                 name="end"
                 label="תאריך סיום"
-                type="datetime-local"
+                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
-                required
+                required={!methods.watch('allDay')}
               />
-              <RHFSwitch name="allDay" label="כל היום" />
               <RHFTextField name="description" label="תיאור" multiline minRows={3} />
             </Stack>
           </DialogContent>
