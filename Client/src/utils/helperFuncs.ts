@@ -1,10 +1,24 @@
 const formatDate = (dateString: string, withTime: boolean = false) => {
-  const dateParts = dateString.split('T')[0].split('-').reverse().join('/');
-  if (withTime) {
-    const timeParts = dateString.split('T')[1].split(':');
-    return `${dateParts} ${timeParts[0]}:${timeParts[1]}`;
+  if (!dateString) return '';
+
+  const [datePart] = dateString.split('T');
+  const [year, month, day] = datePart.split('-');
+  const formattedDate = [day, month, year].filter(Boolean).join('/');
+
+  if (!withTime) {
+    return formattedDate;
   }
-  return dateParts;
+
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return formattedDate;
+  }
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${formattedDate} ${hours}:${minutes}`;
 };
 
 const toDatetimeLocalString = (value: string) => {
