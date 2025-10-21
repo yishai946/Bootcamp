@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { EventType } from '@enums/EventType';
 import UserEvent from '@entities/UserEvent';
 import { toDatetimeLocalString } from '@utils/helperFuncs';
+import { RecurrenceFrequency } from '@enums/RecurrenceFrequency';
 
 export const eventFormSchema = z
   .object({
@@ -11,6 +12,16 @@ export const eventFormSchema = z
     start: z.string().min(1, 'תאריך התחלה הוא חובה'),
     end: z.string().optional(),
     allDay: z.boolean(),
+    isRecurring: z.boolean(),
+    recurrenceFrequency: z.nativeEnum(RecurrenceFrequency),
+    recurrenceInterval: z.coerce
+      .number({ invalid_type_error: 'תדירות חייבת להיות מספר' })
+      .int('יש להזין מספר שלם')
+      .min(1, 'המרווח חייב להיות לפחות 1'),
+    recurrenceEndDate: z
+      .string()
+      .optional()
+      .transform((value) => (value === '' ? undefined : value)),
     description: z
       .string()
       .trim()
@@ -60,6 +71,41 @@ export const eventFormSchema = z
         path: ['end'],
       });
     }
+
+    if (data.isRecurring) {
+      if (data.recurrenceInterval < 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'המרווח חייב להיות לפחות 1',
+          path: ['recurrenceInterval'],
+        });
+      }
+
+      if (data.recurrenceEndDate) {
+        const recurrenceEnd = new Date(data.recurrenceEndDate);
+        if (Number.isNaN(recurrenceEnd.getTime())) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'תאריך סיום מחזור לא תקין',
+            path: ['recurrenceEndDate'],
+          });
+        } else if (!Number.isNaN(startDate.getTime()) && recurrenceEnd < startDate) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'תאריך סיום המחזור חייב להיות אחרי תאריך ההתחלה',
+            path: ['recurrenceEndDate'],
+          });
+        }
+      }
+
+      if (!data.allDay && !hasEnd) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'אירוע מחזורי חייב לכלול תאריך סיום',
+          path: ['end'],
+        });
+      }
+    }
   });
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
@@ -71,6 +117,10 @@ export const DEFAULT_VALUES: EventFormValues = {
   start: '',
   end: '',
   allDay: false,
+  isRecurring: false,
+  recurrenceFrequency: RecurrenceFrequency.Weekly,
+  recurrenceInterval: 1,
+  recurrenceEndDate: '',
   description: undefined,
 };
 
@@ -94,6 +144,10 @@ export const mapEventToFormValues = (event?: UserEvent | null): Partial<EventFor
           ? toDateOnlyLocalString(event.end ?? event.start)
           : toDatetimeLocalString(event.end ?? event.start),
         allDay: event.allDay,
+        isRecurring: false,
+        recurrenceFrequency: RecurrenceFrequency.Weekly,
+        recurrenceInterval: 1,
+        recurrenceEndDate: '',
         description: event.description ?? undefined,
       };
 

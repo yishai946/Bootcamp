@@ -1,6 +1,7 @@
 import axiosInstance from '@api/axiosInstance';
 import UserEvent from '@entities/UserEvent';
 import EventReqDTO from 'DTOs/EventReqDTO';
+import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
 
 const getUserCalendar: (
   userId: string,

@@ -5,13 +5,15 @@ import {
   updateUserEvent,
 } from '@api/endpoints/events';
 import { getRecruitExercises } from '@api/endpoints/recruitExercises';
+import { createRecurringEvent } from '@api/endpoints/recurringEvents';
 import ErrorAlert from '@components/ErrorAlert';
+import { useMessage } from '@providers/MessageProvider';
 import { useUser } from '@providers/UserProvider';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import EventReqDTO from 'DTOs/EventReqDTO';
+import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
 import LoadingScreen from '../../Router/LoadingScreen';
 import Calendar from './Calendar';
-import EventReqDTO from 'DTOs/EventReqDTO';
-import { useMessage } from '@providers/MessageProvider';
 
 const CalendarDisplay = () => {
   const { user } = useUser();
@@ -54,6 +56,20 @@ const CalendarDisplay = () => {
     },
   });
 
+  const { mutate: createRecurringEventMutation } = useMutation({
+    mutationKey: ['createRecurringEvent'],
+    mutationFn: (eventData: Omit<RecurringEventReqDTO, 'userId'>) =>
+      createRecurringEvent({ ...eventData, userId: user!.id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id, 3] });
+      handleChange('אירוע מחזורי נוצר בהצלחה', 'success');
+    },
+    onError: () => {
+      handleChange('אירעה שגיאה ביצירת האירוע המחזורי', 'error');
+    },
+  });
+
   const { mutate: deleteEvent } = useMutation({
     mutationKey: ['deleteEvent'],
     mutationFn: (eventId: string) => deleteUserEvent(eventId),
@@ -85,6 +101,10 @@ const CalendarDisplay = () => {
     createEvent(eventData);
   };
 
+  const handleCreateRecurringEvent = (eventData: Omit<RecurringEventReqDTO, 'userId'>) => {
+    createRecurringEventMutation(eventData);
+  };
+
   const handleDeleteEvent = (eventId: string) => {
     deleteEvent(eventId);
   };
@@ -105,6 +125,7 @@ const CalendarDisplay = () => {
       exercises={exercises}
       events={events}
       handleCreateEvent={handleCreateEvent}
+      handleCreateRecurringEvent={handleCreateRecurringEvent}
       handleDeleteEvent={handleDeleteEvent}
       handleUpdateEvent={handleUpdateEvent}
     />

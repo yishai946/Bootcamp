@@ -3,9 +3,19 @@ import RHFSwitch from '@components/Fields/RHFSwitch';
 import RHFTextField from '@components/Fields/RHFTextField';
 import UserEvent from '@entities/UserEvent';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
-import { useEffect, useMemo } from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Stack,
+} from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { RecurrenceFrequencyLabels, recurrenceFrequencyOptions } from '@enums/RecurrenceFrequency';
+import RHFSelect from '@components/Fields/RHFSelect';
 import {
   DEFAULT_VALUES,
   eventFormSchema,
@@ -13,16 +23,25 @@ import {
   EventFormValues,
   mapEventToFormValues,
 } from './EventForm.schema';
+import Row from '@components/Containers/Row';
 
 interface EventFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (values: EventFormSubmitValues) => void | Promise<void>;
   event?: UserEvent | null;
+  disableRecurring?: boolean;
 }
 
-const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProps) => {
+const EventFormModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  event,
+  disableRecurring,
+}: EventFormModalProps) => {
   const isEditing = !!event;
+  const [userChangedEndDate, setUserChangedEndDate] = useState(false);
 
   const resolvedDefaultValues = useMemo<EventFormValues>(
     () => ({
@@ -37,11 +56,27 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
     defaultValues: resolvedDefaultValues,
   });
 
+  const { watch, setValue, getValues, handleSubmit, reset, formState } = methods;
+
+  const isAllDay = watch('allDay');
+  const isRecurring = watch('isRecurring');
+  const start = watch('start');
+  const end = watch('end');
+
   useEffect(() => {
-    if (isOpen) {
-      methods.reset(resolvedDefaultValues);
+    if (start && !userChangedEndDate) {
+      const startDate = new Date(start);
+      const currentEnd = getValues('end');
+      const currentEndDate = currentEnd ? new Date(currentEnd) : null;
+
+      if (!currentEndDate || currentEndDate <= startDate) {
+        const newEnd = new Date(startDate);
+        newEnd.setHours(startDate.getHours() + 1);
+        const local = newEnd.toLocaleString('sv-SE').replace(' ', 'T').slice(0, 16);
+        setValue('end', local, { shouldDirty: true });
+      }
     }
-  }, [isOpen, methods.reset, resolvedDefaultValues]);
+  }, [start]);
 
   const handleFormSubmit = async (values: EventFormValues) => {
     const trimmedDescription = values.description?.trim();
@@ -50,13 +85,17 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
       start: new Date(values.start).toISOString(),
       end: values.end ? new Date(values.end).toISOString() : undefined,
       description: trimmedDescription ? trimmedDescription : undefined,
+      recurrenceEndDate: values.recurrenceEndDate
+        ? new Date(values.recurrenceEndDate).toISOString()
+        : undefined,
     };
 
     await onSubmit({ ...normalizedValues, id: event?.id });
+    reset(resolvedDefaultValues);
   };
 
   const handleCancel = () => {
-    methods.reset(resolvedDefaultValues);
+    reset(resolvedDefaultValues);
     onClose();
   };
 
@@ -72,27 +111,57 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
       aria-labelledby="event-form-title"
     >
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleFormSubmit)} noValidate>
+        <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
           <DialogTitle id="event-form-title">{dialogTitle}</DialogTitle>
           <DialogContent dividers>
             <Stack gap={3}>
               <RHFTextField name="title" label="שם האירוע" required />
               <EventTypeSelect />
-              <RHFSwitch name="allDay" label="כל היום" />
+              <Row width="100%" justifyContent="space-around">
+                <RHFSwitch name="allDay" label="כל היום" />
+                <RHFSwitch
+                  name="isRecurring"
+                  label="האם האירוע מחזורי?"
+                  disabled={disableRecurring}
+                />
+              </Row>
               <RHFTextField
                 name="start"
                 label="תאריך התחלה"
-                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
+                type={isAllDay ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
                 required
               />
               <RHFTextField
                 name="end"
                 label="תאריך סיום"
-                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
+                type={isAllDay ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
-                required={!methods.watch('allDay')}
+                required={!isAllDay}
               />
+              {isRecurring && (
+                <Stack gap={2}>
+                  <RHFSelect
+                    name="recurrenceFrequency"
+                    label="תדירות"
+                    required
+                    disabled={disableRecurring}
+                  >
+                    {recurrenceFrequencyOptions.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {RecurrenceFrequencyLabels[option]}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <RHFTextField
+                    name="recurrenceEndDate"
+                    label="תאריך סיום מחזור"
+                    type={isAllDay ? 'date' : 'datetime-local'}
+                    InputLabelProps={{ shrink: true }}
+                    disabled={disableRecurring}
+                  />
+                </Stack>
+              )}
               <RHFTextField name="description" label="תיאור" multiline minRows={3} />
             </Stack>
           </DialogContent>
@@ -104,9 +173,9 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
               type="submit"
               variant="contained"
               color="primary"
-              disabled={methods.formState.isSubmitting}
+              disabled={formState.isSubmitting}
             >
-              {methods.formState.isSubmitting ? 'שומר...' : submitLabel}
+              {formState.isSubmitting ? 'שומר...' : submitLabel}
             </Button>
           </DialogActions>
         </form>
