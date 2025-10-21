@@ -10,16 +10,23 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab } from '@mui/material';
 import { useState } from 'react';
 import EventFormModal from './EventForm/EventFormModal';
-import EventCreateDTO from 'DTOs/EventCreateDTO';
+import EventReqDTO from 'DTOs/EventReqDTO';
 
 interface CalendarProps {
   exercises: RecruitExercise[];
   events: UserEvent[];
-  handleCreateEvent: (eventData: Omit<EventCreateDTO, 'userId'>) => void;
+  handleCreateEvent: (eventData: Omit<EventReqDTO, 'userId'>) => void;
   handleDeleteEvent: (eventId: string) => void;
+  handleUpdateEvent: (eventId: string, eventData: EventReqDTO) => void;
 }
 
-const Calendar = ({ exercises, events, handleCreateEvent, handleDeleteEvent }: CalendarProps) => {
+const Calendar = ({
+  exercises,
+  events,
+  handleCreateEvent,
+  handleDeleteEvent,
+  handleUpdateEvent,
+}: CalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<UserEvent | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -80,8 +87,15 @@ const Calendar = ({ exercises, events, handleCreateEvent, handleDeleteEvent }: C
     handleCloseDetails();
   };
 
-  const onCreateEvent = (eventData: Omit<EventCreateDTO, 'userId'>) => {
+  const onCreateEvent = (eventData: Omit<EventReqDTO, 'userId'>) => {
     handleCreateEvent(eventData);
+    handleCloseForm();
+  };
+
+  const onEditEvent = (eventData: Omit<EventReqDTO, 'userId'>) => {
+    if (selectedEvent) {
+      handleUpdateEvent(selectedEvent.id, { ...eventData, userId: selectedEvent.userId });
+    }
     handleCloseForm();
   };
 
@@ -130,7 +144,7 @@ const Calendar = ({ exercises, events, handleCreateEvent, handleDeleteEvent }: C
       <EventFormModal
         isOpen={isFormOpen}
         onClose={handleCloseForm}
-        onSubmit={onCreateEvent}
+        onSubmit={selectedEvent ? onEditEvent : onCreateEvent}
         event={selectedEvent}
       />
       <EventDetailsModal

@@ -1,3 +1,6 @@
+import EventTypeSelect from '@components/Fields/EventTypeSelect';
+import RHFSwitch from '@components/Fields/RHFSwitch';
+import RHFTextField from '@components/Fields/RHFTextField';
 import UserEvent from '@entities/UserEvent';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
@@ -10,9 +13,6 @@ import {
   EventFormValues,
   mapEventToFormValues,
 } from './EventForm.schema';
-import EventTypeSelect from '../../../components/Fields/EventTypeSelect';
-import RHFSwitch from '../../../components/Fields/RHFSwitch';
-import RHFTextField from '../../../components/Fields/RHFTextField';
 
 interface EventFormModalProps {
   isOpen: boolean;

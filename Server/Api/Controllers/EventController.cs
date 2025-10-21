@@ -23,7 +23,7 @@ namespace Server.Api.Controllers
             Ok(EventService.GetUserEvents(userId, limit, from, to));
 
         [HttpPost]
-        public IActionResult Create(EventCreateDTO eventData)
+        public IActionResult Create(EventReqDTO eventData)
         {
             var currentUserId = User.GetUserId();
             var role = User.GetUserRole();
@@ -43,5 +43,17 @@ namespace Server.Api.Controllers
 
             return Ok("Event deleted successfully");
         }
+
+        [HttpPut("{eventId}")]
+        [Authorize]
+        public IActionResult UpdateEvent(Guid eventId, [FromBody] EventReqDTO dto)
+        {
+            var currentUserId = User.GetUserId();
+            var role = User.GetUserRole();
+
+            EventService.Update(eventId, dto, currentUserId, role);
+            return NoContent();
+        }
+
     }
 }

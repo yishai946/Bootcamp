@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Server.Application.DTOs
 {
-    public class EventCreateDTO
+    public class EventReqDTO
     {
         [Required]
         public Guid UserId { get; set; } = default!;

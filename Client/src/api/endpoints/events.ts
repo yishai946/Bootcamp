@@ -1,6 +1,6 @@
 import axiosInstance from '@api/axiosInstance';
 import UserEvent from '@entities/UserEvent';
-import EventCreateDTO from 'DTOs/EventCreateDTO';
+import EventReqDTO from 'DTOs/EventReqDTO';
 
 const getUserCalendar: (
   userId: string,
@@ -11,7 +11,7 @@ const getUserCalendar: (
   (await axiosInstance.get<UserEvent[]>(`/calendar/${userId}`, { params: { limit, from, to } }))
     .data;
 
-const createUserEvent: (eventData: EventCreateDTO) => Promise<void> = async (eventData) => {
+const createUserEvent: (eventData: EventReqDTO) => Promise<void> = async (eventData) => {
   await axiosInstance.post('/event', eventData);
 };
 
@@ -19,4 +19,11 @@ const deleteUserEvent: (eventId: string) => Promise<void> = async (eventId) => {
   await axiosInstance.delete(`/event/${eventId}`);
 };
 
-export { getUserCalendar, createUserEvent, deleteUserEvent };
+const updateUserEvent: (eventId: string, eventData: EventReqDTO) => Promise<void> = async (
+  eventId,
+  eventData
+) => {
+  await axiosInstance.put(`/event/${eventId}`, eventData);
+};
+
+export { getUserCalendar, createUserEvent, deleteUserEvent, updateUserEvent };

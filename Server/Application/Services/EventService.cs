@@ -36,7 +36,7 @@ namespace Server.Application.Services
             return events.Select(userEvent => new EventDTO(userEvent)).ToList();
         }
 
-        public void Create(EventCreateDTO eventData, Guid currentUserId, string currentUserRole)
+        public void Create(EventReqDTO eventData, Guid currentUserId, string currentUserRole)
         {
             AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, eventData.UserId);
 
@@ -83,6 +83,49 @@ namespace Server.Application.Services
 
                 session.Delete(existingEvent);
             });
+
+        public void Update(Guid eventId, EventReqDTO updatedData, Guid currentUserId, string currentUserRole)
+        {
+            Database.Modify(session =>
+            {
+                var existingEvent = session.Query<Event>()
+                    .Where(e => e.Id == eventId)
+                    .Fetch(e => e.User)
+                    .SingleOrDefault();
+
+                EnsureEventFound(existingEvent);
+
+                AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, existingEvent!.User.Id);
+
+                if (updatedData.UserId != existingEvent.User.Id)
+                {
+                    var newUser = session.Get<User>(updatedData.UserId);
+
+                    EnsureUserFound(newUser);
+
+                    existingEvent.User = newUser;
+                }
+
+                existingEvent.Title = updatedData.Title;
+                existingEvent.Description = updatedData.Description;
+                existingEvent.Type = updatedData.Type;
+                existingEvent.AllDay = updatedData.AllDay;
+                existingEvent.StartTime = DateTime.SpecifyKind(updatedData.Start, DateTimeKind.Utc);
+                existingEvent.EndTime = updatedData.End.HasValue
+                    ? DateTime.SpecifyKind(updatedData.End.Value, DateTimeKind.Utc)
+                    : null;
+
+                session.Update(existingEvent);
+            });
+        }
+
+        private void EnsureUserFound(User? user)
+        {
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+        }
 
         public void EnsureEventFound(Event? @event)
         {

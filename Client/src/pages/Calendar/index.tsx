@@ -1,11 +1,16 @@
-import { createUserEvent, deleteUserEvent, getUserCalendar } from '@api/endpoints/events';
+import {
+  createUserEvent,
+  deleteUserEvent,
+  getUserCalendar,
+  updateUserEvent,
+} from '@api/endpoints/events';
 import { getRecruitExercises } from '@api/endpoints/recruitExercises';
 import ErrorAlert from '@components/ErrorAlert';
 import { useUser } from '@providers/UserProvider';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import LoadingScreen from '../../Router/LoadingScreen';
 import Calendar from './Calendar';
-import EventCreateDTO from 'DTOs/EventCreateDTO';
+import EventReqDTO from 'DTOs/EventReqDTO';
 import { useMessage } from '@providers/MessageProvider';
 
 const CalendarDisplay = () => {
@@ -37,7 +42,7 @@ const CalendarDisplay = () => {
 
   const { mutate: createEvent } = useMutation({
     mutationKey: ['createEvent'],
-    mutationFn: (eventData: Omit<EventCreateDTO, 'userId'>) =>
+    mutationFn: (eventData: Omit<EventReqDTO, 'userId'>) =>
       createUserEvent({ ...eventData, userId: user!.id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id] });
@@ -62,12 +67,30 @@ const CalendarDisplay = () => {
     },
   });
 
-  const handleCreateEvent = (eventData: Omit<EventCreateDTO, 'userId'>) => {
+  const { mutate: updateEvent } = useMutation({
+    mutationKey: ['updateEvent'],
+    mutationFn: (data: { eventId: string; eventData: EventReqDTO }) =>
+      updateUserEvent(data.eventId, data.eventData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id] });
+      queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id, 3] });
+      handleChange('אירוע עודכן בהצלחה', 'success');
+    },
+    onError: () => {
+      handleChange('אירעה שגיאה בעדכון האירוע', 'error');
+    },
+  });
+
+  const handleCreateEvent = (eventData: Omit<EventReqDTO, 'userId'>) => {
     createEvent(eventData);
   };
 
   const handleDeleteEvent = (eventId: string) => {
     deleteEvent(eventId);
+  };
+
+  const handleUpdateEvent = (eventId: string, eventData: EventReqDTO) => {
+    updateEvent({ eventId, eventData });
   };
 
   return exercisesPending || eventsPending ? (
@@ -83,6 +106,7 @@ const CalendarDisplay = () => {
       events={events}
       handleCreateEvent={handleCreateEvent}
       handleDeleteEvent={handleDeleteEvent}
+      handleUpdateEvent={handleUpdateEvent}
     />
   );
 };
