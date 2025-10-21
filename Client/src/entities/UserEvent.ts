@@ -9,6 +9,9 @@ interface UserEvent {
   start: string;
   end?: string;
   allDay: boolean;
+  isRecurring?: boolean;
+  seriesId?: string;
+  occurrenceStart?: string;
   createdAt: string;
   updatedAt: string;
 }

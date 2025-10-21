@@ -3,9 +3,19 @@ import RHFSwitch from '@components/Fields/RHFSwitch';
 import RHFTextField from '@components/Fields/RHFTextField';
 import UserEvent from '@entities/UserEvent';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Stack,
+} from '@mui/material';
 import { useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { RecurrenceFrequencyLabels, recurrenceFrequencyOptions } from '@enums/RecurrenceFrequency';
+import RHFSelect from '@components/Fields/RHFSelect';
 import {
   DEFAULT_VALUES,
   eventFormSchema,
@@ -19,9 +29,10 @@ interface EventFormModalProps {
   onClose: () => void;
   onSubmit: (values: EventFormSubmitValues) => void | Promise<void>;
   event?: UserEvent | null;
+  disableRecurring?: boolean;
 }
 
-const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProps) => {
+const EventFormModal = ({ isOpen, onClose, onSubmit, event, disableRecurring }: EventFormModalProps) => {
   const isEditing = !!event;
 
   const resolvedDefaultValues = useMemo<EventFormValues>(
@@ -50,6 +61,9 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
       start: new Date(values.start).toISOString(),
       end: values.end ? new Date(values.end).toISOString() : undefined,
       description: trimmedDescription ? trimmedDescription : undefined,
+      recurrenceEndDate: values.recurrenceEndDate
+        ? new Date(values.recurrenceEndDate).toISOString()
+        : undefined,
     };
 
     await onSubmit({ ...normalizedValues, id: event?.id });
@@ -62,6 +76,9 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
 
   const submitLabel = isEditing ? 'שמור שינויים' : 'צור אירוע';
   const dialogTitle = isEditing ? 'ערוך אירוע' : 'צור אירוע חדש';
+
+  const isAllDay = methods.watch('allDay');
+  const isRecurring = methods.watch('isRecurring');
 
   return (
     <Dialog
@@ -82,17 +99,53 @@ const EventFormModal = ({ isOpen, onClose, onSubmit, event }: EventFormModalProp
               <RHFTextField
                 name="start"
                 label="תאריך התחלה"
-                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
+                type={isAllDay ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
                 required
               />
               <RHFTextField
                 name="end"
                 label="תאריך סיום"
-                type={methods.watch('allDay') ? 'date' : 'datetime-local'}
+                type={isAllDay ? 'date' : 'datetime-local'}
                 InputLabelProps={{ shrink: true }}
-                required={!methods.watch('allDay')}
+                required={!isAllDay}
               />
+              <RHFSwitch
+                name="isRecurring"
+                label="האם האירוע מחזורי?"
+                disabled={disableRecurring}
+              />
+              {isRecurring && (
+                <Stack gap={2}>
+                  <RHFSelect
+                    name="recurrenceFrequency"
+                    label="תדירות"
+                    required
+                    disabled={disableRecurring}
+                  >
+                    {recurrenceFrequencyOptions.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {RecurrenceFrequencyLabels[option]}
+                      </MenuItem>
+                    ))}
+                  </RHFSelect>
+                  <RHFTextField
+                    name="recurrenceInterval"
+                    label="כל כמה אירוע"
+                    type="number"
+                    inputProps={{ min: 1 }}
+                    required
+                    disabled={disableRecurring}
+                  />
+                  <RHFTextField
+                    name="recurrenceEndDate"
+                    label="תאריך סיום מחזור"
+                    type={isAllDay ? 'date' : 'datetime-local'}
+                    InputLabelProps={{ shrink: true }}
+                    disabled={disableRecurring}
+                  />
+                </Stack>
+              )}
               <RHFTextField name="description" label="תיאור" multiline minRows={3} />
             </Stack>
           </DialogContent>

@@ -11,11 +11,14 @@ import { Box, Fab } from '@mui/material';
 import { useState } from 'react';
 import EventFormModal from './EventForm/EventFormModal';
 import EventReqDTO from 'DTOs/EventReqDTO';
+import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
+import { EventFormSubmitValues } from './EventForm/EventForm.schema';
 
 interface CalendarProps {
   exercises: RecruitExercise[];
   events: UserEvent[];
   handleCreateEvent: (eventData: Omit<EventReqDTO, 'userId'>) => void;
+  handleCreateRecurringEvent: (eventData: Omit<RecurringEventReqDTO, 'userId'>) => void;
   handleDeleteEvent: (eventId: string) => void;
   handleUpdateEvent: (eventId: string, eventData: EventReqDTO) => void;
 }
@@ -24,6 +27,7 @@ const Calendar = ({
   exercises,
   events,
   handleCreateEvent,
+  handleCreateRecurringEvent,
   handleDeleteEvent,
   handleUpdateEvent,
 }: CalendarProps) => {
@@ -87,14 +91,42 @@ const Calendar = ({
     handleCloseDetails();
   };
 
-  const onCreateEvent = (eventData: Omit<EventReqDTO, 'userId'>) => {
-    handleCreateEvent(eventData);
+  const onCreateEvent = (values: EventFormSubmitValues) => {
+    if (values.isRecurring) {
+      handleCreateRecurringEvent({
+        title: values.title,
+        description: values.description,
+        allDay: values.allDay,
+        start: values.start,
+        end: values.end,
+        frequency: values.recurrenceFrequency,
+        interval: values.recurrenceInterval,
+        until: values.recurrenceEndDate,
+      });
+    } else {
+      handleCreateEvent({
+        title: values.title,
+        description: values.description,
+        type: values.type,
+        allDay: values.allDay,
+        start: values.start,
+        end: values.end,
+      });
+    }
     handleCloseForm();
   };
 
-  const onEditEvent = (eventData: Omit<EventReqDTO, 'userId'>) => {
-    if (selectedEvent) {
-      handleUpdateEvent(selectedEvent.id, { ...eventData, userId: selectedEvent.userId });
+  const onEditEvent = (values: EventFormSubmitValues) => {
+    if (selectedEvent && !selectedEvent.isRecurring) {
+      handleUpdateEvent(selectedEvent.id, {
+        userId: selectedEvent.userId,
+        title: values.title,
+        description: values.description,
+        type: values.type,
+        allDay: values.allDay,
+        start: values.start,
+        end: values.end,
+      });
     }
     handleCloseForm();
   };
@@ -145,14 +177,15 @@ const Calendar = ({
         isOpen={isFormOpen}
         onClose={handleCloseForm}
         onSubmit={selectedEvent ? onEditEvent : onCreateEvent}
-        event={selectedEvent}
+        event={selectedEvent && !selectedEvent.isRecurring ? selectedEvent : null}
+        disableRecurring={!!selectedEvent}
       />
       <EventDetailsModal
         isOpen={isDetailsOpen}
         event={selectedEvent}
         onClose={handleCloseDetails}
-        onEdit={handleOpenForm}
-        onDelete={onDeleteEvent}
+        onEdit={selectedEvent?.isRecurring ? undefined : handleOpenForm}
+        onDelete={selectedEvent?.isRecurring ? undefined : onDeleteEvent}
       />
     </Box>
   );
