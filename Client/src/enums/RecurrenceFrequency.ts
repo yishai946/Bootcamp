@@ -1,7 +1,7 @@
 enum RecurrenceFrequency {
-  Daily = 'DAILY',
-  Weekly = 'WEEKLY',
-  Monthly = 'MONTHLY',
+  Daily = 0,
+  Weekly,
+  Monthly,
 }
 
 const RecurrenceFrequencyLabels: Record<RecurrenceFrequency, string> = {
@@ -10,6 +10,8 @@ const RecurrenceFrequencyLabels: Record<RecurrenceFrequency, string> = {
   [RecurrenceFrequency.Monthly]: 'חודשי',
 };
 
-const recurrenceFrequencyOptions = Object.values(RecurrenceFrequency) as RecurrenceFrequency[];
+const recurrenceFrequencyOptions = Object.values(RecurrenceFrequency).filter(
+  (value): value is RecurrenceFrequency => typeof value === 'number'
+);
 
 export { RecurrenceFrequency, RecurrenceFrequencyLabels, recurrenceFrequencyOptions };

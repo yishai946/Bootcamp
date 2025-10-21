@@ -24,9 +24,6 @@ namespace Server.Application.DTOs
         [Required]
         public RecurrenceFrequency Frequency { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Interval must be at least 1")]
-        public int Interval { get; set; } = 1;
-
         public DateTime? Until { get; set; }
     }
 }

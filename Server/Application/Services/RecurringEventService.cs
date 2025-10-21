@@ -33,10 +33,7 @@ namespace Server.Application.Services
             {
                 var user = session.Get<User>(dto.UserId);
 
-                if (user == null)
-                {
-                    throw new NotFoundException("User not found");
-                }
+                EnsureUserFound(user);
 
                 var startUtc = DateTime.SpecifyKind(dto.Start, DateTimeKind.Utc);
                 DateTime? endUtc = null;
@@ -44,6 +41,7 @@ namespace Server.Application.Services
                 if (dto.End.HasValue)
                 {
                     endUtc = DateTime.SpecifyKind(dto.End.Value, DateTimeKind.Utc);
+                    EnsureEndAfterStart(startUtc, endUtc.Value);
                 }
                 else if (dto.AllDay)
                 {
@@ -53,11 +51,6 @@ namespace Server.Application.Services
                 if (!dto.AllDay && !endUtc.HasValue)
                 {
                     throw new ArgumentException("Non all-day recurring events must include an end time.");
-                }
-
-                if (endUtc.HasValue && endUtc.Value <= startUtc)
-                {
-                    throw new ArgumentException("Event end must be after start time.");
                 }
 
                 var duration = endUtc.HasValue ? endUtc.Value - startUtc : TimeSpan.FromDays(1);
@@ -76,7 +69,7 @@ namespace Server.Application.Services
                     Description = dto.Description,
                     DtStart = startUtc,
                     Duration = duration,
-                    RRule = BuildRRule(dto.Frequency, dto.Interval, untilUtc),
+                    RRule = BuildRRule(dto.Frequency, untilUtc),
                     AllDay = dto.AllDay,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
@@ -86,7 +79,7 @@ namespace Server.Application.Services
             });
         }
 
-        private static string BuildRRule(RecurrenceFrequency frequency, int interval, DateTime? untilUtc)
+        private static string BuildRRule(RecurrenceFrequency frequency, DateTime? untilUtc)
         {
             var freqString = frequency switch
             {
@@ -96,7 +89,7 @@ namespace Server.Application.Services
                 _ => throw new ArgumentOutOfRangeException(nameof(frequency), frequency, null)
             };
 
-            var rule = $"FREQ={freqString};INTERVAL={Math.Max(interval, 1)}";
+            var rule = $"FREQ={freqString};";
 
             if (untilUtc.HasValue)
             {
@@ -104,6 +97,22 @@ namespace Server.Application.Services
             }
 
             return rule;
+        }
+
+        private void EnsureUserFound(User? user)
+        {
+            if (user == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+        }
+
+        private void EnsureEndAfterStart(DateTime start, DateTime end)
+        {
+            if (end < start)
+            {
+                throw new ArgumentException("Event end must be after start time.");
+            }
         }
 
         //public void AddException(Guid seriesId, RecurringEventException exception)

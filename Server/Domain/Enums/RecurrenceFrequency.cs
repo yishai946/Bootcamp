@@ -2,7 +2,7 @@ namespace Server.Domain.Enums
 {
     public enum RecurrenceFrequency
     {
-        Daily,
+        Daily = 0,
         Weekly,
         Monthly
     }

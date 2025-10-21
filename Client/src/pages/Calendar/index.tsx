@@ -1,19 +1,19 @@
 import {
   createUserEvent,
-  createRecurringEvent as createRecurringEventApi,
   deleteUserEvent,
   getUserCalendar,
   updateUserEvent,
 } from '@api/endpoints/events';
 import { getRecruitExercises } from '@api/endpoints/recruitExercises';
+import { createRecurringEvent } from '@api/endpoints/recurringEvents';
 import ErrorAlert from '@components/ErrorAlert';
+import { useMessage } from '@providers/MessageProvider';
 import { useUser } from '@providers/UserProvider';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import LoadingScreen from '../../Router/LoadingScreen';
-import Calendar from './Calendar';
 import EventReqDTO from 'DTOs/EventReqDTO';
 import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
-import { useMessage } from '@providers/MessageProvider';
+import LoadingScreen from '../../Router/LoadingScreen';
+import Calendar from './Calendar';
 
 const CalendarDisplay = () => {
   const { user } = useUser();
@@ -59,7 +59,7 @@ const CalendarDisplay = () => {
   const { mutate: createRecurringEventMutation } = useMutation({
     mutationKey: ['createRecurringEvent'],
     mutationFn: (eventData: Omit<RecurringEventReqDTO, 'userId'>) =>
-      createRecurringEventApi({ ...eventData, userId: user!.id }),
+      createRecurringEvent({ ...eventData, userId: user!.id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id] });
       queryClient.invalidateQueries({ queryKey: ['userCalendar', user?.id, 3] });
