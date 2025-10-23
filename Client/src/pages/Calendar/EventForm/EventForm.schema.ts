@@ -13,12 +13,12 @@ export const eventFormSchema = z
     end: z.string().optional(),
     allDay: z.boolean(),
     isRecurring: z.boolean(),
-    recurrenceFrequency: z.nativeEnum(RecurrenceFrequency),
-    recurrenceInterval: z.coerce
+    frequency: z.nativeEnum(RecurrenceFrequency),
+    interval: z.coerce
       .number({ invalid_type_error: 'תדירות חייבת להיות מספר' })
       .int('יש להזין מספר שלם')
       .min(1, 'המרווח חייב להיות לפחות 1'),
-    recurrenceEndDate: z
+    until: z
       .string()
       .optional()
       .transform((value) => (value === '' ? undefined : value)),
@@ -73,27 +73,27 @@ export const eventFormSchema = z
     }
 
     if (data.isRecurring) {
-      if (data.recurrenceInterval < 1) {
+      if (data.interval < 1) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'המרווח חייב להיות לפחות 1',
-          path: ['recurrenceInterval'],
+          path: ['interval'],
         });
       }
 
-      if (data.recurrenceEndDate) {
-        const recurrenceEnd = new Date(data.recurrenceEndDate);
+      if (data.until) {
+        const recurrenceEnd = new Date(data.until);
         if (Number.isNaN(recurrenceEnd.getTime())) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'תאריך סיום מחזור לא תקין',
-            path: ['recurrenceEndDate'],
+            path: ['until'],
           });
         } else if (!Number.isNaN(startDate.getTime()) && recurrenceEnd < startDate) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'תאריך סיום המחזור חייב להיות אחרי תאריך ההתחלה',
-            path: ['recurrenceEndDate'],
+            path: ['until'],
           });
         }
       }
@@ -118,9 +118,9 @@ export const DEFAULT_VALUES: EventFormValues = {
   end: '',
   allDay: false,
   isRecurring: false,
-  recurrenceFrequency: RecurrenceFrequency.Weekly,
-  recurrenceInterval: 1,
-  recurrenceEndDate: '',
+  frequency: RecurrenceFrequency.Weekly,
+  interval: 1,
+  until: '',
   description: undefined,
 };
 
@@ -139,15 +139,16 @@ export const mapEventToFormValues = (event?: UserEvent | null): Partial<EventFor
     : {
         title: event.title,
         type: event.type,
-        start: event.allDay ? toDateOnlyLocalString(event.start) : toDatetimeLocalString(event.start),
+        start: event.allDay
+          ? toDateOnlyLocalString(event.start)
+          : toDatetimeLocalString(event.start),
         end: event.allDay
           ? toDateOnlyLocalString(event.end ?? event.start)
           : toDatetimeLocalString(event.end ?? event.start),
         allDay: event.allDay,
         isRecurring: false,
-        recurrenceFrequency: RecurrenceFrequency.Weekly,
-        recurrenceInterval: 1,
-        recurrenceEndDate: '',
+        frequency: RecurrenceFrequency.Weekly,
+        interval: 1,
+        until: '',
         description: event.description ?? undefined,
       };
-

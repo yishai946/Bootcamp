@@ -22,7 +22,13 @@ interface EventDetailsModalProps {
   onDelete?: (eventId: string) => void;
 }
 
-const EventDetailsModal = ({ isOpen, event, onClose, onEdit, onDelete }: EventDetailsModalProps) => (
+const EventDetailsModal = ({
+  isOpen,
+  event,
+  onClose,
+  onEdit,
+  onDelete,
+}: EventDetailsModalProps) => (
   <Dialog
     open={isOpen}
     onClose={onClose}
@@ -66,19 +72,18 @@ const EventDetailsModal = ({ isOpen, event, onClose, onEdit, onDelete }: EventDe
           </Stack>
         </DialogContent>
         <DialogActions>
-          {onEdit && onDelete && (
-            <Row justifyContent="space-between" width="100%">
-              <IconButton
-                onClick={() => onDelete(event.id)}
-                color="error"
-              >
+          <Row justifyContent="space-between" width="100%">
+            {onDelete && (
+              <IconButton onClick={() => onDelete(event.id)} color="error">
                 <DeleteIcon />
               </IconButton>
+            )}
+            {onEdit && (
               <Button onClick={() => onEdit(event)} variant="contained" color="warning">
                 עריכה
               </Button>
-            </Row>
-          )}
+            )}
+          </Row>
           <Button onClick={onClose} variant="contained" color="primary">
             סגירה
           </Button>

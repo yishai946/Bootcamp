@@ -28,5 +28,17 @@ namespace Server.Api.Controllers
 
             return Ok("Recurring event created successfully");
         }
+
+        [HttpDelete("{recurringEventId}")]
+        [Authorize]
+        public IActionResult Delete(Guid recurringEventId)
+        {
+            var currentUserId = User.GetUserId();
+            var role = User.GetUserRole();
+
+            RecurringEventService.Delete(recurringEventId, currentUserId, role);
+
+            return Ok("Recurring event deleted successfully");
+        }
     }
 }

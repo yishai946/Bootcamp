@@ -61,7 +61,6 @@ const EventFormModal = ({
   const isAllDay = watch('allDay');
   const isRecurring = watch('isRecurring');
   const start = watch('start');
-  const end = watch('end');
 
   useEffect(() => {
     if (start && !userChangedEndDate) {
@@ -85,8 +84,8 @@ const EventFormModal = ({
       start: new Date(values.start).toISOString(),
       end: values.end ? new Date(values.end).toISOString() : undefined,
       description: trimmedDescription ? trimmedDescription : undefined,
-      recurrenceEndDate: values.recurrenceEndDate
-        ? new Date(values.recurrenceEndDate).toISOString()
+      until: values.until
+        ? new Date(values.until).toISOString()
         : undefined,
     };
 

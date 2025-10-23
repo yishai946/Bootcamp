@@ -7,4 +7,10 @@ const createRecurringEvent: (eventData: RecurringEventReqDTO) => Promise<void> =
   await axiosInstance.post('/RecurringEvent', eventData);
 };
 
-export { createRecurringEvent };
+const deleteRecurringEvent: (recurringEventSeriesId: string) => Promise<void> = async (
+  recurringEventSeriesId
+) => {
+  await axiosInstance.delete(`/RecurringEvent/${recurringEventSeriesId}`);
+};
+
+export { createRecurringEvent, deleteRecurringEvent };

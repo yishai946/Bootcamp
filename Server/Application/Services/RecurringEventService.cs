@@ -79,6 +79,20 @@ namespace Server.Application.Services
             });
         }
 
+        public void Delete(Guid recurringEventId, Guid currentUserId, string currentUserRole)
+        {
+            Database.Modify(session =>
+            {
+                var recurringEvent = session.Get<RecurringEventSeries>(recurringEventId);
+
+                EnsureRecurringEventFound(recurringEvent);
+
+                AuthService.EnsureSameUserOrSuperior(currentUserId, currentUserRole, recurringEvent.User.Id);
+
+                session.Delete(recurringEvent);
+            });
+        }
+
         private static string BuildRRule(RecurrenceFrequency frequency, DateTime? untilUtc)
         {
             var freqString = frequency switch
@@ -97,6 +111,14 @@ namespace Server.Application.Services
             }
 
             return rule;
+        }
+
+        private void EnsureRecurringEventFound(RecurringEventSeries? recurringEvent)
+        {
+            if (recurringEvent == null)
+            {
+                throw new NotFoundException("Reccuring event not found");
+            }
         }
 
         private void EnsureUserFound(User? user)

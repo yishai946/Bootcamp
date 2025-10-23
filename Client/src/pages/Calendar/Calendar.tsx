@@ -10,30 +10,30 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab } from '@mui/material';
 import { useState } from 'react';
 import EventFormModal from './EventForm/EventFormModal';
-import EventReqDTO from 'DTOs/EventReqDTO';
-import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
 import { EventFormSubmitValues } from './EventForm/EventForm.schema';
+import useCalendarHandlers from '@hooks/Calendar/useCalendarHandlers';
 
 interface CalendarProps {
   exercises: RecruitExercise[];
   events: UserEvent[];
-  handleCreateEvent: (eventData: Omit<EventReqDTO, 'userId'>) => void;
-  handleCreateRecurringEvent: (eventData: Omit<RecurringEventReqDTO, 'userId'>) => void;
-  handleDeleteEvent: (eventId: string) => void;
-  handleUpdateEvent: (eventId: string, eventData: EventReqDTO) => void;
 }
 
-const Calendar = ({
-  exercises,
-  events,
-  handleCreateEvent,
-  handleCreateRecurringEvent,
-  handleDeleteEvent,
-  handleUpdateEvent,
-}: CalendarProps) => {
-  const [selectedEvent, setSelectedEvent] = useState<UserEvent | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+type CalendarMode =
+  | { type: 'idle'; event?: undefined }
+  | { type: 'view'; event: UserEvent }
+  | { type: 'create'; event?: undefined }
+  | { type: 'edit'; event: UserEvent };
+
+const Calendar = ({ exercises, events }: CalendarProps) => {
+  const [mode, setMode] = useState<CalendarMode>({ type: 'idle' });
+
+  const {
+    handleCreateEvent,
+    handleCreateRecurringEvent,
+    handleDeleteEvent,
+    handleUpdateEvent,
+    handleDeleteRecurringEvent,
+  } = useCalendarHandlers();
 
   const getExerciseMilestones = (exercise: RecruitExercise, index: number) =>
     [
@@ -65,44 +65,33 @@ const Calendar = ({
 
   const allEvents = [...mappedEvents, ...mappedExercises];
 
-  const handleOpenDetails = (event: UserEvent) => {
-    setIsDetailsOpen(true);
-    setSelectedEvent(event);
+  const openView = (event: UserEvent) => setMode({ type: 'view', event });
+  const openCreate = () => setMode({ type: 'create' });
+  const openEdit = (event: UserEvent) => setMode({ type: 'edit', event });
+  const closeModal = () => setMode({ type: 'idle' });
+
+  const onDelete = (event: UserEvent) => {
+    if (event.isRecurring) handleDeleteRecurringEvent(event.id);
+    else handleDeleteEvent(event.id);
+    closeModal();
   };
 
-  const handleCloseDetails = () => {
-    setIsDetailsOpen(false);
-    setSelectedEvent(null);
-  };
-
-  const handleOpenForm = (event?: UserEvent) => {
-    setIsDetailsOpen(false);
-    setIsFormOpen(true);
-    event && setSelectedEvent(event);
-  };
-
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-    setSelectedEvent(null);
-  };
-
-  const onDeleteEvent = (eventId: string) => {
-    handleDeleteEvent(eventId);
-    handleCloseDetails();
-  };
-
-  const onCreateEvent = (values: EventFormSubmitValues) => {
-    if (values.isRecurring) {
-      handleCreateRecurringEvent({
-        title: values.title,
-        description: values.description,
-        allDay: values.allDay,
-        start: values.start,
-        end: values.end,
-        frequency: values.recurrenceFrequency,
-        interval: values.recurrenceInterval,
-        until: values.recurrenceEndDate,
+  const handleEdit = (values: EventFormSubmitValues, isRecurring: boolean) => {
+    if (isRecurring) {
+      // For simplicity, we delete and recreate the recurring event
+      handleDeleteRecurringEvent(mode.event!.seriesId!);
+      handleCreateRecurringEvent(values);
+    } else {
+      handleUpdateEvent(mode.event!.id, {
+        userId: mode.event!.userId,
+        ...values,
       });
+    }
+  };
+
+  const handleCreate = (values: EventFormSubmitValues) => {
+    if (values.isRecurring) {
+      handleCreateRecurringEvent(values);
     } else {
       handleCreateEvent({
         title: values.title,
@@ -113,22 +102,17 @@ const Calendar = ({
         end: values.end,
       });
     }
-    handleCloseForm();
   };
 
-  const onEditEvent = (values: EventFormSubmitValues) => {
-    if (selectedEvent && !selectedEvent.isRecurring) {
-      handleUpdateEvent(selectedEvent.id, {
-        userId: selectedEvent.userId,
-        title: values.title,
-        description: values.description,
-        type: values.type,
-        allDay: values.allDay,
-        start: values.start,
-        end: values.end,
-      });
+  const onSubmit = (values: EventFormSubmitValues) => {
+    if (mode.type === 'edit') {
+      console.log(values)
+      handleEdit(values, values.isRecurring);
+    } else if (mode.type === 'create') {
+      handleCreate(values);
     }
-    handleCloseForm();
+
+    closeModal();
   };
 
   return (
@@ -156,14 +140,15 @@ const Calendar = ({
             fixedWeekCount={false}
             eventClick={(info) =>
               !info.event.extendedProps.isMilestone &&
-              handleOpenDetails(info.event.extendedProps as UserEvent)
+              openView(info.event.extendedProps as UserEvent)
             }
           />
         </Box>
+
         <Fab
           color="primary"
           aria-label="add"
-          onClick={() => handleOpenForm()}
+          onClick={openCreate}
           sx={{
             position: 'fixed',
             left: 24,
@@ -173,20 +158,26 @@ const Calendar = ({
           <AddIcon />
         </Fab>
       </Box>
-      <EventFormModal
-        isOpen={isFormOpen}
-        onClose={handleCloseForm}
-        onSubmit={selectedEvent ? onEditEvent : onCreateEvent}
-        event={selectedEvent && !selectedEvent.isRecurring ? selectedEvent : null}
-        disableRecurring={!!selectedEvent}
-      />
-      <EventDetailsModal
-        isOpen={isDetailsOpen}
-        event={selectedEvent}
-        onClose={handleCloseDetails}
-        onEdit={selectedEvent?.isRecurring ? undefined : handleOpenForm}
-        onDelete={selectedEvent?.isRecurring ? undefined : onDeleteEvent}
-      />
+
+      {(mode.type === 'create' || mode.type === 'edit') && (
+        <EventFormModal
+          isOpen
+          onClose={closeModal}
+          onSubmit={onSubmit}
+          event={mode.type === 'edit' ? mode.event : null}
+          disableRecurring={mode.type === 'edit'}
+        />
+      )}
+
+      {mode.type === 'view' && (
+        <EventDetailsModal
+          isOpen
+          event={mode.event}
+          onClose={closeModal}
+          onEdit={() => openEdit(mode.event)}
+          onDelete={() => onDelete(mode.event)}
+        />
+      )}
     </Box>
   );
 };
