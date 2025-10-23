@@ -2,12 +2,16 @@ import { createUserEvent, deleteUserEvent, updateUserEvent } from '@api/endpoint
 import {
   createRecurringEvent as createRecurring,
   deleteRecurringEvent as deleteRecurring,
+  deleteRecurringEventOccurrence as deleteRecurringOccurrence,
+  updateRecurringEventOccurrence as updateRecurringOccurrence,
+  updateRecurringEventSeries as updateRecurringSeries,
 } from '@api/endpoints/recurringEvents';
 import { useMessage } from '@providers/MessageProvider';
 import { useUser } from '@providers/UserProvider';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import EventReqDTO from 'DTOs/EventReqDTO';
 import RecurringEventReqDTO from 'DTOs/RecurringEventReqDTO';
+import RecurringEventOccurrenceUpdateDTO from 'DTOs/RecurringEventOccurrenceUpdateDTO';
 
 const useCalendarMutations = () => {
   const queryClient = useQueryClient();
@@ -75,10 +79,51 @@ const useCalendarMutations = () => {
     mutationFn: (recurringEventSerialId: string) => deleteRecurring(recurringEventSerialId),
     onSuccess: () => {
       invalidateCalendar();
-      handleChange('אירוע מחזורי נוצר בהצלחה', 'success');
+      handleChange('אירוע מחזורי נמחק בהצלחה', 'success');
     },
     onError: () => {
-      handleChange('אירעה שגיאה ביצירת האירוע המחזורי', 'error');
+      handleChange('אירעה שגיאה במחיקת האירוע המחזורי', 'error');
+    },
+  });
+
+  const { mutate: updateRecurringEventSeries } = useMutation({
+    mutationKey: ['updateRecurringEventSeries'],
+    mutationFn: (data: { seriesId: string; eventData: RecurringEventReqDTO }) =>
+      updateRecurringSeries(data.seriesId, data.eventData),
+    onSuccess: () => {
+      invalidateCalendar();
+      handleChange('הסדרה המחזורית עודכנה בהצלחה', 'success');
+    },
+    onError: () => {
+      handleChange('אירעה שגיאה בעדכון הסדרה המחזורית', 'error');
+    },
+  });
+
+  const { mutate: updateRecurringEventOccurrence } = useMutation({
+    mutationKey: ['updateRecurringEventOccurrence'],
+    mutationFn: (data: {
+      seriesId: string;
+      eventData: RecurringEventOccurrenceUpdateDTO;
+    }) => updateRecurringOccurrence(data.seriesId, data.eventData),
+    onSuccess: () => {
+      invalidateCalendar();
+      handleChange('המופע המחזורי עודכן בהצלחה', 'success');
+    },
+    onError: () => {
+      handleChange('אירעה שגיאה בעדכון המופע המחזורי', 'error');
+    },
+  });
+
+  const { mutate: deleteRecurringEventOccurrence } = useMutation({
+    mutationKey: ['deleteRecurringEventOccurrence'],
+    mutationFn: (data: { seriesId: string; occurrenceStart: string }) =>
+      deleteRecurringOccurrence(data.seriesId, data.occurrenceStart),
+    onSuccess: () => {
+      invalidateCalendar();
+      handleChange('המופע המחזורי נמחק בהצלחה', 'success');
+    },
+    onError: () => {
+      handleChange('אירעה שגיאה במחיקת המופע המחזורי', 'error');
     },
   });
 
@@ -88,6 +133,9 @@ const useCalendarMutations = () => {
     deleteEvent,
     updateEvent,
     deleteRecurringEvent,
+    deleteRecurringEventOccurrence,
+    updateRecurringEventOccurrence,
+    updateRecurringEventSeries,
   };
 };
 

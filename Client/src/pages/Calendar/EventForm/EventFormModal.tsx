@@ -63,6 +63,12 @@ const EventFormModal = ({
   const start = watch('start');
 
   useEffect(() => {
+    if (formState.dirtyFields.end) {
+      setUserChangedEndDate(true);
+    }
+  }, [formState.dirtyFields.end]);
+
+  useEffect(() => {
     if (start && !userChangedEndDate) {
       const startDate = new Date(start);
       const currentEnd = getValues('end');
@@ -75,7 +81,7 @@ const EventFormModal = ({
         setValue('end', local, { shouldDirty: true });
       }
     }
-  }, [start]);
+  }, [getValues, setValue, start, userChangedEndDate]);
 
   const handleFormSubmit = async (values: EventFormValues) => {
     const trimmedDescription = values.description?.trim();
@@ -140,8 +146,8 @@ const EventFormModal = ({
               />
               {isRecurring && (
                 <Stack gap={2}>
-                  <RHFSelect
-                    name="recurrenceFrequency"
+              <RHFSelect
+                    name="frequency"
                     label="תדירות"
                     required
                     disabled={disableRecurring}
@@ -153,7 +159,7 @@ const EventFormModal = ({
                     ))}
                   </RHFSelect>
                   <RHFTextField
-                    name="recurrenceEndDate"
+                    name="until"
                     label="תאריך סיום מחזור"
                     type={isAllDay ? 'date' : 'datetime-local'}
                     InputLabelProps={{ shrink: true }}

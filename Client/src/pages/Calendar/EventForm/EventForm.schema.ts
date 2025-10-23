@@ -146,7 +146,7 @@ export const mapEventToFormValues = (event?: UserEvent | null): Partial<EventFor
           ? toDateOnlyLocalString(event.end ?? event.start)
           : toDatetimeLocalString(event.end ?? event.start),
         allDay: event.allDay,
-        isRecurring: false,
+        isRecurring: event.isRecurring ?? false,
         frequency: RecurrenceFrequency.Weekly,
         interval: 1,
         until: '',
